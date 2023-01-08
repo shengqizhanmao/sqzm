@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lin.sqzmHtgl.mapper.ResourceMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.lin.sqzmHtgl.pojo.Resource">
+        <id column="id" property="id" />
+        <result column="parent_id" property="parentId" />
+        <result column="resource_name" property="resourceName" />
+        <result column="request_path" property="requestPath" />
+        <result column="lavel" property="lavel" />
+        <result column="icon" property="icon" />
+        <result column="is_leaf" property="isLeaf" />
+        <result column="resource_type" property="resourceType" />
+        <result column="sort_no" property="sortNo" />
+        <result column="description" property="description" />
+        <result column="system_code" property="systemCode" />
+        <result column="is_system_root" property="isSystemRoot" />
+        <result column="enable_flag" property="enableFlag" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, parent_id, resource_name, request_path, lavel, icon, is_leaf, resource_type, sort_no, description, system_code, is_system_root, enable_flag
+    </sql>
+    <select id="getListResourceBySUserId" resultMap="BaseResultMap">
+        SELECT c.id,request_path,lavel,c.enable_flag
+        from sh_resource c
+        join
+            (select distinct b.resource_id
+            from sh_user_role a
+            join sh_role_resource b
+            on a.role_id=b.role_id
+            where a.user_id=#{id}) d
+        on c.id=d.resource_id
+    </select>
+
+    <select id="getListResourceByRoleId" resultMap="BaseResultMap">
+        SELECT *
+        from sh_resource a
+        join sh_role_resource b
+        on a.id=b.resource_id
+        where b.role_id=#{id}
+    </select>
+</mapper>

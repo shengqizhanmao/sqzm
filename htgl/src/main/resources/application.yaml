@@ -1,0 +1,35 @@
+spring:
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/sqzm_yxlt?useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+    username: root
+    password: root
+    hikari:
+      max-lifetime: 50000
+  redis:
+    host: 192.168.20.130
+    port: 6379
+    connect-timeout: 30000
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 200MB
+  aop:
+    proxy-target-class: true
+minio:
+  url: http://192.168.20.130:9000 # 服务地址
+  access: admin # 账号
+  secret: adminminio # 密码
+  bucket: htgl # Bucket
+mybatis-plus:
+  mapper-locations: classpath*:/mapper/**Mapper.xml
+server:
+  port: 8099
+  servlet:
+    context-path: /htgl
+logging:
+  file:
+    path: G:\\lin\\bysj\\sqzm\\log\\htgl-log
