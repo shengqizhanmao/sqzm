@@ -1,7 +1,7 @@
 package com.lin.sqzmHtgl.config;
 
-import com.lin.sqzmHtgl.shiro.Jwt.JwtFilter;
-import com.lin.sqzmHtgl.shiro.core.Realm.SUserRealm;
+import com.lin.common.shiro.Jwt.JwtFilter;
+import com.lin.common.shiro.core.Realm.SUserRealm;
 import lombok.extern.log4j.Log4j2;
 import org.apache.shiro.mgt.DefaultSessionStorageEvaluator;
 import org.apache.shiro.mgt.DefaultSubjectDAO;
@@ -23,7 +23,7 @@ import java.util.Map;
  * @Description 权限配置类
  */
 @Configuration
-@ComponentScan(basePackages = {"com.lin.sqzmHtgl"})
+@ComponentScan(basePackages = {"com.lin.sqzmHtgl","com.lin.common"})
 @Log4j2
 public class ShiroConfig {
 

@@ -1,9 +1,9 @@
 package com.lin.sqzmHtgl.controller;
 
 import com.lin.common.Result;
-import com.lin.sqzmHtgl.pojo.User;
-import com.lin.sqzmHtgl.pojo.Vo.UserVo;
-import com.lin.sqzmHtgl.service.UserService;
+import com.lin.common.pojo.User;
+import com.lin.common.pojo.Vo.UserVo;
+import com.lin.common.service.UserService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;

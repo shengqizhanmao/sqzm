@@ -2,13 +2,14 @@ package com.lin.sqzmHtgl.controller;
 
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.lin.common.Result;
-import com.lin.sqzmHtgl.controller.param.AddSUserAndRole;
-import com.lin.sqzmHtgl.pojo.SUser;
-import com.lin.sqzmHtgl.pojo.UserRole;
-import com.lin.sqzmHtgl.pojo.Vo.SUserTokenVo;
-import com.lin.sqzmHtgl.pojo.Vo.SUserVo;
-import com.lin.sqzmHtgl.service.SUserService;
-import com.lin.sqzmHtgl.service.UserRoleService;
+
+import com.lin.common.pojo.SUser;
+import com.lin.common.pojo.UserRole;
+import com.lin.common.pojo.Vo.SUserTokenVo;
+import com.lin.common.pojo.Vo.SUserVo;
+import com.lin.common.pojo.param.AddSUserAndRole;
+import com.lin.common.service.SUserService;
+import com.lin.common.service.UserRoleService;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.BeanUtils;

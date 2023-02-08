@@ -2,12 +2,12 @@ package com.lin.sqzmHtgl.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.lin.common.RedisStatus;
+import com.lin.common.pojo.SUser;
+import com.lin.common.pojo.Vo.SUserTokenVo;
+import com.lin.common.service.SUserService;
 import com.lin.common.utils.JWTUtils;
 import com.lin.common.utils.Md5Utils;
 import com.lin.sqzmHtgl.controller.param.LoginForm;
-import com.lin.sqzmHtgl.pojo.SUser;
-import com.lin.sqzmHtgl.pojo.Vo.SUserTokenVo;
-import com.lin.sqzmHtgl.service.SUserService;
 import com.lin.common.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
 import java.util.concurrent.TimeUnit;
 
 
@@ -29,7 +30,7 @@ import java.util.concurrent.TimeUnit;
 @RestController
 @RequestMapping("/login")
 public class LoginController {
-    @Autowired
+    @Resource
     SUserService sUserService;
     @Autowired
     RedisTemplate<String,String> redisTemplate;

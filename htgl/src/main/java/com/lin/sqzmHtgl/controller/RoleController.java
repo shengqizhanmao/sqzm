@@ -1,11 +1,12 @@
 package com.lin.sqzmHtgl.controller;
 
 import com.lin.common.Result;
-import com.lin.sqzmHtgl.controller.param.AddRoleAndResource;
-import com.lin.sqzmHtgl.pojo.Role;
-import com.lin.sqzmHtgl.pojo.RoleResource;
 
-import com.lin.sqzmHtgl.service.RoleService;
+import com.lin.common.pojo.Role;
+import com.lin.common.pojo.RoleResource;
+
+import com.lin.common.pojo.param.AddRoleAndResource;
+import com.lin.common.service.RoleService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

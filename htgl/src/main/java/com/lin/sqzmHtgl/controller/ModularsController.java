@@ -1,8 +1,8 @@
 package com.lin.sqzmHtgl.controller;
 
 import com.lin.common.Result;
-import com.lin.sqzmHtgl.pojo.Modulars;
-import com.lin.sqzmHtgl.service.ModularsService;
+import com.lin.common.pojo.Modulars;
+import com.lin.common.service.ModularsService;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;

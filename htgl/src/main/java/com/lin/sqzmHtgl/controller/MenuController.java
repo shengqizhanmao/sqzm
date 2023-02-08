@@ -1,8 +1,8 @@
 package com.lin.sqzmHtgl.controller;
 
 import com.lin.common.Result;
-import com.lin.sqzmHtgl.pojo.Menu;
-import com.lin.sqzmHtgl.service.MenuService;
+import com.lin.common.pojo.Menu;
+import com.lin.common.service.MenuService;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;

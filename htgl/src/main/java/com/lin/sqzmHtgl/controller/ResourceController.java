@@ -1,8 +1,8 @@
 package com.lin.sqzmHtgl.controller;
 
 import com.lin.common.Result;
-import com.lin.sqzmHtgl.pojo.Resource;
-import com.lin.sqzmHtgl.service.ResourceService;
+import com.lin.common.pojo.Resource;
+import com.lin.common.service.ResourceService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

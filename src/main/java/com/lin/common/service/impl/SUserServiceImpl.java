@@ -23,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -42,9 +43,9 @@ public class SUserServiceImpl extends ServiceImpl<SUserMapper, SUser> implements
 
     @Autowired
     RedisTemplate<String,String> redisTemplate;
-    @Autowired
+    @Resource
     SUserMapper sUserMapper;
-    @Autowired
+    @Resource
     RoleService roleService;
     //获取用户,根据Token
     public SUserTokenVo findSUserByToken(String token) {
@@ -57,7 +58,6 @@ public class SUserServiceImpl extends ServiceImpl<SUserMapper, SUser> implements
         if (StringUtils.isBlank(token)) {
             return null;
         }
-        //获取redis是否存在
         String sUserJson = redisTemplate.opsForValue().get(RedisStatus.TOKEN + token);
         if (StringUtils.isBlank(sUserJson)) {
             return null;

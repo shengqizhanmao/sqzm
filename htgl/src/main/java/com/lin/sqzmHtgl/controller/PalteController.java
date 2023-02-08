@@ -1,8 +1,8 @@
 package com.lin.sqzmHtgl.controller;
 
 import com.lin.common.Result;
-import com.lin.sqzmHtgl.pojo.Palte;
-import com.lin.sqzmHtgl.service.PalteService;
+import com.lin.common.pojo.Palte;
+import com.lin.common.service.PalteService;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
