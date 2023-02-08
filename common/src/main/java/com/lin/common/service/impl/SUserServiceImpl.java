@@ -58,7 +58,7 @@ public class SUserServiceImpl extends ServiceImpl<SUserMapper, SUser> implements
         if (StringUtils.isBlank(token)) {
             return null;
         }
-        String sUserJson = redisTemplate.opsForValue().get(RedisStatus.TOKEN + token);
+        String sUserJson = redisTemplate.opsForValue().get(RedisStatus.TOKEN_SUser + token);
         if (StringUtils.isBlank(sUserJson)) {
             return null;
         }

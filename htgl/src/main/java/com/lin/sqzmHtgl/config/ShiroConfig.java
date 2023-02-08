@@ -53,7 +53,6 @@ public class ShiroConfig {
         filterMap.put("/**","jwt");
 //        filterMap.put("/user/add","perms[user:add]");
 //        filterMap.put("/user/**","perms[user:*]");
-
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterMap);
         shiroFilterFactoryBean.setLoginUrl("/login/LoginUrl");
         shiroFilterFactoryBean.setUnauthorizedUrl("/login/Unauthorized");

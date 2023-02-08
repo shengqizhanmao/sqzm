@@ -16,6 +16,7 @@
     <modules>
         <module>htgl</module>
         <module>yxlt</module>
+        <module>common</module>
     </modules>
     <properties>
         <java.version>1.8</java.version>

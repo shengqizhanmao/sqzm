@@ -16,7 +16,6 @@ import java.util.List;
  * @author linShengWei
  * @since 2023-01-05
  */
-@Mapper
 @Repository
 public interface SMenuMapper extends BaseMapper<SMenu> {
 

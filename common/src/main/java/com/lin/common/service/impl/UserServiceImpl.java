@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lin.common.RedisStatus;
 import com.lin.common.Result;
+import com.lin.common.ResultCode;
 import com.lin.common.pojo.Vo.UserTokenVo;
 import com.lin.common.utils.JWTUtils;
 import com.lin.common.utils.Md5Utils;
@@ -47,7 +48,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             return null;
         }
         //获取redis是否存在
-        String userJson = redisTemplate.opsForValue().get(RedisStatus.TOKEN + token);
+        String userJson = redisTemplate.opsForValue().get(RedisStatus.TOKEN_User + token);
         if (StringUtils.isBlank(userJson)) {
             return null;
         }
@@ -138,7 +139,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public Result deleteUser(String id) {
-        if(id==null){
+        if(StringUtils.isBlank(id)){
             return Result.fail("id参数不能为空");
         }
         try{
@@ -186,7 +187,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             return Result.succ("修改头像成功");
         }catch (Exception e){
             log.error("上传图片失败，原因是"+e);
-            return Result.fail(20001,"上传图片失败");
+            return Result.fail(ResultCode.IMAGE_UPLOAD_FAIL,"上传图片失败");
         }
     }
 }

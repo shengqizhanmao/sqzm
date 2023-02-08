@@ -14,15 +14,15 @@ public class Result implements Serializable {
     private boolean success;
 
     public static Result succ(Object data) {
-        return succ(200, "操作成功", data);
+        return succ(ResultCode.SUCCESS, "操作成功", data);
     }
 
     public static Result succ(String msg, Object data) {
-        return succ(200, msg, data);
+        return succ(ResultCode.SUCCESS, msg, data);
     }
 
     public static Result succ(String msg) {
-        return succ(200, msg, null);
+        return succ(ResultCode.SUCCESS, msg, null);
     }
 
     public static Result succ(int code, String msg, Object data) {
@@ -39,7 +39,7 @@ public class Result implements Serializable {
     }
 
     public static Result fail(String msg) {
-        return fail(400, msg, null);
+        return fail(ResultCode.FAIL, msg, null);
     }
 
     public static Result fail(int code, String msg) {
@@ -47,7 +47,7 @@ public class Result implements Serializable {
     }
 
     public static Result fail(String msg, Object data) {
-        return fail(400, msg, data);
+        return fail(ResultCode.FAIL, msg, data);
     }
 
     public static Result fail(int code, String msg, Object data) {

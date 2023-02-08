@@ -10,5 +10,6 @@ public class RedisStatus {
         return "Info:Token:";
     }
     //存储token
-    public static final String TOKEN="Token:";
+    public static final String TOKEN_SUser="Token:SUser:";
+    public static final String TOKEN_User="Token:User:";
 }

@@ -69,13 +69,13 @@ public class LoginController {
         sUserTokenVo.setNickName(sUser.getNickname());
         sUserTokenVo.setSex(sUser.getGender());
         sUserTokenVo.setEnableFlag(sUser.getEnableFlag());
-        redisTemplate.opsForValue().set(RedisStatus.TOKEN+ jwt, JSON.toJSONString(sUserTokenVo), 1, TimeUnit.DAYS);
+        redisTemplate.opsForValue().set(RedisStatus.TOKEN_SUser+ jwt, JSON.toJSONString(sUserTokenVo), 1, TimeUnit.DAYS);
         return Result.succ("登录成功",jwt);
     }
     @GetMapping("/logout")
     public Result Logout(@RequestHeader("Authorization") String token){
         try {
-            redisTemplate.delete(RedisStatus.TOKEN + token);
+            redisTemplate.delete(RedisStatus.TOKEN_SUser + token);
         } catch (Exception e) {
             log.error("redis删除token失败");
             return Result.fail("退出登录失败");

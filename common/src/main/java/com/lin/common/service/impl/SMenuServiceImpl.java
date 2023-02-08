@@ -29,7 +29,7 @@ public class SMenuServiceImpl extends ServiceImpl<SMenuMapper, SMenu> implements
     public Result getSMenuBySUserId(String token){
         SUserTokenVo sUserByToken = sUserService.findSUserByToken(token);
         String userId = sUserByToken.getId();
-        List<SMenu> listMenuByUserId = sMenuMapper.getListSMenuBySUserId(userId);
-        return Result.succ("查询菜单成功",listMenuByUserId);
+        List<SMenu> listSMenuBySUserId = sMenuMapper.getListSMenuBySUserId(userId);
+        return Result.succ("查询菜单成功",listSMenuBySUserId);
     }
 }
