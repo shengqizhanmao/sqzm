@@ -15,7 +15,7 @@
         <result column="email" property="email" />
         <result column="gender" property="gender" />
         <result column="create_date" property="createDate" />
-        <result column="status" property="status" />
+        <result column="enable_flag" property="enableFlag" />
         <result column="login_date" property="loginDate" />
     </resultMap>
 

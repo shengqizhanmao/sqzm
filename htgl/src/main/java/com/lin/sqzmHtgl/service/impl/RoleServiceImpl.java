@@ -2,7 +2,7 @@ package com.lin.sqzmHtgl.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
-import com.lin.sqzmHtgl.common.Result;
+import com.lin.common.Result;
 import com.lin.sqzmHtgl.controller.param.AddRoleAndResource;
 import com.lin.sqzmHtgl.pojo.Resource;
 import com.lin.sqzmHtgl.pojo.Role;
@@ -67,6 +67,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         }
     }
 
+    @Transactional
     @Override
     public Result deleteRoleById(String id) {
         if (id==null){
@@ -74,6 +75,9 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         }
         try{
             int i = roleMapper.deleteById(id);
+            LambdaUpdateWrapper<RoleResource> lambdaUpdateWrapper=new LambdaUpdateWrapper<RoleResource>();
+            lambdaUpdateWrapper.eq(RoleResource::getRoleId,id);
+            roleResourceService.remove(lambdaUpdateWrapper);
             if (i==0){
                 return Result.fail("删除角色失败,该角色不存在");
             }
@@ -107,6 +111,23 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         }
     }
 
+    @Override
+    public Result updateRoleEnableFlag(Role role) {
+        try{
+            LambdaUpdateWrapper<Role> lambdaUpdateWrapper=new LambdaUpdateWrapper<>();
+            lambdaUpdateWrapper.eq(Role::getId,role.getId())
+                    .set(Role::getEnableFlag,role.getEnableFlag());
+            int update = roleMapper.update(role, lambdaUpdateWrapper);
+            if(update==0){
+                return Result.fail("修改角色状态失败");
+            }
+            return Result.succ("修改角色状态成功");
+        }catch (Exception e){
+            log.error("角色状态修改失败,原因:"+e);
+            return Result.fail(500,"状态修改失败");
+        }
+    }
+
     @Transactional
     @Override
     public Result addRoleAndResource(AddRoleAndResource addRoleAndResource) {
@@ -121,7 +142,10 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
             roleResourceService.remove(roleResourceLambdaQueryWrapper2);
         }catch (Exception e) {
             e.printStackTrace();
-            Result.fail("删除权限失败");
+            Result.fail("删除角色与资源连接失败");
+        }
+        if (listResourceId.size()==0){
+            return Result.succ("修改用户拥有角色连接成功");
         }
         for (String resourceId : listResourceId) {
             if (StringUtils.isEmpty(resourceId)) {
@@ -173,15 +197,16 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         return Result.fail("权限删除失败");
     }
 
+    @Override
+    public List<Role> getListRoleBySUserId(String sId) {
+        List<Role> listRoleBySUserId = roleMapper.getListRoleBySUserId(sId);
+        return listRoleBySUserId;
+    }
+
     //Method
     private RoleAndResourceVo Copy(Role role){
         RoleAndResourceVo roleAndResourceVo = new RoleAndResourceVo();
         BeanUtils.copyProperties(role,roleAndResourceVo);
-        if(role.getEnableFlag().equals("1")){
-            roleAndResourceVo.setEnableFlag(true);
-        }else{
-            roleAndResourceVo.setEnableFlag(false);
-        }
         List<Resource> listResourceByRoleId = resourceService.getListResourceByRoleId(role.getId());
         roleAndResourceVo.setListResourceName(listResourceByRoleId);
         return roleAndResourceVo;

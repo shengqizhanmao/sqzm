@@ -55,7 +55,7 @@ public class SUser implements Serializable {
     private Date createDate;
 
     @ApiModelProperty("状态,1为正常,2为封禁")
-    private String status;
+    private String enableFlag;
 
     @ApiModelProperty("最后登录时间")
     private Date loginDate;
@@ -133,13 +133,6 @@ public class SUser implements Serializable {
         this.createDate = createDate;
     }
 
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
 
     public Date getLoginDate() {
         return loginDate;
@@ -165,6 +158,14 @@ public class SUser implements Serializable {
         this.duties = duties;
     }
 
+    public String getEnableFlag() {
+        return enableFlag;
+    }
+
+    public void setEnableFlag(String enableFlag) {
+        this.enableFlag = enableFlag;
+    }
+
     @Override
     public String toString() {
         return "SUser{" +
@@ -179,8 +180,9 @@ public class SUser implements Serializable {
                 ", email='" + email + '\'' +
                 ", gender='" + gender + '\'' +
                 ", createDate=" + createDate +
-                ", status='" + status + '\'' +
+                ", enableFlag='" + enableFlag + '\'' +
                 ", loginDate=" + loginDate +
                 '}';
     }
+
 }

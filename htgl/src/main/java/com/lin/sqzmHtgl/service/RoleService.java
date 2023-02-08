@@ -1,10 +1,12 @@
 package com.lin.sqzmHtgl.service;
 
-import com.lin.sqzmHtgl.common.Result;
+import com.lin.common.Result;
 import com.lin.sqzmHtgl.controller.param.AddRoleAndResource;
 import com.lin.sqzmHtgl.pojo.Role;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.lin.sqzmHtgl.pojo.RoleResource;
+
+import java.util.List;
 
 /**
  * <p>
@@ -21,6 +23,6 @@ public interface RoleService extends IService<Role> {
     Result updateRole(Role role);
     Result addRoleAndResource(AddRoleAndResource addRoleAndResource);
     Result deleteRoleResource(RoleResource roleResource);
-
-
+    Result updateRoleEnableFlag(Role role);
+    List<Role> getListRoleBySUserId(String sId);
 }

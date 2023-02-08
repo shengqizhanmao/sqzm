@@ -16,5 +16,11 @@
     <sql id="Base_Column_List">
         id, role_name, label, description, sort_no, enable_flag
     </sql>
-
+    <select id="getListRoleBySUserId" resultMap="BaseResultMap">
+        SELECT *
+        from sh_role a
+        join sh_user_role b
+        on a.id=b.role_id
+        where b.user_id=#{sId}
+    </select>
 </mapper>

@@ -50,8 +50,8 @@ public class User implements Serializable {
     @ApiModelProperty("创建时间")
     private Date createDate;
 
-    @ApiModelProperty("状态,1为正常用户,2为封禁状态")
-    private String status;
+    @ApiModelProperty("状态,1为正常用户,-1为封禁状态")
+    private String enableFlag;
 
 
     public String getId() {
@@ -126,12 +126,12 @@ public class User implements Serializable {
         this.createDate = createDate;
     }
 
-    public String getStatus() {
-        return status;
+    public String getEnableFlag() {
+        return enableFlag;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setEnableFlag(String enableFlag) {
+        this.enableFlag = enableFlag;
     }
 
     @Override
@@ -146,7 +146,7 @@ public class User implements Serializable {
         ", email=" + email +
         ", gender=" + gender +
         ", createDate=" + createDate +
-        ", status=" + status +
+        ", enableFlag=" + enableFlag +
         "}";
     }
 }

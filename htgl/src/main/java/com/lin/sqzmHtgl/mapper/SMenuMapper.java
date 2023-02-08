@@ -3,6 +3,7 @@ package com.lin.sqzmHtgl.mapper;
 import com.lin.sqzmHtgl.pojo.SMenu;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -19,5 +20,5 @@ import java.util.List;
 @Repository
 public interface SMenuMapper extends BaseMapper<SMenu> {
 
-    List<SMenu> getListSMenuBySUserId(String userId);
+    List<SMenu> getListSMenuBySUserId(@Param("userId") String userId);
 }

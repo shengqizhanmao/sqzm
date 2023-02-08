@@ -1,14 +1,14 @@
 package com.lin.sqzmHtgl.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.lin.sqzmHtgl.common.Result;
+import com.lin.common.RedisStatus;
+import com.lin.common.utils.JWTUtils;
+import com.lin.common.utils.Md5Utils;
 import com.lin.sqzmHtgl.controller.param.LoginForm;
 import com.lin.sqzmHtgl.pojo.SUser;
-import com.lin.sqzmHtgl.pojo.User;
 import com.lin.sqzmHtgl.pojo.Vo.SUserTokenVo;
-import com.lin.sqzmHtgl.utils.JWTUtils;
-import com.lin.sqzmHtgl.utils.Md5Utils;
 import com.lin.sqzmHtgl.service.SUserService;
+import com.lin.common.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -58,7 +58,7 @@ public class LoginController {
         if(!password2.equals(sUser.getPassword())){
             return Result.fail("登录失败,密码错误") ;
         }
-        if(sUser.getStatus().equals("-1")){
+        if(sUser.getEnableFlag().equals("-1")){
             return Result.fail(402,"帐号被禁用");
         }
         String jwt = JWTUtils.createToken(sUser.getUsername());
@@ -67,14 +67,14 @@ public class LoginController {
         sUserTokenVo.setUserName(sUser.getUsername());
         sUserTokenVo.setNickName(sUser.getNickname());
         sUserTokenVo.setSex(sUser.getGender());
-        sUserTokenVo.setEnableFlag(sUser.getStatus());
-        redisTemplate.opsForValue().set("TOKEN_" + jwt, JSON.toJSONString(sUserTokenVo), 1, TimeUnit.DAYS);
+        sUserTokenVo.setEnableFlag(sUser.getEnableFlag());
+        redisTemplate.opsForValue().set(RedisStatus.TOKEN+ jwt, JSON.toJSONString(sUserTokenVo), 1, TimeUnit.DAYS);
         return Result.succ("登录成功",jwt);
     }
     @GetMapping("/logout")
     public Result Logout(@RequestHeader("Authorization") String token){
         try {
-            redisTemplate.delete("TOKEN_" + token);
+            redisTemplate.delete(RedisStatus.TOKEN + token);
         } catch (Exception e) {
             log.error("redis删除token失败");
             return Result.fail("退出登录失败");

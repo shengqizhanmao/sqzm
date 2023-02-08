@@ -13,12 +13,12 @@
         <result column="email" property="email" />
         <result column="gender" property="gender" />
         <result column="create_date" property="createDate" />
-        <result column="status" property="status" />
+        <result column="enable_flag" property="enableFlag" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, username, nickname, password, salt, avatar, email, gender, create_date, status
+        id, username, nickname, password, salt, avatar, email, gender, create_date, enable_flag
     </sql>
 
 </mapper>

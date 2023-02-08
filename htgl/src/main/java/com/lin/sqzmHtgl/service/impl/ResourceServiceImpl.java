@@ -1,7 +1,7 @@
 package com.lin.sqzmHtgl.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.lin.sqzmHtgl.common.Result;
+import com.lin.common.Result;
 import com.lin.sqzmHtgl.pojo.Resource;
 import com.lin.sqzmHtgl.mapper.ResourceMapper;
 import com.lin.sqzmHtgl.pojo.Vo.ResourceVo;

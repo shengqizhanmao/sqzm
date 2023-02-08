@@ -63,12 +63,12 @@ public class ShiroConfig {
     //安全管理器
     @Bean(value = "defaultWebSecurityManager")
     public DefaultWebSecurityManager getDefaultWebSecurityManager(
-            @Qualifier("sUserRealm")SUserRealm userRealm,
+            @Qualifier("sUserRealm")SUserRealm sUserRealm,
             @Qualifier("defaultSubjectDAO")DefaultSubjectDAO defaultSubjectDAO
     ){
         DefaultWebSecurityManager defaultWebSecurityManager=new DefaultWebSecurityManager();
         //关联Realm
-        defaultWebSecurityManager.setRealm(userRealm);
+        defaultWebSecurityManager.setRealm(sUserRealm);
         //关联Session,关闭session
        defaultWebSecurityManager.setSubjectDAO(defaultSubjectDAO);
         return defaultWebSecurityManager;

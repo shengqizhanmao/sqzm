@@ -56,14 +56,16 @@ public class AutoCodeGenerator {
                     // 设置生成的 映射层 文件夹名称
                     .mapper("mapper")
                     // mapper.xml 文件路径。单模块下，其他文件路径默认即可。 ;
-                    .pathInfo(Collections.singletonMap(OutputFile.xml, PROJECT_ROOT_PATH + "/src/main/resources/mapper"));
+//                    .pathInfo(Collections.singletonMap(OutputFile.xml, PROJECT_ROOT_PATH + "/src/main/resources/mapper"));
+                    .pathInfo(Collections.singletonMap(OutputFile.xml, PROJECT_ROOT_PATH + "/src/main/java/com/lin/sqzmHtgl/mapper"));
         });
 
         // 5、策略配置
         generator.strategyConfig(builder -> {
             // 设置数据库表名称. 如果不设置，则会将数据库中所有表都生成。（注意：需要与数据库中表名称一致，前缀也需添加）
             // ===========3.手动修改设置。===========
-            builder.addInclude("sh_resource","sh_role","sh_role_resource","sh_user_role")
+            builder.addInclude("u_palte","u_modulars")
+//            "sh_resource","sh_role","sh_role_resource","sh_user_role"
                     // 过滤表前缀，生成的类名会去掉这个前缀
                     .addTablePrefix("u_","sh_")
                     // 第一阶段

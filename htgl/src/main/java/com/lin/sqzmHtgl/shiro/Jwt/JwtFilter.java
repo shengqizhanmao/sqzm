@@ -2,13 +2,16 @@ package com.lin.sqzmHtgl.shiro.Jwt;
 
 
 import com.alibaba.fastjson.JSON;
-import com.lin.sqzmHtgl.common.Result;
+import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.lin.common.Result;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpStatus;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.DisabledAccountException;
+import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.authc.BasicHttpAuthenticationFilter;
 import org.springframework.stereotype.Component;
@@ -28,6 +31,7 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
     /**
      * 执行登录认证
      */
+    @SneakyThrows
     @Override
     //这个方法叫做尝试进行登录的操作,如果token存在,那么进行提交登录,如果不存在说明可能是正在进行登录或者做其它的事情 直接放过即可
     protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) {
@@ -42,7 +46,16 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
             Subject subject = SecurityUtils.getSubject();
             subject.login(jwtToken);
             return true;
-        } catch (Exception e) {
+        }catch (UnknownAccountException e){
+            HttpServletResponse httpServletResponse = (HttpServletResponse) response;
+            httpServletResponse.setContentType("application/json;charset=utf-8");
+            httpServletResponse.setCharacterEncoding("utf-8");
+            httpServletResponse.setStatus(401);
+            Result fail = Result.fail(401, "登录过期,请重新登录");
+            httpServletResponse.getWriter().write(JSON.toJSONString(fail, SerializerFeature.WriteDateUseDateFormat));
+            return false;
+        }
+        catch (Exception e) {
             log.info("JwtFilter-isAccessAllowed的错误,错误原因:"+e);
             return false;
         }

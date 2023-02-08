@@ -1,6 +1,6 @@
 package com.lin.sqzmHtgl.controller;
 
-import com.lin.sqzmHtgl.common.Result;
+import com.lin.common.Result;
 import com.lin.sqzmHtgl.pojo.Resource;
 import com.lin.sqzmHtgl.service.ResourceService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;

@@ -1,6 +1,6 @@
 package com.lin.sqzmHtgl.service.impl;
 
-import com.lin.sqzmHtgl.common.Result;
+import com.lin.common.Result;
 import com.lin.sqzmHtgl.pojo.SMenu;
 import com.lin.sqzmHtgl.mapper.SMenuMapper;
 import com.lin.sqzmHtgl.pojo.Vo.SUserTokenVo;
@@ -27,7 +27,7 @@ public class SMenuServiceImpl extends ServiceImpl<SMenuMapper, SMenu> implements
     @Autowired
     SUserService sUserService;
     public Result getSMenuBySUserId(String token){
-        SUserTokenVo sUserByToken = sUserService.findUserByToken(token);
+        SUserTokenVo sUserByToken = sUserService.findSUserByToken(token);
         String userId = sUserByToken.getId();
         List<SMenu> listMenuByUserId = sMenuMapper.getListSMenuBySUserId(userId);
         return Result.succ("查询菜单成功",listMenuByUserId);

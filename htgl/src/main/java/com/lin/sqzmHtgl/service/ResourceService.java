@@ -1,6 +1,6 @@
 package com.lin.sqzmHtgl.service;
 
-import com.lin.sqzmHtgl.common.Result;
+import com.lin.common.Result;
 import com.lin.sqzmHtgl.pojo.Resource;
 import com.baomidou.mybatisplus.extension.service.IService;
 

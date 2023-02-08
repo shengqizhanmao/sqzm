@@ -30,7 +30,7 @@ public class RoleAndResourceVo {
     private Integer sortNo;
 
     @ApiModelProperty("是否有效")
-    private Boolean enableFlag;
+    private String enableFlag;
 
     @ApiModelProperty("角色拥有的资源权限")
     private List<Resource> listResourceName;
@@ -92,11 +92,11 @@ public class RoleAndResourceVo {
         this.sortNo = sortNo;
     }
 
-    public Boolean getEnableFlag() {
+    public String getEnableFlag() {
         return enableFlag;
     }
 
-    public void setEnableFlag(Boolean enableFlag) {
+    public void setEnableFlag(String enableFlag) {
         this.enableFlag = enableFlag;
     }
 

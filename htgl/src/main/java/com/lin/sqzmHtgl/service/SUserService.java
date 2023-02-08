@@ -1,6 +1,6 @@
 package com.lin.sqzmHtgl.service;
 
-import com.lin.sqzmHtgl.common.Result;
+import com.lin.common.Result;
 import com.lin.sqzmHtgl.pojo.SUser;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.lin.sqzmHtgl.pojo.Vo.SUserTokenVo;
@@ -16,6 +16,10 @@ import com.lin.sqzmHtgl.pojo.Vo.SUserTokenVo;
 public interface SUserService extends IService<SUser> {
     SUserTokenVo findSUserByToken(String token);
     SUser getSUserByUsername(String username);
+    Result getSUserAndRole();
     Result addSUser(SUser sUser);
-    SUserTokenVo findUserByToken(String token);
+    Result updateSUser(SUser sUser);
+    Result updateEnableFlag(SUser sUser);
+    Result deleteSUser(String id);
+
 }

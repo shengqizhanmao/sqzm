@@ -1,5 +1,7 @@
 package com.lin.sqzmHtgl.service;
 
+import com.lin.common.Result;
+import com.lin.sqzmHtgl.controller.param.AddSUserAndRole;
 import com.lin.sqzmHtgl.pojo.UserRole;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -13,4 +15,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface UserRoleService extends IService<UserRole> {
 
+    Result addSUserAndRole(AddSUserAndRole addSUserAndRole);
 }

@@ -31,7 +31,7 @@
             from sh_user_role a
             join sh_role_resource b
             on a.role_id=b.role_id
-            where a.user_id=#{id}) d
+            where a.user_id=#{id} and b.enable_flag='1') d
         on c.id=d.resource_id
     </select>
 

@@ -1,9 +1,10 @@
 package com.lin.sqzmHtgl.controller;
 
-import com.lin.sqzmHtgl.common.Result;
+import com.lin.common.Result;
 import com.lin.sqzmHtgl.controller.param.AddRoleAndResource;
 import com.lin.sqzmHtgl.pojo.Role;
 import com.lin.sqzmHtgl.pojo.RoleResource;
+
 import com.lin.sqzmHtgl.service.RoleService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * <p>
@@ -30,9 +33,19 @@ public class RoleController {
     @RequiresPermissions("role:get")
     @GetMapping("/get")
     public Result get(){
-        return roleService.getRoleAndResource();
+        try{
+            List<Role> list = roleService.list();
+            return Result.succ("查询角色成功",list);
+        }catch (Exception e){
+            return Result.fail(500,"查询角色失败");
+        }
     }
 
+    @RequiresPermissions("role:get")
+    @GetMapping("/getRoleAndResource")
+    public Result getRoleAndResource(){
+        return roleService.getRoleAndResource();
+    }
     @RequiresPermissions("role:add")
     @PostMapping("/add")
     public Result add(@RequestBody Role role){
@@ -49,6 +62,14 @@ public class RoleController {
         }
         return roleService.updateRole(role);
     }
+    @RequiresPermissions("role:update")
+    @PostMapping("/updateEnable")
+    public Result updateEnable(@RequestBody Role role){
+        if (role==null){
+            return Result.fail("参数不能为空");
+        }
+        return roleService.updateRoleEnableFlag(role);
+    }
     @RequiresPermissions("role:delete")
     @PostMapping("/delete")
     public Result delete(@RequestBody Role role){
@@ -62,6 +83,7 @@ public class RoleController {
     public Result add(@RequestBody AddRoleAndResource addRoleAndResource){
         return roleService.addRoleAndResource(addRoleAndResource);
     }
+
     @RequiresPermissions("role:delete")
     @PostMapping("/deleteRoleAndResource")
     public Result deleteRoleAndResource(@RequestBody RoleResource roleResource){

@@ -24,7 +24,7 @@ public class SwaggerConfig {
 //                .groupName("分布式任务系统") // 如果配置多个文档的时候，那么需要配置groupName来分组标识
                 .apiInfo(apiInfo()) // 用于生成API信息
                 .select() // select()函数返回一个ApiSelectorBuilder实例,用来控制接口被swagger做成文档
-                .apis(RequestHandlerSelectors.basePackage("com")) // 用于指定扫描哪个包下的接口
+                .apis(RequestHandlerSelectors.basePackage("com.lin.sqzmHtgl")) // 用于指定扫描哪个包下的接口
                 .paths(PathSelectors.any())// 选择所有的API,如果你想只为部分API生成文档，可以配置这里
                 .build();
     }
@@ -36,8 +36,8 @@ public class SwaggerConfig {
      */
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("博客项目API") //  可以用来自定义API的主标题
-                .description("博客项目SwaggerAPI管理") // 可以用来描述整体的API
+                .title("游戏论坛后台系统API") //  可以用来自定义API的主标题
+                .description("游戏论坛后台系统APISwaggerAPI管理") // 可以用来描述整体的API
                 .version("1.0") // 可以用来定义版本。
                 .build(); //
     }
