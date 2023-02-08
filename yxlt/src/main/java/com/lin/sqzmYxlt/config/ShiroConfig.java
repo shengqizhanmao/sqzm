@@ -1,7 +1,7 @@
 package com.lin.sqzmYxlt.config;
 
-import com.lin.sqzmYxlt.shiro.Jwt.JwtFilter;
-import com.lin.sqzmYxlt.shiro.core.Realm.UserRealm;
+import com.lin.common.shiro.Jwt.JwtFilter;
+import com.lin.common.shiro.core.Realm.UserRealm;
 import lombok.extern.log4j.Log4j2;
 import org.apache.shiro.mgt.DefaultSessionStorageEvaluator;
 import org.apache.shiro.mgt.DefaultSubjectDAO;
