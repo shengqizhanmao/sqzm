@@ -1,18 +1,31 @@
 package com.lin.sqzmYxlt.controller.param;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * @author lin
  */
 public class LoginForm {
     private String username;
     private String password;
+    private String code;
 
+    @NotNull
     @Override
     public String toString() {
         return "LoginForm{" +
                 "username='" + username + '\'' +
                 ", password='" + password + '\'' +
+                ", code='" + code + '\'' +
                 '}';
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public String getUsername() {

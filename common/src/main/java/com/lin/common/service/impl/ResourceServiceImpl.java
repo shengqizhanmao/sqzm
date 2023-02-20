@@ -8,6 +8,7 @@ import com.lin.common.pojo.Resource;
 import com.lin.common.pojo.Vo.ResourceVo;
 import com.lin.common.service.ResourceService;
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,7 +28,7 @@ import java.util.List;
 public class ResourceServiceImpl extends ServiceImpl<ResourceMapper, Resource> implements ResourceService {
 
     @Autowired
-    ResourceMapper resourceMapper;
+    private ResourceMapper resourceMapper;
     @Override
     public List<Resource> getListResourceByUserId(String id){
         List<Resource> listResourceByUserId = resourceMapper.getListResourceByUserId(id);
@@ -43,6 +44,7 @@ public class ResourceServiceImpl extends ServiceImpl<ResourceMapper, Resource> i
         return listResourceByRoleId;
     }
 
+    @NotNull
     @Override
     public Result getListResourceByTypeResources() {
         LambdaQueryWrapper<Resource> lambdaQueryWrapper=new LambdaQueryWrapper();
@@ -62,8 +64,9 @@ public class ResourceServiceImpl extends ServiceImpl<ResourceMapper, Resource> i
         return Result.succ("查询成功",resourceVos);
     }
 
+    @NotNull
     @Override
-    public Result addResource(Resource resource) {
+    public Result addResource(@NotNull Resource resource) {
         String resourceType = resource.getResourceType();
         if(StringUtils.isEmpty(resourceType)){
             return Result.fail("添加失败,类型不能为空");
@@ -84,8 +87,9 @@ public class ResourceServiceImpl extends ServiceImpl<ResourceMapper, Resource> i
         return Result.succ("添加成功");
     }
 
+    @NotNull
     @Override
-    public Result updateResource(Resource resource) {
+    public Result updateResource(@NotNull Resource resource) {
         int i = resourceMapper.updateById(resource);
         if(StringUtils.isEmpty(resource.getResourceType())){
             return Result.fail("添加失败,类型不能为空");
@@ -112,12 +116,14 @@ public class ResourceServiceImpl extends ServiceImpl<ResourceMapper, Resource> i
     }
 
     //Method
-    private ResourceVo Copy(Resource resource){
+    @NotNull
+    private ResourceVo Copy(@NotNull Resource resource){
         ResourceVo resourceVo = new ResourceVo();
         BeanUtils.copyProperties(resource,resourceVo);
         return resourceVo;
     }
-    private List<ResourceVo> ListCopy(List<Resource> resources){
+    @NotNull
+    private List<ResourceVo> ListCopy(@NotNull List<Resource> resources){
         List<ResourceVo> ResourceVos = new ArrayList<>();
         for(Resource resource:resources){
             ResourceVo copy = Copy(resource);
@@ -126,7 +132,8 @@ public class ResourceServiceImpl extends ServiceImpl<ResourceMapper, Resource> i
         }
         return ResourceVos;
     }
-    private ResourceVo Select(ResourceVo resourceVo){
+    @NotNull
+    private ResourceVo Select(@NotNull ResourceVo resourceVo){
         if(resourceVo.getIsLeaf().equals("1")){ //判断有无子节点
             LambdaQueryWrapper<Resource> lambdaQueryWrapper=new LambdaQueryWrapper<>();
             lambdaQueryWrapper.eq(Resource::getParentId,resourceVo.getId());

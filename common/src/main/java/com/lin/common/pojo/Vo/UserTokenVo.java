@@ -3,6 +3,7 @@ package com.lin.common.pojo.Vo;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import io.swagger.annotations.ApiModelProperty;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author lin
@@ -16,14 +17,50 @@ public class UserTokenVo {
     @ApiModelProperty("登录名称")
     private String userName;
 
+    @ApiModelProperty("头像")
+    private String avatar;
+
     @ApiModelProperty("昵称")
     private String nickName;
 
     @ApiModelProperty("性别")
     private String gender;
 
+    @ApiModelProperty("邮箱")
+    private String email;
+
     @ApiModelProperty("是否有效")
     private String enableFlag;
+
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    @Override
+    public String toString() {
+        return "UserTokenVo{" +
+                "id='" + id + '\'' +
+                ", userName='" + userName + '\'' +
+                ", avatar='" + avatar + '\'' +
+                ", nickName='" + nickName + '\'' +
+                ", gender='" + gender + '\'' +
+                ", email='" + email + '\'' +
+                ", enableFlag='" + enableFlag + '\'' +
+                '}';
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
 
     public String getEnableFlag() {
         return enableFlag;
@@ -66,14 +103,4 @@ public class UserTokenVo {
         this.gender = gender;
     }
 
-    @Override
-    public String toString() {
-        return "UserTokenVo{" +
-                "id='" + id + '\'' +
-                ", userName='" + userName + '\'' +
-                ", nickName='" + nickName + '\'' +
-                ", gender='" + gender + '\'' +
-                ", enableFlag='" + enableFlag + '\'' +
-                '}';
-    }
 }

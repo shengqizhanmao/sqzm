@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 
@@ -63,6 +64,7 @@ public class Category implements Serializable {
         this.description = description;
     }
 
+    @NotNull
     @Override
     public String toString() {
         return "Category{" +

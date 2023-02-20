@@ -5,12 +5,9 @@ import com.lin.common.pojo.Menu;
 import com.lin.common.service.MenuService;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -28,6 +25,7 @@ public class MenuController {
     @Autowired
     MenuService menuService;
     //获取menu
+    @NotNull
     @RequiresAuthentication
     @GetMapping("/get")
     public Result get(){
@@ -35,6 +33,7 @@ public class MenuController {
         return Result.succ("获取用户菜单",list);
     }
     //添加menu
+    @NotNull
     @RequiresPermissions("menu:add")
     @PostMapping("/add")
     public Result add(@RequestBody Menu menu){
@@ -55,9 +54,10 @@ public class MenuController {
         return Result.fail("修改用户菜单失败");
     }
     //删除menu
+    @NotNull
     @RequiresPermissions("menu:delete")
     @PostMapping("/delete")
-    public Result delete(@RequestBody Menu menu){
+    public Result delete(@NotNull @RequestBody Menu menu){
         boolean b = menuService.removeById(menu.getId());
         if (b){
             return Result.succ("删除用户菜单成功");

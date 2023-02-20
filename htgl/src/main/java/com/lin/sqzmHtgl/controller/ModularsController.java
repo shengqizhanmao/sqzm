@@ -5,12 +5,9 @@ import com.lin.common.pojo.Modulars;
 import com.lin.common.service.ModularsService;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -28,6 +25,7 @@ public class ModularsController {
     @Autowired
     ModularsService modularsService;
     //获取modulars
+    @NotNull
     @RequiresAuthentication
     @GetMapping("/get")
     public Result get(){
@@ -35,6 +33,7 @@ public class ModularsController {
         return Result.succ("获取模块",list);
     }
     //添加modulars
+    @NotNull
     @RequiresPermissions("modulars:add")
     @PostMapping("/add")
     public Result add(@RequestBody Modulars modulars){
@@ -55,9 +54,10 @@ public class ModularsController {
         return Result.fail("修改模块失败");
     }
     //删除modulars
+    @NotNull
     @RequiresPermissions("modulars:delete")
     @PostMapping("/delete")
-    public Result delete(@RequestBody Modulars modulars){
+    public Result delete(@NotNull @RequestBody Modulars modulars){
         boolean b = modularsService.removeById(modulars.getId());
         if (b){
             return Result.succ("删除模块成功");

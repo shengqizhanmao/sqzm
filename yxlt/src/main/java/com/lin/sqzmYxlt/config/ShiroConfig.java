@@ -8,6 +8,7 @@ import org.apache.shiro.mgt.DefaultSubjectDAO;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -28,6 +29,7 @@ import java.util.Map;
 public class ShiroConfig {
 
     //ShiroFilterFactoryBean
+    @NotNull
     @Bean(value = "shiroFilterFactoryBean")
     public ShiroFilterFactoryBean shiroFilterFactoryBean(
             @Qualifier("defaultWebSecurityManager") DefaultWebSecurityManager defaultWebSecurityManager
@@ -61,6 +63,7 @@ public class ShiroConfig {
     }
 
     //安全管理器
+    @NotNull
     @Bean(value = "defaultWebSecurityManager")
     public DefaultWebSecurityManager getDefaultWebSecurityManager(
             @Qualifier("userRealm") UserRealm userRealm,
@@ -75,18 +78,21 @@ public class ShiroConfig {
     }
 
     //Realm
+    @NotNull
     @Bean(value = "userRealm")
     public UserRealm getUserRealm(){
         return new UserRealm();
     }
 
     //session
+    @NotNull
     @Bean(value = "defaultSubjectDAO")
     public DefaultSubjectDAO defaultSubjectDAO(@Qualifier("defaultSessionStorageEvaluator")DefaultSessionStorageEvaluator defaultSessionStorageEvaluator) {
         DefaultSubjectDAO subjectDAO = new DefaultSubjectDAO();
         subjectDAO.setSessionStorageEvaluator(defaultSessionStorageEvaluator);
         return subjectDAO;
     }
+    @NotNull
     @Bean(value = "defaultSessionStorageEvaluator")
     public DefaultSessionStorageEvaluator defaultSessionStorageEvaluator() {
         DefaultSessionStorageEvaluator defaultSessionStorageEvaluator = new DefaultSessionStorageEvaluator();
@@ -94,6 +100,7 @@ public class ShiroConfig {
         return defaultSessionStorageEvaluator;
     }
     //aop
+    @NotNull
     @Bean
     public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(@Qualifier("defaultWebSecurityManager") DefaultWebSecurityManager defaultWebSecurityManager) {
         AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor

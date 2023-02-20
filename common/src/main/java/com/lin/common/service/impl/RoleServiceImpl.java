@@ -9,12 +9,13 @@ import com.lin.common.mapper.RoleMapper;
 import com.lin.common.pojo.Resource;
 import com.lin.common.pojo.Role;
 import com.lin.common.pojo.RoleResource;
-import com.lin.common.pojo.Vo.RoleAndResourceVo;
-import com.lin.common.pojo.param.AddRoleAndResource;
+import com.lin.common.pojo.Vo2.RoleAndResourceVo;
 import com.lin.common.service.ResourceService;
 import com.lin.common.service.RoleResourceService;
 import com.lin.common.service.RoleService;
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,13 +35,14 @@ import java.util.List;
 @Service
 public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements RoleService {
     @Autowired
-    RoleMapper roleMapper;
+    private RoleMapper roleMapper;
 
     @Autowired
-    ResourceService resourceService;
+    private  ResourceService resourceService;
 
     @Autowired
-    RoleResourceService roleResourceService;
+    private RoleResourceService roleResourceService;
+    @NotNull
     @Override
     public Result getRoleAndResource() {
         LambdaQueryWrapper<Role> lambdaQueryWrapper=new LambdaQueryWrapper<>();
@@ -50,8 +52,9 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         return Result.succ("查询角色成功",roleAndResourceVos);
     }
 
+    @NotNull
     @Override
-    public Result saveRole(Role role) {
+    public Result saveRole(@NotNull Role role) {
         role.setEnableFlag("1");
         if (StringUtils.isEmpty(role.getRoleName())){
             return Result.fail("添加失败,角色名称不能为空");
@@ -68,9 +71,10 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         }
     }
 
+    @NotNull
     @Transactional
     @Override
-    public Result deleteRoleById(String id) {
+    public Result deleteRoleById(@Nullable String id) {
         if (id==null){
             return Result.fail("id不能为空");
         }
@@ -89,8 +93,9 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         return Result.succ("删除角色成功");
     }
 
+    @NotNull
     @Override
-    public Result updateRole(Role role) {
+    public Result updateRole(@NotNull Role role) {
         if (StringUtils.isEmpty(role.getId())){
             return Result.fail("id参数不能为空");
         }
@@ -112,8 +117,9 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         }
     }
 
+    @NotNull
     @Override
-    public Result updateRoleEnableFlag(Role role) {
+    public Result updateRoleEnableFlag(@NotNull Role role) {
         try{
             LambdaUpdateWrapper<Role> lambdaUpdateWrapper=new LambdaUpdateWrapper<>();
             lambdaUpdateWrapper.eq(Role::getId,role.getId())
@@ -129,11 +135,10 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         }
     }
 
+    @NotNull
     @Transactional
     @Override
-    public Result addRoleAndResource(AddRoleAndResource addRoleAndResource) {
-        List<String> listResourceId = addRoleAndResource.getListResourceId();
-        String roleId = addRoleAndResource.getRoleId();
+    public Result addRoleAndResource(String roleId, @NotNull List<String> listResourceId) {
         if (StringUtils.isEmpty(roleId)) {
             return Result.fail("角色id参数不能为空");
         }
@@ -178,8 +183,9 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         return Result.succ("添加权限成功");
     }
 
+    @NotNull
     @Override
-    public Result deleteRoleResource(RoleResource roleResource) {
+    public Result deleteRoleResource(@NotNull RoleResource roleResource) {
         String roleId = roleResource.getRoleId();
         String resourceId = roleResource.getResourceId();
         if (StringUtils.isEmpty(resourceId)) {
@@ -205,14 +211,16 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     }
 
     //Method
-    private RoleAndResourceVo Copy(Role role){
+    @NotNull
+    private RoleAndResourceVo Copy(@NotNull Role role){
         RoleAndResourceVo roleAndResourceVo = new RoleAndResourceVo();
         BeanUtils.copyProperties(role,roleAndResourceVo);
         List<Resource> listResourceByRoleId = resourceService.getListResourceByRoleId(role.getId());
         roleAndResourceVo.setListResourceName(listResourceByRoleId);
         return roleAndResourceVo;
     }
-    private List<RoleAndResourceVo> ListCopy(List<Role> roles){
+    @NotNull
+    private List<RoleAndResourceVo> ListCopy(@NotNull List<Role> roles){
         List<RoleAndResourceVo> roleAndResourceVos = new ArrayList<>();
         for(Role role:roles){
             RoleAndResourceVo copy = Copy(role);

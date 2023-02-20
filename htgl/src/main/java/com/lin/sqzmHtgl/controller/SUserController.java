@@ -2,23 +2,18 @@ package com.lin.sqzmHtgl.controller;
 
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.lin.common.Result;
-
 import com.lin.common.pojo.SUser;
 import com.lin.common.pojo.UserRole;
 import com.lin.common.pojo.Vo.SUserTokenVo;
 import com.lin.common.pojo.Vo.SUserVo;
-import com.lin.common.pojo.param.AddSUserAndRole;
 import com.lin.common.service.SUserService;
 import com.lin.common.service.UserRoleService;
+import com.lin.sqzmHtgl.controller.param.AddSUserAndRole;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.BeanUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -41,6 +36,7 @@ public class SUserController {
     @Resource
     UserRoleService userRoleService;
 
+    @NotNull
     @RequiresAuthentication
     @GetMapping("/getSUserByToken")
     public Result getSUserByToken(
@@ -49,6 +45,7 @@ public class SUserController {
         SUserTokenVo sUserByToken = sUserService.findSUserByToken(token);
         return Result.succ("获取sUser信息成功",sUserByToken);
     }
+    @NotNull
     @RequiresPermissions("sUser:get")
     @GetMapping("/get")
     public Result get(){
@@ -75,8 +72,10 @@ public class SUserController {
 
     @RequiresPermissions("sUser:add")
     @PostMapping("/addSUserAndRole")
-    public Result addSUserAndRole(@RequestBody AddSUserAndRole addSUserAndRole){
-        return userRoleService.addSUserAndRole(addSUserAndRole);
+    public Result addSUserAndRole(@NotNull @RequestBody AddSUserAndRole addSUserAndRole){
+        List<String> listRoleId = addSUserAndRole.getListRoleId();
+        String sId = addSUserAndRole.getsId();
+        return userRoleService.addSUserAndRole(listRoleId,sId);
     }
 
         @RequiresPermissions("sUser:update")

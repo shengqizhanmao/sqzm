@@ -18,6 +18,8 @@ import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 
@@ -45,7 +47,7 @@ public class SUserRealm extends AuthorizingRealm {
 
     //授权
     @Override
-    protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
+    protected AuthorizationInfo doGetAuthorizationInfo(@NotNull PrincipalCollection principalCollection) {
 //        log.info("------开始授权-------");
         SUserTokenVo sUser = (SUserTokenVo)principalCollection.getPrimaryPrincipal();
         String id = sUser.getId();
@@ -72,8 +74,9 @@ public class SUserRealm extends AuthorizingRealm {
     }
 
     //认证
+    @Nullable
     @Override
-    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
+    protected AuthenticationInfo doGetAuthenticationInfo(@NotNull AuthenticationToken authenticationToken) throws AuthenticationException {
         JwtToken token=(JwtToken)authenticationToken;
         String credentials = (String)authenticationToken.getCredentials();
         SUserTokenVo sUser = sUserService.findSUserByToken(token.getToken());

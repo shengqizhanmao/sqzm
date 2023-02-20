@@ -9,11 +9,12 @@
         <result column="icon" property="icon" />
         <result column="path" property="path" />
         <result column="palte_id" property="palteId" />
+        <result column="sort" property="sort" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, name, icon, path, palte_id
+        id, name, icon, path, palte_id,sort
     </sql>
 
 </mapper>

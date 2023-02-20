@@ -12,6 +12,7 @@ import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
@@ -37,7 +38,7 @@ public class CacheAspect {
 
     //环绕通知
     @Around("pt()")
-    public Object around(ProceedingJoinPoint joinPoint) {
+    public Object around(@NotNull ProceedingJoinPoint joinPoint) {
         try {
             Signature signature = joinPoint.getSignature();
             String className = joinPoint.getTarget().getClass().getSimpleName();

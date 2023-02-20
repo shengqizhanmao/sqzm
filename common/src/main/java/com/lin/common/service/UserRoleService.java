@@ -4,7 +4,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.lin.common.Result;
 
 import com.lin.common.pojo.UserRole;
-import com.lin.common.pojo.param.AddSUserAndRole;
+
+import java.util.List;
 
 /**
  * <p>
@@ -15,6 +16,5 @@ import com.lin.common.pojo.param.AddSUserAndRole;
  * @since 2023-01-05
  */
 public interface UserRoleService extends IService<UserRole> {
-
-    Result addSUserAndRole(AddSUserAndRole addSUserAndRole);
+    Result addSUserAndRole( List<String> listRoleId,  String sId);
 }

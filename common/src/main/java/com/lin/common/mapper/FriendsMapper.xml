@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lin.common.mapper.FriendsMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.lin.common.pojo.Friends">
+        <id column="id" property="id" />
+        <result column="form_user_id" property="formUserId" />
+        <result column="to_user_id" property="toUserId" />
+        <result column="msg" property="msg" />
+        <result column="created_date" property="createdDate" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id,form_user_id,to_user_id,msg,created_date
+    </sql>
+
+</mapper>

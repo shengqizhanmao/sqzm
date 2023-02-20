@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 
@@ -32,6 +33,28 @@ public class Modulars implements Serializable {
 
     private String palteId;
 
+    private String sort;
+
+    @NotNull
+    @Override
+    public String toString() {
+        return "Modulars{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", icon='" + icon + '\'' +
+                ", path='" + path + '\'' +
+                ", palteId='" + palteId + '\'' +
+                ", sort='" + sort + '\'' +
+                '}';
+    }
+
+    public String getSort() {
+        return sort;
+    }
+
+    public void setSort(String sort) {
+        this.sort = sort;
+    }
 
     public String getId() {
         return id;
@@ -73,14 +96,4 @@ public class Modulars implements Serializable {
         this.palteId = palteId;
     }
 
-    @Override
-    public String toString() {
-        return "Modulars{" +
-        "id=" + id +
-        ", name=" + name +
-        ", icon=" + icon +
-        ", path=" + path +
-        ", palteId=" + palteId +
-        "}";
-    }
 }

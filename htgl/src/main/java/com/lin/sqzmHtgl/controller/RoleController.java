@@ -1,19 +1,15 @@
 package com.lin.sqzmHtgl.controller;
 
 import com.lin.common.Result;
-
 import com.lin.common.pojo.Role;
 import com.lin.common.pojo.RoleResource;
-
-import com.lin.common.pojo.param.AddRoleAndResource;
 import com.lin.common.service.RoleService;
+import com.lin.sqzmHtgl.controller.param.AddRoleAndResource;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -31,6 +27,7 @@ public class RoleController {
     @Autowired
     RoleService roleService;
 
+    @NotNull
     @RequiresPermissions("role:get")
     @GetMapping("/get")
     public Result get(){
@@ -49,7 +46,7 @@ public class RoleController {
     }
     @RequiresPermissions("role:add")
     @PostMapping("/add")
-    public Result add(@RequestBody Role role){
+    public Result add(@Nullable @RequestBody Role role){
         if (role==null){
             return Result.fail("参数不能为空");
         }
@@ -57,7 +54,7 @@ public class RoleController {
     }
     @RequiresPermissions("role:update")
     @PostMapping("/update")
-    public Result update(@RequestBody Role role){
+    public Result update(@Nullable @RequestBody Role role){
         if (role==null){
             return Result.fail("参数不能为空");
         }
@@ -65,7 +62,7 @@ public class RoleController {
     }
     @RequiresPermissions("role:update")
     @PostMapping("/updateEnable")
-    public Result updateEnable(@RequestBody Role role){
+    public Result updateEnable(@Nullable @RequestBody Role role){
         if (role==null){
             return Result.fail("参数不能为空");
         }
@@ -73,7 +70,7 @@ public class RoleController {
     }
     @RequiresPermissions("role:delete")
     @PostMapping("/delete")
-    public Result delete(@RequestBody Role role){
+    public Result delete(@Nullable @RequestBody Role role){
         if (role==null){
             return Result.fail("id不能为空");
         }
@@ -81,8 +78,10 @@ public class RoleController {
     }
     @RequiresPermissions("role:add")
     @PostMapping("/addRoleAndResource")
-    public Result add(@RequestBody AddRoleAndResource addRoleAndResource){
-        return roleService.addRoleAndResource(addRoleAndResource);
+    public Result add(@NotNull @RequestBody AddRoleAndResource addRoleAndResource){
+        List<String> listResourceId = addRoleAndResource.getListResourceId();
+        String roleId = addRoleAndResource.getRoleId();
+        return roleService.addRoleAndResource(roleId,listResourceId);
     }
 
     @RequiresPermissions("role:delete")

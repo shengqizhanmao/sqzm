@@ -21,4 +21,12 @@
         id, username, nickname, password, salt, avatar, email, gender, create_date, enable_flag
     </sql>
 
+    <select id="selectListUserByUsernameOrNickname" resultMap="BaseResultMap">
+        select id,username,nickname,avatar,gender,enable_flag
+        FROM u_user
+        where nickname
+            like "%"#{usernameOrNickname}"%"
+           OR username
+            like "%"#{usernameOrNickname}"%"
+    </select>
 </mapper>

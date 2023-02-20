@@ -1,5 +1,7 @@
 package com.lin.sqzmHtgl.controller.param;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * @author lin
  */
@@ -7,6 +9,7 @@ public class LoginForm {
     private String username;
     private String password;
 
+    @NotNull
     @Override
     public String toString() {
         return "LoginForm{" +

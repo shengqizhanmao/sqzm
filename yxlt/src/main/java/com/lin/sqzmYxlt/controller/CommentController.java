@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
  * <p>
  *  前端控制器
  * </p>
- *
+ * @apiNote 评论
  * @author linShengWei
  * @since 2023-02-06
  */

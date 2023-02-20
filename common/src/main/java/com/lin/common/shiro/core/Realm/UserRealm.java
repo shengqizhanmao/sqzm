@@ -18,6 +18,7 @@ import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.jetbrains.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 
@@ -72,17 +73,18 @@ public class UserRealm extends AuthorizingRealm {
     }
 
     //认证
+    @Nullable
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
         JwtToken token=(JwtToken)authenticationToken;
         String credentials = (String)authenticationToken.getCredentials();
-        UserTokenVo user = userService.findUserByToken(token.getToken());
-        if(user==null){
-            return null;
-        }
-        if(user.getEnableFlag().equals("-1")){
-            throw new DisabledAccountException();
-        }
-        return new SimpleAuthenticationInfo(user,credentials,"UserRealm");
+            UserTokenVo user = userService.findUserByToken(token.getToken());
+            if(user==null){
+                return null;
+            }
+            if(user.getEnableFlag().equals("-1")){
+                throw new DisabledAccountException();
+            }
+            return new SimpleAuthenticationInfo(user,credentials,"UserRealm");
     }
 }

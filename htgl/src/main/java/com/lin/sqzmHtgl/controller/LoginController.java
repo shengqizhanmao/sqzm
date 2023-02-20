@@ -2,22 +2,17 @@ package com.lin.sqzmHtgl.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.lin.common.RedisStatus;
+import com.lin.common.Result;
 import com.lin.common.pojo.SUser;
 import com.lin.common.pojo.Vo.SUserTokenVo;
 import com.lin.common.service.SUserService;
 import com.lin.common.utils.JWTUtils;
 import com.lin.common.utils.Md5Utils;
 import com.lin.sqzmHtgl.controller.param.LoginForm;
-import com.lin.common.Result;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.concurrent.TimeUnit;
@@ -32,11 +27,12 @@ import java.util.concurrent.TimeUnit;
 public class LoginController {
     @Resource
     SUserService sUserService;
-    @Autowired
+    @Resource
     RedisTemplate<String,String> redisTemplate;
 
+    @NotNull
     @PostMapping()
-    public Result login(@RequestBody LoginForm loginForm){
+    public Result login(@NotNull @RequestBody LoginForm loginForm){
         String username = loginForm.getUsername();
         String password = loginForm.getPassword();
         if(username.equals("")){
@@ -72,6 +68,7 @@ public class LoginController {
         redisTemplate.opsForValue().set(RedisStatus.TOKEN_SUser+ jwt, JSON.toJSONString(sUserTokenVo), 1, TimeUnit.DAYS);
         return Result.succ("登录成功",jwt);
     }
+    @NotNull
     @GetMapping("/logout")
     public Result Logout(@RequestHeader("Authorization") String token){
         try {
@@ -82,15 +79,18 @@ public class LoginController {
         }
         return Result.succ("退出成功");
     }
+    @NotNull
     @GetMapping("/LoginUrl")
     public Result LoginUrl(){
         return Result.fail(401,"未登录,请跳转到登录页");
     }
+    @NotNull
     @GetMapping("/Unauthorized")
     public Result Unauthorized(){
         return Result.fail(403,"权限不够,请联系管理员");
     }
 
+    @NotNull
     @PostMapping("/register")
     public Result register(@RequestBody SUser sUser){
         Result result = sUserService.addSUser(sUser);

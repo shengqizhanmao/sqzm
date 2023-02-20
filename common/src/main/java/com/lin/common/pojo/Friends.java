@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -74,6 +75,7 @@ public class Friends implements Serializable {
         this.createdDate = createdDate;
     }
 
+    @NotNull
     @Override
     public String toString() {
         return "Friends{" +

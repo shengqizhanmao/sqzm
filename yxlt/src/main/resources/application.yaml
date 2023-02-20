@@ -19,6 +19,19 @@ spring:
       max-request-size: 200MB
   aop:
     proxy-target-class: true
+  mail:
+    protocol: smtps
+    host: smtp.163.com
+    port: 465
+    username: lin1149566912@163.com
+    password: MEBKVZRCWOMAOWOU
+    default-encoding: UTF-8
+    properties:
+      mail:
+        smtp:
+          socketFactoryClass: javax.net.ssl.SSLSocketFactory
+    #        debug: true
+    from: lin1149566912@163.com
 minio:
   url: http://192.168.20.130:9000 # 服务地址
   access: admin # 账号

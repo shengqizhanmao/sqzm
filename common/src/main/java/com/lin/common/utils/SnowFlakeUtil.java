@@ -1,5 +1,7 @@
 package com.lin.common.utils;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * @author lin
  * 雪花算法
@@ -133,6 +135,7 @@ public class SnowFlakeUtil {
             System.out.println(id);
         }
     }
+    @NotNull
     public static String getId(){
         SnowFlakeUtil idWorker = new SnowFlakeUtil(0, 0);
         long id = idWorker.nextId();

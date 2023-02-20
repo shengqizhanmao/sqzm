@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.lin.common.Result;
 import com.lin.common.pojo.SUser;
 import com.lin.common.pojo.Vo.SUserTokenVo;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * <p>
@@ -14,6 +15,7 @@ import com.lin.common.pojo.Vo.SUserTokenVo;
  * @since 2023-01-05
  */
 public interface SUserService extends IService<SUser> {
+    @Nullable
     SUserTokenVo findSUserByToken(String token);
     SUser getSUserByUsername(String username);
     Result getSUserAndRole();

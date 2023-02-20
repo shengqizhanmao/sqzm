@@ -1,6 +1,7 @@
 package com.lin.common.pojo.Vo;
 
 import io.swagger.annotations.ApiModelProperty;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Date;
 
@@ -32,6 +33,7 @@ public class SUserVo {
     @ApiModelProperty("最后登录时间")
     private Date loginDate;
 
+    @NotNull
     @Override
     public String toString() {
         return "SUserVo{" +

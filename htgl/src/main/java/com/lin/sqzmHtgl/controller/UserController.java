@@ -5,13 +5,9 @@ import com.lin.common.pojo.User;
 import com.lin.common.pojo.Vo.UserVo;
 import com.lin.common.service.UserService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
@@ -31,6 +27,7 @@ import java.util.List;
 public class UserController {
     @Resource
     UserService userService;
+    @NotNull
     @RequiresPermissions("user:get")
     @GetMapping("/get")
     public Result get(){
@@ -60,7 +57,7 @@ public class UserController {
     }
     @RequiresPermissions("user:delete")
     @PostMapping("/delete")
-    public Result delete(@RequestBody User user){
+    public Result delete(@NotNull @RequestBody User user){
         return userService.deleteUser(user.getId());
     }
 

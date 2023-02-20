@@ -7,6 +7,7 @@ import com.lin.common.pojo.SMenu;
 import com.lin.common.pojo.Vo.SUserTokenVo;
 import com.lin.common.service.SMenuService;
 import com.lin.common.service.SUserService;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,9 +24,10 @@ import java.util.List;
 @Service
 public class SMenuServiceImpl extends ServiceImpl<SMenuMapper, SMenu> implements SMenuService {
     @Autowired
-    SMenuMapper sMenuMapper;
+    private SMenuMapper sMenuMapper;
     @Autowired
-    SUserService sUserService;
+    private  SUserService sUserService;
+    @NotNull
     public Result getSMenuBySUserId(String token){
         SUserTokenVo sUserByToken = sUserService.findSUserByToken(token);
         String userId = sUserByToken.getId();

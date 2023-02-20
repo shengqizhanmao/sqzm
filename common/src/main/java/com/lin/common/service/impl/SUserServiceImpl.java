@@ -12,12 +12,13 @@ import com.lin.common.utils.SnowFlakeUtil;
 import com.lin.common.mapper.SUserMapper;
 import com.lin.common.pojo.Role;
 import com.lin.common.pojo.SUser;
-import com.lin.common.pojo.Vo.SUserAndRoleVo;
+import com.lin.common.pojo.Vo2.SUserAndRoleVo;
 import com.lin.common.pojo.Vo.SUserTokenVo;
 import com.lin.common.service.RoleService;
 import com.lin.common.service.SUserService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -42,11 +43,11 @@ import java.util.Map;
 public class SUserServiceImpl extends ServiceImpl<SUserMapper, SUser> implements SUserService {
 
     @Autowired
-    RedisTemplate<String,String> redisTemplate;
+    private RedisTemplate redisTemplate;
     @Resource
-    SUserMapper sUserMapper;
+    private SUserMapper sUserMapper;
     @Resource
-    RoleService roleService;
+    private  RoleService roleService;
     //获取用户,根据Token
     public SUserTokenVo findSUserByToken(String token) {
         /*
@@ -58,7 +59,8 @@ public class SUserServiceImpl extends ServiceImpl<SUserMapper, SUser> implements
         if (StringUtils.isBlank(token)) {
             return null;
         }
-        String sUserJson = redisTemplate.opsForValue().get(RedisStatus.TOKEN_SUser + token);
+        Object o = redisTemplate.opsForValue().get(RedisStatus.TOKEN_SUser + token);
+        String sUserJson = (String) redisTemplate.opsForValue().get(RedisStatus.TOKEN_SUser + token);
         if (StringUtils.isBlank(sUserJson)) {
             return null;
         }
@@ -84,6 +86,7 @@ public class SUserServiceImpl extends ServiceImpl<SUserMapper, SUser> implements
     }
 
     //根据SUserId获取Role
+    @NotNull
     @Override
     public Result getSUserAndRole() {
         List<SUser> listRole = sUserMapper.selectList(null);
@@ -92,7 +95,8 @@ public class SUserServiceImpl extends ServiceImpl<SUserMapper, SUser> implements
     }
 
     //添加用户
-    public Result addSUser(SUser sUser){
+    @NotNull
+    public Result addSUser(@NotNull SUser sUser){
         String sUsername = sUser.getUsername();
         if(StringUtils.isEmpty(sUsername)){
             return Result.fail("不能缺少登录名");
@@ -121,6 +125,7 @@ public class SUserServiceImpl extends ServiceImpl<SUserMapper, SUser> implements
         return Result.succ("添加成功");
     }
     //修改用户
+    @NotNull
     public Result updateSUser(SUser sUser){
         SUser sUser1 = sUserMapper.selectById(sUser.getsId());
         if(!StringUtils.isEmpty(sUser.getEmail())){
@@ -140,7 +145,8 @@ public class SUserServiceImpl extends ServiceImpl<SUserMapper, SUser> implements
             return Result.fail("修改失败,原因是:"+e);
         }
     }
-    public Result updateEnableFlag(SUser sUser) {
+    @NotNull
+    public Result updateEnableFlag(@NotNull SUser sUser) {
         String enableFlag = sUser.getEnableFlag();
         String id = sUser.getsId();
         if(StringUtils.isEmpty(id)){
@@ -165,6 +171,7 @@ public class SUserServiceImpl extends ServiceImpl<SUserMapper, SUser> implements
         return Result.succ("禁用用户成功");
     }
     //删除用户
+    @NotNull
     public Result deleteSUser(String id){
         try {
             int i = sUserMapper.deleteById(id);
@@ -178,14 +185,16 @@ public class SUserServiceImpl extends ServiceImpl<SUserMapper, SUser> implements
     }
 
     //Method
-    private SUserAndRoleVo Copy(SUser sUser){
+    @NotNull
+    private SUserAndRoleVo Copy(@NotNull SUser sUser){
         SUserAndRoleVo sUserAndRoleVo = new SUserAndRoleVo();
         BeanUtils.copyProperties(sUser,sUserAndRoleVo);
         List<Role> listRoleBySUserId = roleService.getListRoleBySUserId(sUser.getsId());
         sUserAndRoleVo.setListRoleName(listRoleBySUserId);
         return sUserAndRoleVo;
     }
-    private List<SUserAndRoleVo> ListCopy(List<SUser> sUsers){
+    @NotNull
+    private List<SUserAndRoleVo> ListCopy(@NotNull List<SUser> sUsers){
         List<SUserAndRoleVo> sUserAndRoleVos = new ArrayList<>();
         for(SUser sUser:sUsers){
             SUserAndRoleVo copy = Copy(sUser);

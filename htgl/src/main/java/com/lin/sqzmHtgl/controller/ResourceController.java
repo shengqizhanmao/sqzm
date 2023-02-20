@@ -4,12 +4,9 @@ import com.lin.common.Result;
 import com.lin.common.pojo.Resource;
 import com.lin.common.service.ResourceService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * <p>
@@ -49,7 +46,7 @@ public class ResourceController {
     }
     @RequiresPermissions("resource:delete")
     @PostMapping("/delete")
-    public Result delete(@RequestBody Resource resource){
+    public Result delete(@NotNull @RequestBody Resource resource){
         return resourceService.deleteResourceById(resource.getId());
     }
 

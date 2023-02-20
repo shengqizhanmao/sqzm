@@ -1,7 +1,10 @@
 package com.lin.common.service;
 
+import com.lin.common.Result;
 import com.lin.common.pojo.Friends;
 import com.baomidou.mybatisplus.extension.service.IService;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +16,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface FriendsService extends IService<Friends> {
 
+    List<Friends> getFriendsByToUserIdAndFormUserId(String toUserId, String formUserId);
 }

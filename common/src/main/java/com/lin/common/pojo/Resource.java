@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 
@@ -167,6 +168,7 @@ public class Resource implements Serializable {
         this.enableFlag = enableFlag;
     }
 
+    @NotNull
     @Override
     public String toString() {
         return "Resource{" +

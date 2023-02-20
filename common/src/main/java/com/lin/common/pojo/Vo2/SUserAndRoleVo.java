@@ -1,7 +1,8 @@
-package com.lin.common.pojo.Vo;
+package com.lin.common.pojo.Vo2;
 
 import com.lin.common.pojo.Role;
 import io.swagger.annotations.ApiModelProperty;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Date;
 import java.util.List;
@@ -35,6 +36,7 @@ public class SUserAndRoleVo {
     @ApiModelProperty("角色拥有的资源权限")
     private List<Role> listRoleName;
 
+    @NotNull
     @Override
     public String toString() {
         return "SUserAndRoleVo{" +

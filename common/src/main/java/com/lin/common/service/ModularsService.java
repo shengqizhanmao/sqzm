@@ -1,6 +1,7 @@
 package com.lin.common.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.lin.common.Result;
 import com.lin.common.pojo.Modulars;
 
 /**
@@ -13,4 +14,5 @@ import com.lin.common.pojo.Modulars;
  */
 public interface ModularsService extends IService<Modulars> {
 
+    Result getModularsByPalteId(String palteId);
 }

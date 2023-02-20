@@ -1,5 +1,7 @@
 package com.lin.sqzmHtgl.controller.param;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 
 /**
@@ -9,6 +11,7 @@ public class AddSUserAndRole {
     private String sId;
     private List<String> listRoleId;
 
+    @NotNull
     @Override
     public String toString() {
         return "AddSUserAndRole{" +

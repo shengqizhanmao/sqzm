@@ -6,9 +6,9 @@ import com.lin.common.Result;
 import com.lin.common.ResultCode;
 import com.lin.common.mapper.UserRoleMapper;
 import com.lin.common.pojo.UserRole;
-import com.lin.common.pojo.param.AddSUserAndRole;
 import com.lin.common.service.UserRoleService;
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,12 +26,10 @@ import java.util.List;
 public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> implements UserRoleService {
 
     @Autowired
-    UserRoleService userRoleService;
-
+    private  UserRoleService userRoleService;
+    @NotNull
     @Override
-    public Result addSUserAndRole(AddSUserAndRole addSUserAndRole) {
-        List<String> listRoleId = addSUserAndRole.getListRoleId();
-        String sId = addSUserAndRole.getsId();
+    public Result addSUserAndRole(@NotNull List<String> listRoleId, String sId) {
         if (StringUtils.isEmpty(sId)) {
             return Result.fail("系统用户id参数不能为空");
         }

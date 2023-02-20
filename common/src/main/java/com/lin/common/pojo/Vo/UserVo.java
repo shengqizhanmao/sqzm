@@ -1,6 +1,7 @@
 package com.lin.common.pojo.Vo;
 
 import io.swagger.annotations.ApiModelProperty;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Date;
 
@@ -25,6 +26,7 @@ public class UserVo {
     @ApiModelProperty("状态,1为正常用户,2为封禁状态")
     private String enableFlag;
 
+    @NotNull
     @Override
     public String toString() {
         return "UserVo{" +

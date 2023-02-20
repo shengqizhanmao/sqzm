@@ -3,6 +3,7 @@ package com.lin.common.pojo.Vo;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import io.swagger.annotations.ApiModelProperty;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author lin
@@ -66,6 +67,7 @@ public class SUserTokenVo {
         this.sex = sex;
     }
 
+    @NotNull
     @Override
     public String toString() {
         return "UserTokenVo{" +

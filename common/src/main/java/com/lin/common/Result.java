@@ -1,5 +1,7 @@
 package com.lin.common;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.Serializable;
 
 /**
@@ -7,28 +9,33 @@ import java.io.Serializable;
  */
 public class Result implements Serializable {
 
-    // 200是正常，非200表示异常
+    // 200表示正常，非200表示异常
     private int code;
     private String msg;
     private Object data;
     private boolean success;
 
+    @NotNull
     public static Result succ(Object data) {
         return succ(ResultCode.SUCCESS, "操作成功", data);
     }
 
+    @NotNull
     public static Result succ(String msg, Object data) {
         return succ(ResultCode.SUCCESS, msg, data);
     }
 
+    @NotNull
     public static Result succ(String msg) {
         return succ(ResultCode.SUCCESS, msg, null);
     }
 
+    @NotNull
     public static Result succ(int code, String msg, Object data) {
         return succ(true, code, msg, data);
     }
 
+    @NotNull
     public static Result succ(boolean success, int code, String msg, Object data) {
         Result r = new Result();
         r.setSuccess(success);
@@ -42,14 +49,17 @@ public class Result implements Serializable {
         return fail(ResultCode.FAIL, msg, null);
     }
 
+    @NotNull
     public static Result fail(int code, String msg) {
         return fail(code, msg, null);
     }
 
+    @NotNull
     public static Result fail(String msg, Object data) {
         return fail(ResultCode.FAIL, msg, data);
     }
 
+    @NotNull
     public static Result fail(int code, String msg, Object data) {
         return fail(false, code, msg, data);
     }
@@ -96,6 +106,7 @@ public class Result implements Serializable {
         this.success = success;
     }
 
+    @NotNull
     @Override
     public String toString() {
         return "Result{" +

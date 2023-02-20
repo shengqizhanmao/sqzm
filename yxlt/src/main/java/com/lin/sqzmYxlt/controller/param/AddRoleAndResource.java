@@ -1,5 +1,7 @@
 package com.lin.sqzmYxlt.controller.param;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 
 /**
@@ -9,6 +11,7 @@ public class AddRoleAndResource {
     private String roleId;
     private List<String> listResourceId;
 
+    @NotNull
     @Override
     public String toString() {
         return "AddRoleAndResource{" +

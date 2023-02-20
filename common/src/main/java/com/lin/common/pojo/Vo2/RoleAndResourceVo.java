@@ -1,9 +1,10 @@
-package com.lin.common.pojo.Vo;
+package com.lin.common.pojo.Vo2;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.lin.common.pojo.Resource;
 import io.swagger.annotations.ApiModelProperty;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -35,6 +36,7 @@ public class RoleAndResourceVo {
     @ApiModelProperty("角色拥有的资源权限")
     private List<Resource> listResourceName;
 
+    @NotNull
     @Override
     public String toString() {
         return "RoleAndResourceVo{" +
