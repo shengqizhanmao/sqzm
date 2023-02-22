@@ -17,7 +17,7 @@ import java.io.Serializable;
  * @since 2023-02-06
  */
 @TableName("u_tags")
-@ApiModel(value = "Tags对象", description = "")
+@ApiModel(value = "Tags对象", description = "标签")
 public class Tags implements Serializable {
 
     private static final long serialVersionUID = 1L;

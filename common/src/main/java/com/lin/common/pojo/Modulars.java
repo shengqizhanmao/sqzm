@@ -17,7 +17,7 @@ import java.io.Serializable;
  * @since 2023-01-09
  */
 @TableName("u_modulars")
-@ApiModel(value = "Modulars对象", description = "")
+@ApiModel(value = "Modulars对象", description = "模块,分区")
 public class Modulars implements Serializable {
 
     private static final long serialVersionUID = 1L;

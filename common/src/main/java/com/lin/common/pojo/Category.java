@@ -17,7 +17,7 @@ import java.io.Serializable;
  * @since 2023-02-06
  */
 @TableName("u_category")
-@ApiModel(value = "Category对象", description = "")
+@ApiModel(value = "Category对象", description = "分类")
 public class Category implements Serializable {
 
     private static final long serialVersionUID = 1L;

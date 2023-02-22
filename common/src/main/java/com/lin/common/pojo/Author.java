@@ -13,22 +13,20 @@ import io.swagger.annotations.ApiModelProperty;
  * </p>
  *
  * @author linShengWei
- * @since 2023-02-19
+ * @since 2023-02-22
  */
-@TableName("u_friends_user")
-@ApiModel(value = "FriendsUser对象", description = "好友表")
-public class FriendsUser implements Serializable {
+@TableName("u_author")
+@ApiModel(value = "Author对象", description = "作者表")
+public class Author implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @TableId(value = "id", type = IdType.ASSIGN_ID)
     private String id;
 
-    private String formUserId;
+    private String userId;
 
-    private String toUserId;
-
-    @ApiModelProperty("1:好友,-1:非好友,0:申请好友中")
+    @ApiModelProperty("0为申请中,1为申请成功,-1为申请失败")
     private String status;
 
 
@@ -40,20 +38,12 @@ public class FriendsUser implements Serializable {
         this.id = id;
     }
 
-    public String getFormUserId() {
-        return formUserId;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setFormUserId(String formUserId) {
-        this.formUserId = formUserId;
-    }
-
-    public String getToUserId() {
-        return toUserId;
-    }
-
-    public void setToUserId(String toUserId) {
-        this.toUserId = toUserId;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getStatus() {
@@ -66,10 +56,9 @@ public class FriendsUser implements Serializable {
 
     @Override
     public String toString() {
-        return "FriendsUser{" +
+        return "Author{" +
         "id=" + id +
-        ", formUserId=" + formUserId +
-        ", toUserId=" + toUserId +
+        ", userId=" + userId +
         ", status=" + status +
         "}";
     }

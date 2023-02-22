@@ -13,6 +13,7 @@ import org.apache.shiro.authz.AuthorizationException;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.bind.MissingRequestHeaderException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -44,6 +45,11 @@ class GlobalExceptionHandler {
 //        return Result.fail(200003,"Assert异常");
 //    }
 
+
+    @ExceptionHandler(value = MissingRequestHeaderException.class)
+    public Result handler(MissingRequestHeaderException e) {
+        return Result.fail(ResultCode.FAIL,"未登录,请登录");
+    }
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(value = NullPointerException.class)
     public Result handler(NullPointerException e) {

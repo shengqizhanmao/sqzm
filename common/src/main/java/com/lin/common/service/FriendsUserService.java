@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.lin.common.Result;
 import com.lin.common.pojo.FriendsUser;
 
+import java.util.List;
+
 
 /**
  * <p>
@@ -29,4 +31,5 @@ public interface FriendsUserService extends IService<FriendsUser> {
     Result getListDetete(String userId);
 
     Result delete(String formUserId, String toUserId);
+    List<FriendsUser> getListMethod(String formUserId);
 }

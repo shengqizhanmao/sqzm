@@ -17,7 +17,7 @@ import java.io.Serializable;
  * @since 2023-01-05
  */
 @TableName("u_menu")
-@ApiModel(value = "Menu对象", description = "")
+@ApiModel(value = "Menu对象", description = "用户目录")
 public class Menu implements Serializable {
 
     private static final long serialVersionUID = 1L;

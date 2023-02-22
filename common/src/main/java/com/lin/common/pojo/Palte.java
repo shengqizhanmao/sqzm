@@ -16,7 +16,7 @@ import java.io.Serializable;
  * @since 2023-01-09
  */
 @TableName("u_palte")
-@ApiModel(value = "Palte对象", description = "")
+@ApiModel(value = "Palte对象", description = "板块")
 public class Palte implements Serializable {
 
     private static final long serialVersionUID = 1L;

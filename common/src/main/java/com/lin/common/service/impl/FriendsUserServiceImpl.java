@@ -21,6 +21,7 @@ import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -255,6 +256,13 @@ public class FriendsUserServiceImpl extends ServiceImpl<FriendsUserMapper, Frien
             friendsUsersAndUserVos.add(friendsUsersAndUserVo);
         }
         return friendsUsersAndUserVos;
+    }
+
+    //获取好友
+    public List<FriendsUser> getListMethod(String formUserId){
+        LambdaQueryWrapper<FriendsUser> friendsUserLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        friendsUserLambdaQueryWrapper.eq(FriendsUser::getFormUserId,formUserId).eq(FriendsUser::getStatus,"1");
+        return friendsUserMapper.selectList(friendsUserLambdaQueryWrapper);
     }
 
 }

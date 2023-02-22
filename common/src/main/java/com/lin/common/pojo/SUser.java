@@ -18,7 +18,7 @@ import java.util.Date;
  * @since 2023-01-05
  */
 @TableName("s_user")
-@ApiModel(value = "SUser对象", description = "")
+@ApiModel(value = "SUser对象", description = "系统用户")
 public class SUser implements Serializable {
 
     private static final long serialVersionUID = 1L;

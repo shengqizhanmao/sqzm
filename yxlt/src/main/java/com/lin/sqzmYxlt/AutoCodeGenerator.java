@@ -65,8 +65,8 @@ public class AutoCodeGenerator {
         generator.strategyConfig(builder -> {
             // 设置数据库表名称. 如果不设置，则会将数据库中所有表都生成。（注意：需要与数据库中表名称一致，前缀也需添加）
             // ===========3.手动修改设置。===========
-            builder.addInclude("u_friends_user")
-//            "sh_resource","sh_role","sh_role_resource","sh_user_role","u_palte","u_modulars","u_user","u_tags","u_menu","u_friends","u_comment","u_category","u_body","u_article","sh_resource","sh_role"
+            builder.addInclude("u_author")
+//            ""u_friends_user","sh_resource","sh_role","sh_role_resource","sh_user_role","u_palte","u_modulars","u_user","u_tags","u_menu","u_friends","u_comment","u_category","u_body","u_article","sh_resource","sh_role"
                     // 过滤表前缀，生成的类名会去掉这个前缀
                     .addTablePrefix("u_","sh_")
                     // 第一阶段
