@@ -68,10 +68,10 @@ public class RoleResource implements Serializable {
     @Override
     public String toString() {
         return "RoleResource{" +
-        "id=" + id +
-        ", enableFlag=" + enableFlag +
-        ", roleId=" + roleId +
-        ", resourceId=" + resourceId +
-        "}";
+                "id=" + id +
+                ", enableFlag=" + enableFlag +
+                ", roleId=" + roleId +
+                ", resourceId=" + resourceId +
+                "}";
     }
 }

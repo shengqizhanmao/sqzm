@@ -4,15 +4,16 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.lin.common.pojo.FriendsUser">
-        <id column="id" property="id" />
-        <result column="form_user_id" property="formUserId" />
-        <result column="to_user_id" property="toUserId" />
-        <result column="status" property="status" />
+        <id column="id" property="id"/>
+        <result column="form_user_id" property="formUserId"/>
+        <result column="to_user_id" property="toUserId"/>
+        <result column="status" property="status"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, form_user_id, to_user_id, status
+        id
+        , form_user_id, to_user_id, status
     </sql>
 
 </mapper>

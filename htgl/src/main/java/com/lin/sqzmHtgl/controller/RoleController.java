@@ -2,9 +2,9 @@ package com.lin.sqzmHtgl.controller;
 
 import com.lin.common.Result;
 import com.lin.common.pojo.Role;
-import com.lin.common.pojo.RoleResource;
 import com.lin.common.service.RoleService;
 import com.lin.sqzmHtgl.controller.param.AddRoleAndResource;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -27,66 +27,73 @@ public class RoleController {
     @Autowired
     RoleService roleService;
 
-    @NotNull
     @RequiresPermissions("role:get")
     @GetMapping("/get")
-    public Result get(){
-        try{
+    public Result get() {
+        try {
             List<Role> list = roleService.list();
-            return Result.succ("查询角色成功",list);
-        }catch (Exception e){
-            return Result.fail(500,"查询角色失败");
+            return Result.succ("查询角色成功", list);
+        } catch (Exception e) {
+            return Result.fail(500, "查询角色失败");
         }
     }
 
     @RequiresPermissions("role:get")
     @GetMapping("/getRoleAndResource")
-    public Result getRoleAndResource(){
+    public Result getRoleAndResource() {
         return roleService.getRoleAndResource();
     }
+
     @RequiresPermissions("role:add")
     @PostMapping("/add")
-    public Result add(@Nullable @RequestBody Role role){
-        if (role==null){
+    public Result add(@RequestBody Role role) {
+        if (role == null) {
             return Result.fail("参数不能为空");
         }
         return roleService.saveRole(role);
     }
+
+    @RequiresPermissions("role:add")
+    @PostMapping("/addRoleAndResource")
+    public Result add(@NotNull @RequestBody AddRoleAndResource addRoleAndResource) {
+        List<String> listResourceId = addRoleAndResource.getListResourceId();
+        String roleId = addRoleAndResource.getRoleId();
+        return roleService.addRoleAndResource(roleId, listResourceId);
+    }
+
     @RequiresPermissions("role:update")
-    @PostMapping("/update")
-    public Result update(@Nullable @RequestBody Role role){
-        if (role==null){
+    @PutMapping("/update")
+    public Result update(@Nullable @RequestBody Role role) {
+        if (role == null) {
             return Result.fail("参数不能为空");
         }
         return roleService.updateRole(role);
     }
+
     @RequiresPermissions("role:update")
-    @PostMapping("/updateEnable")
-    public Result updateEnable(@Nullable @RequestBody Role role){
-        if (role==null){
+    @PutMapping("/updateEnable/{id}/{enableFlag}")
+    public Result updateEnable(@PathVariable("id") String id, @PathVariable("enableFlag") String enableFlag) {
+        if (StringUtils.isEmpty(id) || StringUtils.isEmpty(enableFlag)) {
             return Result.fail("参数不能为空");
         }
-        return roleService.updateRoleEnableFlag(role);
-    }
-    @RequiresPermissions("role:delete")
-    @PostMapping("/delete")
-    public Result delete(@Nullable @RequestBody Role role){
-        if (role==null){
-            return Result.fail("id不能为空");
-        }
-        return roleService.deleteRoleById(role.getId());
-    }
-    @RequiresPermissions("role:add")
-    @PostMapping("/addRoleAndResource")
-    public Result add(@NotNull @RequestBody AddRoleAndResource addRoleAndResource){
-        List<String> listResourceId = addRoleAndResource.getListResourceId();
-        String roleId = addRoleAndResource.getRoleId();
-        return roleService.addRoleAndResource(roleId,listResourceId);
+        return roleService.updateRoleEnableFlag(id, enableFlag);
     }
 
     @RequiresPermissions("role:delete")
-    @PostMapping("/deleteRoleAndResource")
-    public Result deleteRoleAndResource(@RequestBody RoleResource roleResource){
-        return roleService.deleteRoleResource(roleResource);
+    @DeleteMapping("/delete/{id}")
+    public Result delete(@PathVariable("id") String id) {
+        if (StringUtils.isEmpty(id)) {
+            return Result.fail("参数不能为空");
+        }
+        return roleService.deleteRoleById(id);
+    }
+
+    @RequiresPermissions("role:delete")
+    @DeleteMapping("/delete/{roleId}/{resourceId}")
+    public Result deleteRoleAndResource(@PathVariable("roleId") String roleId, @PathVariable("resourceId") String resourceId) {
+        if (StringUtils.isEmpty(roleId) || StringUtils.isEmpty(resourceId)) {
+            return Result.fail("参数不能为空");
+        }
+        return roleService.deleteRoleResource(roleId, resourceId);
     }
 }

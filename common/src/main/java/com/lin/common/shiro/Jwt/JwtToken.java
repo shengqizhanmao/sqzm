@@ -5,7 +5,7 @@ import org.apache.shiro.authc.AuthenticationToken;
 /**
  * @author lin
  */
-public class JwtToken implements AuthenticationToken{
+public class JwtToken implements AuthenticationToken {
     private String token;
 
     public JwtToken(String token) {

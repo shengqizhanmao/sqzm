@@ -33,26 +33,26 @@ public class ShiroConfig {
     @Bean(value = "shiroFilterFactoryBean")
     public ShiroFilterFactoryBean shiroFilterFactoryBean(
             @Qualifier("defaultWebSecurityManager") DefaultWebSecurityManager defaultWebSecurityManager
-            ){
-        ShiroFilterFactoryBean shiroFilterFactoryBean=new ShiroFilterFactoryBean();
+    ) {
+        ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
         //设置安全管理器
         shiroFilterFactoryBean.setSecurityManager(defaultWebSecurityManager);
         //设置我们自定义的JWT过滤器
         Map<String, Filter> map = new HashMap<>();
-        map.put("jwt",new JwtFilter());
+        map.put("jwt", new JwtFilter());
         shiroFilterFactoryBean.setFilters(map);
         //anon游客,authc登录,user,perms资源,role角色
-        Map<String,String> filterMap=new LinkedHashMap<>();
+        Map<String, String> filterMap = new LinkedHashMap<>();
         //资源
-        filterMap.put("/static/**","anon");
+        filterMap.put("/static/**", "anon");
         filterMap.put("/webjars/**", "anon");
         filterMap.put("/swagger-ui.html", "anon");
         filterMap.put("/doc.html", "anon");
         filterMap.put("/v2/**", "anon");
         //不经过jwt拦截器就可以的
-        filterMap.put("/login/**","anon");
+        filterMap.put("/login/**", "anon");
         //全部请求经过jwt拦截
-        filterMap.put("/**","jwt");
+        filterMap.put("/**", "jwt");
 //        filterMap.put("/user/add","perms[user:add]");
 //        filterMap.put("/user/**","perms[user:*]");
 
@@ -67,31 +67,32 @@ public class ShiroConfig {
     @Bean(value = "defaultWebSecurityManager")
     public DefaultWebSecurityManager getDefaultWebSecurityManager(
             @Qualifier("userRealm") UserRealm userRealm,
-            @Qualifier("defaultSubjectDAO")DefaultSubjectDAO defaultSubjectDAO
-    ){
-        DefaultWebSecurityManager defaultWebSecurityManager=new DefaultWebSecurityManager();
+            @Qualifier("defaultSubjectDAO") DefaultSubjectDAO defaultSubjectDAO
+    ) {
+        DefaultWebSecurityManager defaultWebSecurityManager = new DefaultWebSecurityManager();
         //关联Realm
         defaultWebSecurityManager.setRealm(userRealm);
         //关联Session,关闭session
-       defaultWebSecurityManager.setSubjectDAO(defaultSubjectDAO);
+        defaultWebSecurityManager.setSubjectDAO(defaultSubjectDAO);
         return defaultWebSecurityManager;
     }
 
     //Realm
     @NotNull
     @Bean(value = "userRealm")
-    public UserRealm getUserRealm(){
+    public UserRealm getUserRealm() {
         return new UserRealm();
     }
 
     //session
     @NotNull
     @Bean(value = "defaultSubjectDAO")
-    public DefaultSubjectDAO defaultSubjectDAO(@Qualifier("defaultSessionStorageEvaluator")DefaultSessionStorageEvaluator defaultSessionStorageEvaluator) {
+    public DefaultSubjectDAO defaultSubjectDAO(@Qualifier("defaultSessionStorageEvaluator") DefaultSessionStorageEvaluator defaultSessionStorageEvaluator) {
         DefaultSubjectDAO subjectDAO = new DefaultSubjectDAO();
         subjectDAO.setSessionStorageEvaluator(defaultSessionStorageEvaluator);
         return subjectDAO;
     }
+
     @NotNull
     @Bean(value = "defaultSessionStorageEvaluator")
     public DefaultSessionStorageEvaluator defaultSessionStorageEvaluator() {
@@ -99,6 +100,7 @@ public class ShiroConfig {
         defaultSessionStorageEvaluator.setSessionStorageEnabled(false);
         return defaultSessionStorageEvaluator;
     }
+
     //aop
     @NotNull
     @Bean

@@ -14,7 +14,7 @@ import java.util.Map;
  */
 public class JWTUtils {
 
-    private static String jwtToken="linShengWei";
+    private static String jwtToken = "linShengWei";
 
     //生成token
     public static String createToken(String username) {
@@ -31,8 +31,8 @@ public class JWTUtils {
 
     //检查token
     public static Map<String, Object> checkToken(String token) {
-            Jwt parse = Jwts.parser().setSigningKey(jwtToken).parse(token);
-            return (Map<String, Object>) parse.getBody();
+        Jwt parse = Jwts.parser().setSigningKey(jwtToken).parse(token);
+        return (Map<String, Object>) parse.getBody();
     }
     //测试
 //    public static void main(String[] args) {

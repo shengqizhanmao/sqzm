@@ -15,7 +15,7 @@ import java.util.List;
 
 /**
  * <p>
- *  服务实现类
+ * 服务实现类
  * </p>
  *
  * @author linShengWei
@@ -26,17 +26,22 @@ public class ModularsServiceImpl extends ServiceImpl<ModularsMapper, Modulars> i
 
     @Resource
     private ModularsMapper modularsMapper;
+
     @NotNull
     @Override
     public Result getModularsByPalteId(String palteId) {
-        LambdaQueryWrapper<Modulars> modularsLambdaQueryWrapper = new LambdaQueryWrapper<>();
-        modularsLambdaQueryWrapper.eq(Modulars::getPalteId,palteId).orderByAsc(Modulars::getSort);
-        try{
-            List<Modulars> modulars = modularsMapper.selectList(modularsLambdaQueryWrapper);
-            return Result.succ("查询成功",modulars);
-        }catch (Exception e){
-            log.error("ModularsServiceImpl:getModularsByPalteId:"+palteId+",出现错误:"+e);
-            return Result.fail(ResultCode.ERROR,"服务器出现错误,请联系管理员");
+        try {
+            List<Modulars> modulars = getModularsByPalteIdMethod(palteId);
+            return Result.succ("查询成功", modulars);
+        } catch (Exception e) {
+            log.error("ModularsServiceImpl:getModularsByPalteId:" + palteId + ",出现错误:" + e);
+            return Result.fail(ResultCode.ERROR, "服务器出现错误,请联系管理员");
         }
+    }
+
+    public List<Modulars> getModularsByPalteIdMethod(String palteId) {
+        LambdaQueryWrapper<Modulars> modularsLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        modularsLambdaQueryWrapper.eq(Modulars::getPalteId, palteId).orderByAsc(Modulars::getSort);
+        return modularsMapper.selectList(modularsLambdaQueryWrapper);
     }
 }

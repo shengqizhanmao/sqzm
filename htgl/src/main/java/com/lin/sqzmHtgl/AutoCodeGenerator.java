@@ -12,7 +12,7 @@ public class AutoCodeGenerator {
     /**
      * 项目根目录
      */
-    private static final String PROJECT_ROOT_PATH = System.getProperty("user.dir")+("/htgl");
+    private static final String PROJECT_ROOT_PATH = System.getProperty("user.dir") + ("/htgl");
 
     public static void main(String[] args) {
         // 1、数据源配置
@@ -64,10 +64,10 @@ public class AutoCodeGenerator {
         generator.strategyConfig(builder -> {
             // 设置数据库表名称. 如果不设置，则会将数据库中所有表都生成。（注意：需要与数据库中表名称一致，前缀也需添加）
             // ===========3.手动修改设置。===========
-            builder.addInclude("u_palte","u_modulars")
-//            "sh_resource","sh_role","sh_role_resource","sh_user_role"
+            builder.addInclude("s_user_menu")
+//            "u_palte","u_modulars","sh_resource","sh_role","sh_role_resource","sh_user_role"
                     // 过滤表前缀，生成的类名会去掉这个前缀
-                    .addTablePrefix("u_","sh_")
+                    .addTablePrefix("u_", "sh_")
                     // 第一阶段
                     // 是否生成 entity：是
                     .entityBuilder()

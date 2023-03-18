@@ -1,6 +1,6 @@
 package com.lin.common.mapper;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.lin.common.mapper.mapperX.BaseMapperX;
 import com.lin.common.pojo.UserRole;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
@@ -15,6 +15,6 @@ import org.springframework.stereotype.Repository;
  */
 @Mapper
 @Repository
-public interface UserRoleMapper extends BaseMapper<UserRole> {
+public interface UserRoleMapper extends BaseMapperX<UserRole> {
 
 }

@@ -13,7 +13,6 @@ import com.lin.common.pojo.Vo2.FriendsAndUserVo;
 import com.lin.common.service.FriendsService;
 import com.lin.common.service.FriendsUserService;
 import com.lin.common.service.UserService;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -22,7 +21,7 @@ import java.util.Comparator;
 import java.util.List;
 
 @Service
-public class FriendsServiceImlp  extends ServiceImpl<FriendsMapper, Friends> implements FriendsService {
+public class FriendsServiceImlp extends ServiceImpl<FriendsMapper, Friends> implements FriendsService {
 
     @Resource
     private FriendsMapper friendsMapper;
@@ -32,37 +31,38 @@ public class FriendsServiceImlp  extends ServiceImpl<FriendsMapper, Friends> imp
 
     @Resource
     private FriendsUserService friendsUserService;
+
     @Override
     public Result getAllList(String formUserId, String toUserId) {
-        if (StringUtils.isBlank(formUserId)){
+        if (StringUtils.isBlank(formUserId)) {
             return Result.fail("参数不能为空");
         }
-        if (StringUtils.isBlank(toUserId)){
+        if (StringUtils.isBlank(toUserId)) {
             return Result.fail("参数不能为空");
         }
         List<Friends> friendsList = getListMethod(formUserId, toUserId);
         List<Friends> friendsList2 = getListMethod(toUserId, formUserId);
         friendsList.addAll(friendsList2);
         friendsList.sort(getSortComparator());
-        return Result.succ("获取全部聊天记录成功",friendsList);
+        return Result.succ("获取全部聊天记录成功", friendsList);
     }
 
     @Override
     public Result getTen(String formUserId, String toUserId, Long page, Long size) {
-        if (StringUtils.isBlank(formUserId)){
+        if (StringUtils.isBlank(formUserId)) {
             return Result.fail("参数不能为空");
         }
-        if (StringUtils.isBlank(toUserId)){
+        if (StringUtils.isBlank(toUserId)) {
             return Result.fail("参数不能为空");
         }
-        if (page == 0 || null == page){
+        if (page == 0 || null == page) {
             return Result.fail("参数不能为空");
         }
-        if (size == 0 || null == page){
+        if (size == 0 || null == page) {
             return Result.fail("参数不能为空");
         }
         List<Friends> tenList = friendsMapper.getTenList(formUserId, toUserId, (page - 1) * size, size);
-        return Result.succ("获取聊天记录成功",tenList);
+        return Result.succ("获取聊天记录成功", tenList);
     }
 
     @Override
@@ -71,26 +71,30 @@ public class FriendsServiceImlp  extends ServiceImpl<FriendsMapper, Friends> imp
             UserTokenVo userByToken = userService.findUserByToken(token);
             List<FriendsUser> listFriendsUser = friendsUserService.getListMethod(userByToken.getId());
             List<FriendsAndUserVo> friendsAndUserVos = copyListFriendsAndUserVo(listFriendsUser);
-            return Result.succ("获取成功",friendsAndUserVos);
+            return Result.succ("获取成功", friendsAndUserVos);
         } catch (Exception e) {
-            log.error("FriendsServiceImlp的getFriendsAndUserVo出现错误"+e);
-            return Result.fail(500,"系统出现错误,请反馈给问题"+e);
+            log.error("FriendsServiceImlp的getFriendsAndUserVo出现错误" + e);
+            return Result.fail(500, "系统出现错误,请反馈给问题" + e);
         }
     }
 
-    public List<Friends> getListMethod(String formUserId, String toUserId){
+    public List<Friends> getListMethod(String formUserId, String toUserId) {
         LambdaQueryWrapper<Friends> friendsLambdaQueryWrapper = new LambdaQueryWrapper<>();
-        friendsLambdaQueryWrapper.eq(Friends::getFormUserId,formUserId).eq(Friends::getToUserId,toUserId)
+        friendsLambdaQueryWrapper.eq(Friends::getFormUserId, formUserId).eq(Friends::getToUserId, toUserId)
                 .orderByAsc(Friends::getCreatedDate);
         return friendsMapper.selectList(friendsLambdaQueryWrapper);
     }
+
     //数组sort根据日期进行排序
-    public Comparator<Friends> getSortComparator(){
-        return (Comparator<Friends>) (o1, o2) -> {
-            return o1.getCreatedDate().compareTo(o2.getCreatedDate());
-        };
+    public Comparator<Friends> getSortComparator() {
+//        return (Comparator<Friends>) (o1, o2) -> {
+//            return o1.getCreatedDate().compareTo(o2.getCreatedDate());
+//        };
+//        return ((o1, o2) ->o1.getCreatedDate().compareTo(o2.getCreatedDate()) );
+        return Comparator.comparing(friends -> friends.getCreatedDate());
     }
-    public FriendsAndUserVo copyFriendsAndUserVo(User user,Friends friends){
+
+    public FriendsAndUserVo copyFriendsAndUserVo(User user, Friends friends) {
         FriendsAndUserVo friendsAndUserVo = new FriendsAndUserVo();
         friendsAndUserVo.setId(friends.getId());
         friendsAndUserVo.setToUserId(user.getId());
@@ -101,13 +105,14 @@ public class FriendsServiceImlp  extends ServiceImpl<FriendsMapper, Friends> imp
         friendsAndUserVo.setCreateDate(friends.getCreatedDate());
         return friendsAndUserVo;
     }
-    public  List<FriendsAndUserVo> copyListFriendsAndUserVo(List<FriendsUser> listFriendsUser){
+
+    public List<FriendsAndUserVo> copyListFriendsAndUserVo(List<FriendsUser> listFriendsUser) {
         List<FriendsAndUserVo> friendsAndUserVos = new ArrayList();
-        for (FriendsUser friendsUser:listFriendsUser){
+        for (FriendsUser friendsUser : listFriendsUser) {
             String formUserId = friendsUser.getFormUserId();
             String toUserId = friendsUser.getToUserId();
             List<Friends> tenList = friendsMapper.getTenList(formUserId, toUserId, 0L, 1L);
-            if (tenList.size()==0){
+            if (tenList.size() == 0) {
                 continue;
             }
             Friends friends = tenList.get(0);

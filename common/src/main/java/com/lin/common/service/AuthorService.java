@@ -7,7 +7,7 @@ import com.lin.common.pojo.Author;
 
 /**
  * <p>
- *  服务类
+ * 服务类
  * </p>
  *
  * @author linShengWei
@@ -19,5 +19,7 @@ public interface AuthorService extends IService<Author> {
 
     Result apply(String token);
 
-    Result add(String userId,String status);
+    Result add(String userId, String status);
+
+    Result getAuthorVoList(String status, Long size, Long page);
 }

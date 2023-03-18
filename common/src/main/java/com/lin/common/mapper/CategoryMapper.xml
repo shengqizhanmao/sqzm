@@ -4,15 +4,17 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.lin.common.pojo.Category">
-        <id column="id" property="id" />
-        <result column="avatar" property="avatar" />
-        <result column="category_name" property="categoryName" />
-        <result column="description" property="description" />
+        <id column="id" property="id"/>
+        <result column="avatar" property="avatar"/>
+        <result column="name" property="name"/>
+        <result column="description" property="description"/>
+        <result column="palte_id" property="palteId"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, avatar, category_name, description
+        id
+        , avatar, name, description,palte_id
     </sql>
 
 </mapper>

@@ -4,23 +4,24 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.lin.common.pojo.Role">
-        <id column="id" property="id" />
-        <result column="role_name" property="roleName" />
-        <result column="label" property="label" />
-        <result column="description" property="description" />
-        <result column="sort_no" property="sortNo" />
-        <result column="enable_flag" property="enableFlag" />
+        <id column="id" property="id"/>
+        <result column="role_name" property="roleName"/>
+        <result column="label" property="label"/>
+        <result column="description" property="description"/>
+        <result column="sort_no" property="sortNo"/>
+        <result column="enable_flag" property="enableFlag"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, role_name, label, description, sort_no, enable_flag
+        id
+        , role_name, label, description, sort_no, enable_flag
     </sql>
     <select id="getListRoleBySUserId" resultMap="BaseResultMap">
         SELECT *
         from sh_role a
-        join sh_user_role b
-        on a.id=b.role_id
-        where b.user_id=#{sId}
+                 join sh_user_role b
+                      on a.id = b.role_id
+        where b.user_id = #{sId}
     </select>
 </mapper>

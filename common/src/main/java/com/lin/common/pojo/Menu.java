@@ -10,7 +10,7 @@ import java.io.Serializable;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author linShengWei
@@ -88,12 +88,12 @@ public class Menu implements Serializable {
     @Override
     public String toString() {
         return "Menu{" +
-        "id=" + id +
-        ", name=" + name +
-        ", icon=" + icon +
-        ", path=" + path +
-        ", effect=" + effect +
-        ", modularsId=" + modularsId +
-        "}";
+                "id=" + id +
+                ", name=" + name +
+                ", icon=" + icon +
+                ", path=" + path +
+                ", effect=" + effect +
+                ", modularsId=" + modularsId +
+                "}";
     }
 }

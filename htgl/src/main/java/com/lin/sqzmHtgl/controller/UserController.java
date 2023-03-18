@@ -2,21 +2,17 @@ package com.lin.sqzmHtgl.controller;
 
 import com.lin.common.Result;
 import com.lin.common.pojo.User;
-import com.lin.common.pojo.Vo.UserVo;
 import com.lin.common.service.UserService;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.jetbrains.annotations.NotNull;
-import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * <p>
- *  前端控制器
+ * 前端控制器
  * </p>
  *
  * @author linShengWei
@@ -27,38 +23,53 @@ import java.util.List;
 public class UserController {
     @Resource
     UserService userService;
-    @NotNull
+
+    //分页查询用户
     @RequiresPermissions("user:get")
-    @GetMapping("/get")
-    public Result get(){
-        List<User> list = userService.list();
-        List<UserVo> list1=new ArrayList<>();
-        for (User user:list) {
-            UserVo userVo= new UserVo();
-            BeanUtils.copyProperties(user, userVo);
-            list1.add(userVo);
-        }
-        return Result.succ("查询普通用户成功",list1);
+    @GetMapping("/get/{size}/{page}")
+    public Result get(@PathVariable("size") Long size, @PathVariable("page") Long page) {
+        return userService.listPage(size, page);
     }
+
+    //添加用户
     @RequiresPermissions("user:add")
     @PostMapping("/add")
-    public Result add(@RequestBody User user){
+    public Result add(@RequestBody User user) {
         return userService.addUser(user);
     }
+
+    //修改用户
     @RequiresPermissions("user:update")
-    @PostMapping("/update")
-    public Result update(@RequestBody User user){
+    @PutMapping("/update")
+    public Result update(@RequestBody User user) {
         return userService.updateUser(user);
     }
-    @RequiresPermissions("user:update")
-    @PostMapping("/updateUserAvatar")
-    public Result updateUserAvatar(MultipartFile file, String id) {
-        return userService.upAvatar(file,id);
+
+    //修改用户状态,1
+    @RequiresPermissions("sUser:update")
+    @PutMapping("/updateEnableFlag/{id}/{enableFlag}")
+    public Result UpdateEnableFlag(@PathVariable("id") String id, @PathVariable("enableFlag") String enableFlag) {
+        if (StringUtils.isEmpty(id)) {
+            return Result.fail(403, "id参数不能为空");
+        }
+        if (StringUtils.isEmpty(enableFlag)) {
+            return Result.fail(403, "enableFlag参数不能为空");
+        }
+        return userService.updateEnableFlag(id, enableFlag);
     }
+
+    //修改头像
+    @RequiresPermissions("user:update")
+    @PutMapping("/updateUserAvatar")
+    public Result updateUserAvatar(MultipartFile file, String id) {
+        return userService.upAvatar(file, id);
+    }
+
+    //删除用户
     @RequiresPermissions("user:delete")
-    @PostMapping("/delete")
-    public Result delete(@NotNull @RequestBody User user){
-        return userService.deleteUser(user.getId());
+    @DeleteMapping("/delete/{id}")
+    public Result delete(@PathVariable("id") String id) {
+        return userService.deleteUser(id);
     }
 
 }

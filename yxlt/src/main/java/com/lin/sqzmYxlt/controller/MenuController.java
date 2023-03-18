@@ -5,11 +5,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * <p>
- *  前端控制器
+ * 前端控制器
  * </p>
  *
- * @apiNote 菜单
  * @author linShengWei
+ * @apiNote 菜单
  * @since 2023-02-06
  */
 @RestController

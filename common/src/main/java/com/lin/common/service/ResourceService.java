@@ -16,11 +16,18 @@ import java.util.List;
  */
 public interface ResourceService extends IService<Resource> {
     List<Resource> getListResourceByUserId(String id);
+
     List<Resource> getListResourceBySUserId(String id);
+
     List<Resource> getListResourceByRoleId(String id);
+
     Result getListResourceVo();
+
     Result getListResourceByTypeResources();
+
     Result addResource(Resource resource);
+
     Result updateResource(Resource resource);
+
     Result deleteResourceById(String id);
 }

@@ -172,19 +172,19 @@ public class Resource implements Serializable {
     @Override
     public String toString() {
         return "Resource{" +
-        "id=" + id +
-        ", parentId=" + parentId +
-        ", resourceName=" + resourceName +
-        ", requestPath=" + requestPath +
-        ", lavel=" + lavel +
-        ", icon=" + icon +
-        ", isLeaf=" + isLeaf +
-        ", resourceType=" + resourceType +
-        ", sortNo=" + sortNo +
-        ", description=" + description +
-        ", systemCode=" + systemCode +
-        ", isSystemRoot=" + isSystemRoot +
-        ", enableFlag=" + enableFlag +
-        "}";
+                "id=" + id +
+                ", parentId=" + parentId +
+                ", resourceName=" + resourceName +
+                ", requestPath=" + requestPath +
+                ", lavel=" + lavel +
+                ", icon=" + icon +
+                ", isLeaf=" + isLeaf +
+                ", resourceType=" + resourceType +
+                ", sortNo=" + sortNo +
+                ", description=" + description +
+                ", systemCode=" + systemCode +
+                ", isSystemRoot=" + isSystemRoot +
+                ", enableFlag=" + enableFlag +
+                "}";
     }
 }

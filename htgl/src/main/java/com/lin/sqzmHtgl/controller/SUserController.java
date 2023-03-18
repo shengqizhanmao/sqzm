@@ -1,27 +1,22 @@
 package com.lin.sqzmHtgl.controller;
 
-import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.lin.common.Result;
 import com.lin.common.pojo.SUser;
-import com.lin.common.pojo.UserRole;
 import com.lin.common.pojo.Vo.SUserTokenVo;
-import com.lin.common.pojo.Vo.SUserVo;
 import com.lin.common.service.SUserService;
-import com.lin.common.service.UserRoleService;
-import com.lin.sqzmHtgl.controller.param.AddSUserAndRole;
+import com.lin.sqzmHtgl.controller.param.AddSUserRole;
+import com.lin.sqzmHtgl.controller.param.AddSUserSMenu;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.jetbrains.annotations.NotNull;
-import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * <p>
- *  前端控制器
+ * 前端控制器
  * </p>
  *
  * @author linShengWei
@@ -32,73 +27,114 @@ import java.util.List;
 public class SUserController {
 
     @Resource
-    SUserService sUserService;
-    @Resource
-    UserRoleService userRoleService;
+    private SUserService sUserService;
 
-    @NotNull
+    //获取系统用户,根据token
     @RequiresAuthentication
     @GetMapping("/getSUserByToken")
-    public Result getSUserByToken(
-            @RequestHeader("Authorization") String token
-    ) {
+    public Result getSUserByToken(@RequestHeader("Authorization") String token) {
         SUserTokenVo sUserByToken = sUserService.findSUserByToken(token);
-        return Result.succ("获取sUser信息成功",sUserByToken);
-    }
-    @NotNull
-    @RequiresPermissions("sUser:get")
-    @GetMapping("/get")
-    public Result get(){
-            List<SUser> list = sUserService.list();
-            List<SUserVo> list1=new ArrayList<>();
-            for (SUser sUser:list) {
-                SUserVo sUserVo= new SUserVo();
-                BeanUtils.copyProperties(sUser, sUserVo);
-                list1.add(sUserVo);
-            }
-            return Result.succ("查询用户成功",list1);
-    }
-    @RequiresPermissions("sUser:get")
-    @GetMapping("/getSUserAndRole")
-    public Result getSUserAndRole(){
-        return sUserService.getSUserAndRole();
+        return Result.succ("获取sUser信息成功", sUserByToken);
     }
 
+    //获取系统用户
+    @RequiresPermissions("sUser:get")
+    @GetMapping("/get/{size}/{page}")
+    //获取系统用户和角色的列表,分页
+    public Result get(@PathVariable("size") Long size, @PathVariable("page") Long page) {
+        return sUserService.get(size, page);
+    }
+
+    //获取系统用户拥有的角色
+    @RequiresPermissions("sUser:get")
+    @GetMapping("/getSUserRole/{sUserSId}")
+    //获取系统用户和角色的列表,分页
+    public Result getSUserAndRole(@PathVariable("sUserSId") String sUserSId) {
+        return sUserService.getSUserRoleBySUserId(sUserSId);
+    }
+
+    //获取该系统用户拥有的系统目录列表
+    @RequiresPermissions("sUser:get")
+    @GetMapping("/getSUserSMenu/{sUserSId}")
+    public Result getSMenuBySUserId(@PathVariable("sUserSId") String sUserSId) {
+        return sUserService.getSUserSMenuBySUserId(sUserSId);
+    }
+
+    //添加系统用户
     @RequiresPermissions("sUser:add")
     @PostMapping("/add")
-    public Result add(@RequestBody SUser sUser){
-            return sUserService.addSUser(sUser);
-        }
-
-    @RequiresPermissions("sUser:add")
-    @PostMapping("/addSUserAndRole")
-    public Result addSUserAndRole(@NotNull @RequestBody AddSUserAndRole addSUserAndRole){
-        List<String> listRoleId = addSUserAndRole.getListRoleId();
-        String sId = addSUserAndRole.getsId();
-        return userRoleService.addSUserAndRole(listRoleId,sId);
+    public Result add(@RequestBody SUser sUser) {
+        return sUserService.addSUser(sUser);
     }
 
-        @RequiresPermissions("sUser:update")
-        @PostMapping("/update")
-        public Result update(@RequestBody SUser sUser){
-            return sUserService.updateSUser(sUser);
-        }
+    //添加系统用户拥有的角色
+    @RequiresPermissions("sUser:add")
+    @PostMapping("/addSUserRole")
+    public Result addSUserRole(@RequestBody AddSUserRole addSUserRole) {
+        List<String> listRoleId = addSUserRole.getListRoleId();
+        String sId = addSUserRole.getsId();
+        return sUserService.addSUserRole(listRoleId, sId);
+    }
 
-        @RequiresPermissions("sUser:update")
-        @PostMapping("/updateEnableFlag")
-        public Result UpdateEnableFlag(@RequestBody SUser sUser){
-            return sUserService.updateEnableFlag(sUser);
+    //添加系统用户拥有的系统目录
+    @RequiresPermissions("sUser:add")
+    @PostMapping("/addSUserSMenu")
+    public Result addSUserSMenu(@RequestBody AddSUserSMenu addSUserSMenu) {
+        String sId = addSUserSMenu.getsId();
+        List<String> SMenuSIdList = addSUserSMenu.getListSMenuId();
+        if (StringUtils.isEmpty(sId)) {
+            return Result.fail("参数不能为空");
         }
-        @RequiresPermissions("sUser:delete")
-        @PostMapping("/delete")
-        public Result delete(@RequestBody SUser sUser) {
-            try {
-                LambdaUpdateWrapper<UserRole> lambdaUpdateWrapper = new LambdaUpdateWrapper();
-                lambdaUpdateWrapper.eq(UserRole::getUserId, sUser.getsId());
-                userRoleService.remove(lambdaUpdateWrapper);
-            } catch (Exception e) {
-                return Result.fail(500, "删除失败");
-            }
-            return sUserService.deleteSUser(sUser.getsId());
+        return sUserService.addSUserSMenu(sId, SMenuSIdList);
+    }
+
+    //修改系统用户
+    @RequiresPermissions("sUser:update")
+    @PutMapping("/update")
+    public Result update(@RequestBody SUser sUser) {
+        return sUserService.updateSUser(sUser);
+    }
+
+    //修改系统用户的状态
+    @RequiresPermissions("sUser:update")
+    @PutMapping("/updateEnableFlag/{sId}/{enableFlag}")
+    public Result UpdateEnableFlag(@PathVariable("sId") String sId, @PathVariable("enableFlag") String enableFlag) {
+        if (StringUtils.isEmpty(sId)) {
+            return Result.fail(403, "id参数不能为空");
         }
+        if (StringUtils.isEmpty(enableFlag)) {
+            return Result.fail(403, "enableFlag参数不能为空");
+        }
+        return sUserService.updateEnableFlag(sId, enableFlag);
+    }
+
+    //删除系统用户
+    @RequiresPermissions("sUser:delete")
+    @DeleteMapping("/delete/{sId}")
+    public Result delete(@PathVariable("sId") String sId) {
+        if (StringUtils.isEmpty(sId)) {
+            return Result.fail(403, "参数不能为空");
+        }
+        return sUserService.deleteSUser(sId);
+    }
+
+    //删除系统用户拥有的角色
+    @RequiresPermissions("sUser:delete")
+    @DeleteMapping("/deleteSUserRole/{sUserSId}/{roleId}")
+    public Result deleteSUserRole(@PathVariable("sUserSId") String sUserSId, @PathVariable("roleId") String roleId) {
+        if (StringUtils.isEmpty(sUserSId) || StringUtils.isEmpty(roleId)) {
+            return Result.fail(403, "参数不能为空");
+        }
+        return sUserService.deleteSUserRole(sUserSId, roleId);
+    }
+
+    //删除系统用户拥有的系统目录
+    @RequiresPermissions("sUser:delete")
+    @DeleteMapping("/deleteSUserSMenu/{sUserSId}/{sMenuId}")
+    public Result deleteSUserSMenu(@PathVariable("sUserSId") String sUserSId, @PathVariable("sMenuId") String sMenuId) {
+        if (StringUtils.isEmpty(sUserSId) || StringUtils.isEmpty(sMenuId)) {
+            return Result.fail("参数不能为空");
+        }
+        return sUserService.deleteSUserSMenu(sUserSId, sMenuId);
+    }
 }

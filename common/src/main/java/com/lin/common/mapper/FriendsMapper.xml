@@ -4,24 +4,26 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.lin.common.pojo.Friends">
-        <id column="id" property="id" />
-        <result column="form_user_id" property="formUserId" />
-        <result column="to_user_id" property="toUserId" />
-        <result column="msg" property="msg" />
-        <result column="created_date" property="createdDate" />
+        <id column="id" property="id"/>
+        <result column="form_user_id" property="formUserId"/>
+        <result column="to_user_id" property="toUserId"/>
+        <result column="msg" property="msg"/>
+        <result column="created_date" property="createdDate"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id,form_user_id,to_user_id,msg,created_date
+        id
+        ,form_user_id,to_user_id,msg,created_date
     </sql>
 
     <select id="getTenList" resultType="com.lin.common.pojo.Friends">
-        SELECT * FROM (
-            SELECT * FROM u_friends
-            WHERE (form_user_id=#{formUserId} AND to_user_id=#{toUserId})
-            OR (form_user_id=#{toUserId} AND to_user_id=#{formUserId})
-            ORDER BY created_date desc LIMIT #{one},#{two} ) a
+        SELECT *
+        FROM (SELECT *
+              FROM u_friends
+              WHERE (form_user_id = #{formUserId} AND to_user_id = #{toUserId})
+                 OR (form_user_id = #{toUserId} AND to_user_id = #{formUserId})
+              ORDER BY created_date desc LIMIT #{one}, #{two}) a
         ORDER BY created_date asc
     </select>
 </mapper>

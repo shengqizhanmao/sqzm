@@ -9,7 +9,7 @@ import java.io.Serializable;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author linShengWei
@@ -66,10 +66,10 @@ public class Palte implements Serializable {
     @Override
     public String toString() {
         return "Palte{" +
-        "id=" + id +
-        ", name=" + name +
-        ", icon=" + icon +
-        ", path=" + path +
-        "}";
+                "id=" + id +
+                ", name=" + name +
+                ", icon=" + icon +
+                ", path=" + path +
+                "}";
     }
 }

@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lin.common.Result;
-
 import com.lin.common.mapper.RoleMapper;
 import com.lin.common.pojo.Resource;
 import com.lin.common.pojo.Role;
@@ -38,35 +37,36 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     private RoleMapper roleMapper;
 
     @Autowired
-    private  ResourceService resourceService;
+    private ResourceService resourceService;
 
     @Autowired
     private RoleResourceService roleResourceService;
+
     @NotNull
     @Override
     public Result getRoleAndResource() {
-        LambdaQueryWrapper<Role> lambdaQueryWrapper=new LambdaQueryWrapper<>();
+        LambdaQueryWrapper<Role> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.orderByAsc(Role::getSortNo);
         List<Role> listRole = roleMapper.selectList(lambdaQueryWrapper);
         List<RoleAndResourceVo> roleAndResourceVos = ListCopy(listRole);
-        return Result.succ("查询角色成功",roleAndResourceVos);
+        return Result.succ("查询角色成功", roleAndResourceVos);
     }
 
     @NotNull
     @Override
     public Result saveRole(@NotNull Role role) {
         role.setEnableFlag("1");
-        if (StringUtils.isEmpty(role.getRoleName())){
+        if (StringUtils.isEmpty(role.getRoleName())) {
             return Result.fail("添加失败,角色名称不能为空");
         }
-        try{
+        try {
             int insert = roleMapper.insert(role);
-            if (insert==0){
+            if (insert == 0) {
                 return Result.fail("添加失败");
             }
             return Result.succ("添加成功");
-        }catch (Exception e){
-            log.error("添加角色失败,原因是"+e.toString());
+        } catch (Exception e) {
+            log.error("添加角色失败,原因是" + e.toString());
             return Result.fail("添加失败");
         }
     }
@@ -75,19 +75,19 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     @Transactional
     @Override
     public Result deleteRoleById(@Nullable String id) {
-        if (id==null){
+        if (id == null) {
             return Result.fail("id不能为空");
         }
-        try{
+        try {
             int i = roleMapper.deleteById(id);
-            LambdaUpdateWrapper<RoleResource> lambdaUpdateWrapper=new LambdaUpdateWrapper<RoleResource>();
-            lambdaUpdateWrapper.eq(RoleResource::getRoleId,id);
+            LambdaUpdateWrapper<RoleResource> lambdaUpdateWrapper = new LambdaUpdateWrapper<RoleResource>();
+            lambdaUpdateWrapper.eq(RoleResource::getRoleId, id);
             roleResourceService.remove(lambdaUpdateWrapper);
-            if (i==0){
+            if (i == 0) {
                 return Result.fail("删除角色失败,该角色不存在");
             }
-        }catch (Exception e){
-            log.error("删除角色失败,原因是"+e);
+        } catch (Exception e) {
+            log.error("删除角色失败,原因是" + e);
             return Result.fail("删除失败");
         }
         return Result.succ("删除角色成功");
@@ -96,47 +96,58 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     @NotNull
     @Override
     public Result updateRole(@NotNull Role role) {
-        if (StringUtils.isEmpty(role.getId())){
+        if (StringUtils.isEmpty(role.getId())) {
             return Result.fail("id参数不能为空");
         }
-        try{
-            LambdaUpdateWrapper<Role> lambdaUpdateWrapper=new LambdaUpdateWrapper<>();
-            lambdaUpdateWrapper.eq(Role::getId,role.getId())
-                    .set(Role::getRoleName,role.getRoleName())
-                    .set(Role::getDescription,role.getDescription())
-                    .set(Role::getSortNo,role.getSortNo())
-                    .set(Role::getLabel,role.getLabel());
+        try {
+            LambdaUpdateWrapper<Role> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+            lambdaUpdateWrapper.eq(Role::getId, role.getId())
+                    .set(Role::getRoleName, role.getRoleName())
+                    .set(Role::getDescription, role.getDescription())
+                    .set(Role::getSortNo, role.getSortNo())
+                    .set(Role::getLabel, role.getLabel());
             int update = roleMapper.update(role, lambdaUpdateWrapper);
-            if(update==0){
+            if (update == 0) {
                 return Result.fail("修改角色失败");
             }
             return Result.succ("修改角色成功");
-        }catch (Exception e){
-            log.error("角色修改失败,原因:"+e);
+        } catch (Exception e) {
+            log.error("角色修改失败,原因:" + e);
             return Result.fail("修改失败");
         }
     }
 
     @NotNull
     @Override
-    public Result updateRoleEnableFlag(@NotNull Role role) {
-        try{
-            LambdaUpdateWrapper<Role> lambdaUpdateWrapper=new LambdaUpdateWrapper<>();
-            lambdaUpdateWrapper.eq(Role::getId,role.getId())
-                    .set(Role::getEnableFlag,role.getEnableFlag());
-            int update = roleMapper.update(role, lambdaUpdateWrapper);
-            if(update==0){
-                return Result.fail("修改角色状态失败");
+    public Result updateRoleEnableFlag(String id, String enableFlag) {
+        try {
+            Role role = roleMapper.selectById(id);
+            role.setEnableFlag(enableFlag);
+            int update = roleMapper.updateById(role);
+            LambdaUpdateWrapper<RoleResource> roleResourceLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+            roleResourceLambdaUpdateWrapper.eq(RoleResource::getRoleId, id);
+            List<RoleResource> list = roleResourceService.list(roleResourceLambdaUpdateWrapper);
+            for (RoleResource roleResource : list) {
+                roleResource.setEnableFlag(enableFlag);
+                roleResourceService.updateById(roleResource);
             }
-            return Result.succ("修改角色状态成功");
-        }catch (Exception e){
-            log.error("角色状态修改失败,原因:"+e);
-            return Result.fail(500,"状态修改失败");
+            if (update == 0) {
+                if (enableFlag.equals("1")) {
+                    return Result.fail("启动角色失败");
+                }
+                return Result.fail("禁用角色失败");
+            }
+            if (enableFlag.equals("1")) {
+                return Result.succ("启动角色成功");
+            }
+            return Result.succ("禁用角色成功");
+        } catch (Exception e) {
+            log.error("角色状态修改失败,原因:" + e);
+            return Result.fail(500, "状态修改失败");
         }
     }
 
     @NotNull
-    @Transactional
     @Override
     public Result addRoleAndResource(String roleId, @NotNull List<String> listResourceId) {
         if (StringUtils.isEmpty(roleId)) {
@@ -146,12 +157,12 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
             LambdaQueryWrapper<RoleResource> roleResourceLambdaQueryWrapper2 = new LambdaQueryWrapper<>();
             roleResourceLambdaQueryWrapper2.eq(RoleResource::getRoleId, roleId);
             roleResourceService.remove(roleResourceLambdaQueryWrapper2);
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
-            Result.fail("删除角色与资源连接失败");
+            Result.fail("删除角色拥有的资源失败");
         }
-        if (listResourceId.size()==0){
-            return Result.succ("修改用户拥有角色连接成功");
+        if (listResourceId.size() == 0) {
+            return Result.succ("修改角色拥有的资源成功");
         }
         for (String resourceId : listResourceId) {
             if (StringUtils.isEmpty(resourceId)) {
@@ -161,68 +172,59 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
             roleResource.setRoleId(roleId);
             roleResource.setResourceId(resourceId);
             roleResource.setEnableFlag("1");
-            LambdaQueryWrapper<RoleResource> roleResourceLambdaQueryWrapper=new LambdaQueryWrapper<>();
-            roleResourceLambdaQueryWrapper.eq(RoleResource::getRoleId,roleId);
-            roleResourceLambdaQueryWrapper.eq(RoleResource::getResourceId,resourceId);
-            try{
+            LambdaQueryWrapper<RoleResource> roleResourceLambdaQueryWrapper = new LambdaQueryWrapper<>();
+            roleResourceLambdaQueryWrapper.eq(RoleResource::getRoleId, roleId);
+            roleResourceLambdaQueryWrapper.eq(RoleResource::getResourceId, resourceId);
+            try {
                 RoleResource one = roleResourceService.getOne(roleResourceLambdaQueryWrapper);
-                if (one!=null){
-                    Result.fail("权限已经存在");
+                if (one != null) {
+                    Result.fail("角色拥有的资源已经存在");
                 }
-            }catch (Exception e){
+            } catch (Exception e) {
                 log.error(e.toString());
-                Result.fail("权限已经存在");
+                Result.fail("角色拥有的资源已经存在");
             }
             try {
                 roleResourceService.save(roleResource);
             } catch (Exception e) {
                 e.printStackTrace();
-                Result.fail("添加权限失败");
+                Result.fail("添加角色拥有的资源失败");
             }
         }
-        return Result.succ("添加权限成功");
+        return Result.succ("添加角色拥有的资源成功");
     }
 
     @NotNull
     @Override
-    public Result deleteRoleResource(@NotNull RoleResource roleResource) {
-        String roleId = roleResource.getRoleId();
-        String resourceId = roleResource.getResourceId();
-        if (StringUtils.isEmpty(resourceId)) {
-            return Result.fail("资源id参数不能为空");
-        }
-        if (StringUtils.isEmpty(roleId)) {
-            return Result.fail("角色id参数不能为空");
-        }
-        LambdaUpdateWrapper<RoleResource> lambdaQueryWrapper=new LambdaUpdateWrapper<>();
-        lambdaQueryWrapper.eq(RoleResource::getRoleId,roleId);
-        lambdaQueryWrapper.eq(RoleResource::getResourceId,resourceId);
+    public Result deleteRoleResource(String roleId, String resourceId) {
+        LambdaUpdateWrapper<RoleResource> lambdaQueryWrapper = new LambdaUpdateWrapper<>();
+        lambdaQueryWrapper.eq(RoleResource::getRoleId, roleId).eq(RoleResource::getResourceId, resourceId);
         boolean remove = roleResourceService.remove(lambdaQueryWrapper);
-        if (remove){
-            return Result.succ("权限删除成功");
+        if (remove) {
+            return Result.succ("角色拥有的权限删除成功");
         }
-        return Result.fail("权限删除失败");
+        return Result.fail("角色拥有的权限删除失败");
     }
 
     @Override
     public List<Role> getListRoleBySUserId(String sId) {
-        List<Role> listRoleBySUserId = roleMapper.getListRoleBySUserId(sId);
-        return listRoleBySUserId;
+        return roleMapper.getListRoleBySUserId(sId);
     }
 
     //Method
     @NotNull
-    private RoleAndResourceVo Copy(@NotNull Role role){
+    private RoleAndResourceVo Copy(@NotNull Role role) {
         RoleAndResourceVo roleAndResourceVo = new RoleAndResourceVo();
-        BeanUtils.copyProperties(role,roleAndResourceVo);
+        BeanUtils.copyProperties(role, roleAndResourceVo);
         List<Resource> listResourceByRoleId = resourceService.getListResourceByRoleId(role.getId());
         roleAndResourceVo.setListResourceName(listResourceByRoleId);
         return roleAndResourceVo;
     }
+
     @NotNull
-    private List<RoleAndResourceVo> ListCopy(@NotNull List<Role> roles){
+    private List<RoleAndResourceVo> ListCopy(@NotNull List<Role> roles) {
         List<RoleAndResourceVo> roleAndResourceVos = new ArrayList<>();
-        for(Role role:roles){
+        for (Role role : roles) {
             RoleAndResourceVo copy = Copy(role);
             roleAndResourceVos.add(copy);
         }

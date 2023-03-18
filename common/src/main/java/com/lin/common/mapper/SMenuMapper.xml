@@ -4,22 +4,25 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.lin.common.pojo.SMenu">
-        <result column="s_id" property="sId" />
-        <result column="path" property="path" />
-        <result column="name" property="name" />
-        <result column="icon" property="icon" />
-        <result column="effect" property="effect" />
+        <result column="s_id" property="sId"/>
+        <result column="path" property="path"/>
+        <result column="name" property="name"/>
+        <result column="icon" property="icon"/>
+        <result column="effect" property="effect"/>
+        <result column="sort" property="sort"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        s_id, path, name, icon, effect
+        s_id
+        , path, name, icon, effect,sort
     </sql>
     <select id="getListSMenuBySUserId" resultType="com.lin.common.pojo.SMenu">
-       select a.s_id, a.name, a.path, a.icon, a.effect
-       from s_menu a
-       join s_user_menu b on a.s_id=b.menu_id
-       where b.user_id=#{userId}
-       order by a.sort asc
+        select a.s_id, a.name, a.path, a.icon, a.effect, a.sort
+        from s_menu a
+                 join s_user_menu b on a.s_id = b.menu_id
+        where b.user_id = #{userId}
+        order by a.sort asc
     </select>
+
 </mapper>

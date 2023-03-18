@@ -9,11 +9,7 @@ import com.lin.common.service.SUserService;
 import com.lin.common.shiro.Jwt.JwtToken;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.AuthenticationInfo;
-import org.apache.shiro.authc.AuthenticationToken;
-import org.apache.shiro.authc.DisabledAccountException;
-import org.apache.shiro.authc.SimpleAuthenticationInfo;
+import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
@@ -34,11 +30,11 @@ import java.util.List;
 public class SUserRealm extends AuthorizingRealm {
 
     @Autowired
-    RedisTemplate<String, String> redisTemplate;
+    private RedisTemplate<String, String> redisTemplate;
     @Autowired
-    SUserService sUserService;
+    private SUserService sUserService;
     @Autowired
-    ResourceService resourceService;
+    private ResourceService resourceService;
 
     @Override
     public boolean supports(AuthenticationToken token) {
@@ -49,25 +45,24 @@ public class SUserRealm extends AuthorizingRealm {
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(@NotNull PrincipalCollection principalCollection) {
 //        log.info("------开始授权-------");
-        SUserTokenVo sUser = (SUserTokenVo)principalCollection.getPrimaryPrincipal();
+        SUserTokenVo sUser = (SUserTokenVo) principalCollection.getPrimaryPrincipal();
         String id = sUser.getId();
         String infoCache = redisTemplate.opsForValue().get(RedisStatus.INFO_TOKEN + sUser.getId());
-        if(!StringUtils.isBlank(infoCache)){
-            SimpleAuthorizationInfo simpleAuthorizationInfo = JSON.parseObject(infoCache, SimpleAuthorizationInfo.class);
-//            log.info("------走了缓存-------");
+        if (!StringUtils.isBlank(infoCache)) {
+            //            log.info("------走了缓存-------");
 //            log.info("------授权结束-------");
-            return simpleAuthorizationInfo;
+            return JSON.parseObject(infoCache, SimpleAuthorizationInfo.class);
         }
-        SimpleAuthorizationInfo info= new SimpleAuthorizationInfo();
+        SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
         List<Resource> listResourceBySUserId = resourceService.getListResourceBySUserId(id);
         for (Resource r : listResourceBySUserId) {
             String enableFlag = r.getEnableFlag();
-            if(enableFlag.equals("-1")){
+            if (enableFlag.equals("-1")) {
                 continue;
             }
             info.addStringPermission(r.getLavel());
         }
-        redisTemplate.opsForValue().set(RedisStatus.INFO_TOKEN+sUser.getId(), JSON.toJSONString(info), Duration.ofMillis(1000*60*60*24*10));
+        redisTemplate.opsForValue().set(RedisStatus.INFO_TOKEN + sUser.getId(), JSON.toJSONString(info), Duration.ofMillis(1000 * 60 * 60 * 24 * 10));
 //        log.info("------存了缓存-------");
 //        log.info("------授权结束-------");
         return info;
@@ -77,15 +72,15 @@ public class SUserRealm extends AuthorizingRealm {
     @Nullable
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(@NotNull AuthenticationToken authenticationToken) throws AuthenticationException {
-        JwtToken token=(JwtToken)authenticationToken;
-        String credentials = (String)authenticationToken.getCredentials();
+        JwtToken token = (JwtToken) authenticationToken;
+        String credentials = (String) authenticationToken.getCredentials();
         SUserTokenVo sUser = sUserService.findSUserByToken(token.getToken());
-            if(sUser==null){
+        if (sUser == null) {
             return null;
         }
-        if(sUser.getEnableFlag().equals("-1")){
+        if (sUser.getEnableFlag().equals("-1")) {
             throw new DisabledAccountException();
         }
-        return new SimpleAuthenticationInfo(sUser,credentials,"SUserRealm");
+        return new SimpleAuthenticationInfo(sUser, credentials, "SUserRealm");
     }
 }

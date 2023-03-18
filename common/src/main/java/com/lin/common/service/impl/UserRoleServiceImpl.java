@@ -26,10 +26,11 @@ import java.util.List;
 public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> implements UserRoleService {
 
     @Autowired
-    private  UserRoleService userRoleService;
+    private UserRoleService userRoleService;
+
     @NotNull
     @Override
-    public Result addSUserAndRole(@NotNull List<String> listRoleId, String sId) {
+    public Result addSUserRole(@NotNull List<String> listRoleId, String sId) {
         if (StringUtils.isEmpty(sId)) {
             return Result.fail("系统用户id参数不能为空");
         }
@@ -37,11 +38,11 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> i
             LambdaQueryWrapper<UserRole> userRoleLambdaQueryWrapper2 = new LambdaQueryWrapper<>();
             userRoleLambdaQueryWrapper2.eq(UserRole::getUserId, sId);
             userRoleService.remove(userRoleLambdaQueryWrapper2);
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
-            Result.fail(ResultCode.USER_ROLE_DELETE_FAIL,"删除用户拥有角色失败");
+            Result.fail(ResultCode.USER_ROLE_DELETE_FAIL, "删除用户拥有角色失败");
         }
-        if (listRoleId.size()==0){
+        if (listRoleId.size() == 0) {
             return Result.succ("修改用户拥有角色连接成功");
         }
         for (String roleId : listRoleId) {
@@ -52,15 +53,15 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> i
             userRole.setUserId(sId);
             userRole.setRoleId(roleId);
             userRole.setEnableFlag("1");
-            LambdaQueryWrapper<UserRole> userRoleLambdaQueryWrapper=new LambdaQueryWrapper<>();
-            userRoleLambdaQueryWrapper.eq(UserRole::getUserId,sId);
-            userRoleLambdaQueryWrapper.eq(UserRole::getRoleId,roleId);
-            try{
+            LambdaQueryWrapper<UserRole> userRoleLambdaQueryWrapper = new LambdaQueryWrapper<>();
+            userRoleLambdaQueryWrapper.eq(UserRole::getUserId, sId);
+            userRoleLambdaQueryWrapper.eq(UserRole::getRoleId, roleId);
+            try {
                 UserRole one = userRoleService.getOne(userRoleLambdaQueryWrapper);
-                if (one!=null){
+                if (one != null) {
                     Result.fail("用户拥有角色已经存在");
                 }
-            }catch (Exception e){
+            } catch (Exception e) {
                 log.error(e.toString());
                 Result.fail("用户拥有角色已经存在");
             }

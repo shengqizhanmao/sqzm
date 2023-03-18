@@ -46,7 +46,7 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
             Subject subject = SecurityUtils.getSubject();
             subject.login(jwtToken);
             return true;
-        }catch (UnknownAccountException e){
+        } catch (UnknownAccountException e) {
             HttpServletResponse httpServletResponse = (HttpServletResponse) response;
             httpServletResponse.setContentType("application/json;charset=utf-8");
             httpServletResponse.setCharacterEncoding("utf-8");
@@ -55,10 +55,11 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
             httpServletResponse.getWriter().write(JSON.toJSONString(fail, SerializerFeature.WriteDateUseDateFormat));
             return false;
         } catch (Exception e) {
-            log.info("JwtFilter-isAccessAllowed的错误,错误原因:"+e);
+            log.info("JwtFilter-isAccessAllowed的错误,错误原因:" + e);
             return false;
         }
     }
+
     /**
      * 对跨域提供支持
      */

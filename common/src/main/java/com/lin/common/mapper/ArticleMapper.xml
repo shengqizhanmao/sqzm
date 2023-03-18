@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lin.common.mapper.ArticleMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.lin.common.pojo.Article">
+        <id column="id" property="id"/>
+        <result column="title" property="title"/>
+        <result column="front_cover" property="frontCover"/>
+        <result column="summary" property="summary"/>
+        <result column="comment_counts" property="commentCounts"/>
+        <result column="view_counts" property="viewCounts"/>
+        <result column="weight" property="weight"/>
+        <result column="likes_counts" property="likesCounts"/>
+        <result column="collection_counts" property="collectionCounts"/>
+        <result column="create_date" property="createDate"/>
+        <result column="user_id" property="userId"/>
+        <result column="category_id" property="categoryId"/>
+        <result column="body_id" property="bodyId"/>
+        <result column="modulars_id" property="modularsId"/>
+        <result column="plate_id" property="plateId"/>
+        <result column="status" property="status"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id
+        , title, front_cover, summary, comment_counts, view_counts, weight, likes_counts, collection_counts, create_date, user_id, category_id, body_id, modulars_id, plate_id, status
+    </sql>
+
+</mapper>

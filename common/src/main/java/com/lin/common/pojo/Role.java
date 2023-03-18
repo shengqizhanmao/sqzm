@@ -93,12 +93,12 @@ public class Role implements Serializable {
     @Override
     public String toString() {
         return "Role{" +
-        "id=" + id +
-        ", roleName=" + roleName +
-        ", label=" + label +
-        ", description=" + description +
-        ", sortNo=" + sortNo +
-        ", enableFlag=" + enableFlag +
-        "}";
+                "id=" + id +
+                ", roleName=" + roleName +
+                ", label=" + label +
+                ", description=" + description +
+                ", sortNo=" + sortNo +
+                ", enableFlag=" + enableFlag +
+                "}";
     }
 }

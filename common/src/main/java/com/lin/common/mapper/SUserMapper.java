@@ -1,13 +1,13 @@
 package com.lin.common.mapper;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.lin.common.mapper.mapperX.BaseMapperX;
 import com.lin.common.pojo.SUser;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
 /**
  * <p>
- *  Mapper 接口
+ * Mapper 接口
  * </p>
  *
  * @author linShengWei
@@ -15,6 +15,6 @@ import org.springframework.stereotype.Repository;
  */
 @Mapper
 @Repository
-public interface SUserMapper extends BaseMapper<SUser> {
+public interface SUserMapper extends BaseMapperX<SUser> {
 
 }

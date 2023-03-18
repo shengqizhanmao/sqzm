@@ -12,7 +12,7 @@ public class AutoCodeGenerator {
     /**
      * 项目根目录
      */
-    private static final String PROJECT_ROOT_PATH = System.getProperty("user.dir")+("/yxlt");
+    private static final String PROJECT_ROOT_PATH = System.getProperty("user.dir") + ("/common");
 
     public static void main(String[] args) {
         // 1、数据源配置
@@ -44,7 +44,8 @@ public class AutoCodeGenerator {
         // 4、包配置
         generator.packageConfig(builder -> {
             // 父包名. ===========1.手动修改设置===========
-            builder.parent("com.lin.sqzmYxlt")
+            builder.parent("com.lin.common")
+
                     // 将要生成的模块名称. ===========2.手动修改设置===========
 //                    .moduleName("employee")
                     // 设置生成的 控制层 文件夹名称
@@ -58,17 +59,17 @@ public class AutoCodeGenerator {
                     // mapper.xml 文件路径。单模块下，其他文件路径默认即可。 ;
                     .xml("mapper")
 //                    .pathInfo(Collections.singletonMap(OutputFile.xml, PROJECT_ROOT_PATH + "/src/main/resources/mapper"));
-                    .pathInfo(Collections.singletonMap(OutputFile.xml, PROJECT_ROOT_PATH + "/src/main/java/com/lin/sqzmyxlt/mapper"));
+                    .pathInfo(Collections.singletonMap(OutputFile.xml, PROJECT_ROOT_PATH + "/src/main/java/com/lin/common/mapper"));
         });
 
         // 5、策略配置
         generator.strategyConfig(builder -> {
             // 设置数据库表名称. 如果不设置，则会将数据库中所有表都生成。（注意：需要与数据库中表名称一致，前缀也需添加）
             // ===========3.手动修改设置。===========
-            builder.addInclude("u_author")
-//            ""u_friends_user","sh_resource","sh_role","sh_role_resource","sh_user_role","u_palte","u_modulars","u_user","u_tags","u_menu","u_friends","u_comment","u_category","u_body","u_article","sh_resource","sh_role"
+            builder.addInclude("u_article_likes_collection")
+//            "u_comment,"u_body","u_article_tags","u_article","u_author",""u_friends_user","sh_resource","sh_role","sh_role_resource","sh_user_role","u_palte","u_modulars","u_user","u_tags","u_menu","u_friends","u_comment","u_category","u_body","u_article","sh_resource","sh_role"
                     // 过滤表前缀，生成的类名会去掉这个前缀
-                    .addTablePrefix("u_","sh_")
+                    .addTablePrefix("u_", "sh_")
                     // 第一阶段
                     // 是否生成 entity：是
                     .entityBuilder()

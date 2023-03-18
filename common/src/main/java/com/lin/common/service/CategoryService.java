@@ -1,11 +1,12 @@
 package com.lin.common.service;
 
-import com.lin.common.pojo.Category;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.lin.common.Result;
+import com.lin.common.pojo.Category;
 
 /**
  * <p>
- *  服务类
+ * 服务类
  * </p>
  *
  * @author linShengWei
@@ -13,4 +14,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface CategoryService extends IService<Category> {
 
+    Result getByPalteId(String palteId);
 }

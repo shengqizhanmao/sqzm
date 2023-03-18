@@ -24,7 +24,7 @@ import java.util.Map;
  * @Description 权限配置类
  */
 @Configuration
-@ComponentScan(basePackages = {"com.lin.sqzmHtgl","com.lin.common"})
+@ComponentScan(basePackages = {"com.lin.sqzmHtgl", "com.lin.common"})
 @Log4j2
 public class ShiroConfig {
 
@@ -32,31 +32,31 @@ public class ShiroConfig {
     @Bean(value = "shiroFilterFactoryBean")
     public ShiroFilterFactoryBean shiroFilterFactoryBean(
             @Qualifier("defaultWebSecurityManager") DefaultWebSecurityManager defaultWebSecurityManager
-            ){
-        ShiroFilterFactoryBean shiroFilterFactoryBean=new ShiroFilterFactoryBean();
+    ) {
+        ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
         //设置安全管理器
         shiroFilterFactoryBean.setSecurityManager(defaultWebSecurityManager);
         //设置我们自定义的JWT过滤器
         Map<String, Filter> map = new HashMap<>();
-        map.put("jwt",new JwtFilter());
+        map.put("jwt", new JwtFilter());
         shiroFilterFactoryBean.setFilters(map);
         //anon游客,authc登录,user,perms资源,role角色
-        Map<String,String> filterMap=new LinkedHashMap<>();
+        Map<String, String> filterMap = new LinkedHashMap<>();
         //资源
-        filterMap.put("/static/**","anon");
+        filterMap.put("/static/**", "anon");
         filterMap.put("/webjars/**", "anon");
         filterMap.put("/swagger-ui.html", "anon");
         filterMap.put("/doc.html", "anon");
         filterMap.put("/v2/**", "anon");
         //不经过jwt拦截器就可以的
-        filterMap.put("/login/**","anon");
+        filterMap.put("/login/**", "anon");
         //全部请求经过jwt拦截
-        filterMap.put("/**","jwt");
+        filterMap.put("/**", "jwt");
 //        filterMap.put("/user/add","perms[user:add]");
 //        filterMap.put("/user/**","perms[user:*]");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterMap);
-        shiroFilterFactoryBean.setLoginUrl("/login/LoginUrl");
-        shiroFilterFactoryBean.setUnauthorizedUrl("/login/Unauthorized");
+//        shiroFilterFactoryBean.setLoginUrl("/login/LoginUrl");
+//        shiroFilterFactoryBean.setUnauthorizedUrl("/login/Unauthorized");
         return shiroFilterFactoryBean;
     }
 
@@ -64,32 +64,33 @@ public class ShiroConfig {
     @NotNull
     @Bean(value = "defaultWebSecurityManager")
     public DefaultWebSecurityManager getDefaultWebSecurityManager(
-            @Qualifier("sUserRealm")SUserRealm sUserRealm,
-            @Qualifier("defaultSubjectDAO")DefaultSubjectDAO defaultSubjectDAO
-    ){
-        DefaultWebSecurityManager defaultWebSecurityManager=new DefaultWebSecurityManager();
+            @Qualifier("sUserRealm") SUserRealm sUserRealm,
+            @Qualifier("defaultSubjectDAO") DefaultSubjectDAO defaultSubjectDAO
+    ) {
+        DefaultWebSecurityManager defaultWebSecurityManager = new DefaultWebSecurityManager();
         //关联Realm
         defaultWebSecurityManager.setRealm(sUserRealm);
         //关联Session,关闭session
-       defaultWebSecurityManager.setSubjectDAO(defaultSubjectDAO);
+        defaultWebSecurityManager.setSubjectDAO(defaultSubjectDAO);
         return defaultWebSecurityManager;
     }
 
     //Realm
     @NotNull
     @Bean(value = "sUserRealm")
-    public SUserRealm getUserRealm(){
+    public SUserRealm getUserRealm() {
         return new SUserRealm();
     }
 
     //session
     @NotNull
     @Bean(value = "defaultSubjectDAO")
-    public DefaultSubjectDAO defaultSubjectDAO(@Qualifier("defaultSessionStorageEvaluator")DefaultSessionStorageEvaluator defaultSessionStorageEvaluator) {
+    public DefaultSubjectDAO defaultSubjectDAO(@Qualifier("defaultSessionStorageEvaluator") DefaultSessionStorageEvaluator defaultSessionStorageEvaluator) {
         DefaultSubjectDAO subjectDAO = new DefaultSubjectDAO();
         subjectDAO.setSessionStorageEvaluator(defaultSessionStorageEvaluator);
         return subjectDAO;
     }
+
     @NotNull
     @Bean(value = "defaultSessionStorageEvaluator")
     public DefaultSessionStorageEvaluator defaultSessionStorageEvaluator() {
@@ -97,6 +98,7 @@ public class ShiroConfig {
         defaultSessionStorageEvaluator.setSessionStorageEnabled(false);
         return defaultSessionStorageEvaluator;
     }
+
     //aop
     @NotNull
     @Bean

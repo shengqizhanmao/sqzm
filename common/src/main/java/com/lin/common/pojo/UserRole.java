@@ -68,10 +68,10 @@ public class UserRole implements Serializable {
     @Override
     public String toString() {
         return "UserRole{" +
-        "id=" + id +
-        ", enableFlag=" + enableFlag +
-        ", userId=" + userId +
-        ", roleId=" + roleId +
-        "}";
+                "id=" + id +
+                ", enableFlag=" + enableFlag +
+                ", userId=" + userId +
+                ", roleId=" + roleId +
+                "}";
     }
 }

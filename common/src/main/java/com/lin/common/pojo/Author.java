@@ -3,13 +3,14 @@ package com.lin.common.pojo;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import java.io.Serializable;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import java.io.Serializable;
+
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author linShengWei
@@ -57,9 +58,9 @@ public class Author implements Serializable {
     @Override
     public String toString() {
         return "Author{" +
-        "id=" + id +
-        ", userId=" + userId +
-        ", status=" + status +
-        "}";
+                "id=" + id +
+                ", userId=" + userId +
+                ", status=" + status +
+                "}";
     }
 }

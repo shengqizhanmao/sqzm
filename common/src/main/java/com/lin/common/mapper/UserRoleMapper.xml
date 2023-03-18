@@ -4,15 +4,16 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.lin.common.pojo.UserRole">
-        <id column="id" property="id" />
-        <result column="enable_flag" property="enableFlag" />
-        <result column="user_id" property="userId" />
-        <result column="role_id" property="roleId" />
+        <id column="id" property="id"/>
+        <result column="enable_flag" property="enableFlag"/>
+        <result column="user_id" property="userId"/>
+        <result column="role_id" property="roleId"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, enable_flag, user_id, role_id
+        id
+        , enable_flag, user_id, role_id
     </sql>
 
 </mapper>

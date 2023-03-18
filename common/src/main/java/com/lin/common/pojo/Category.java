@@ -4,13 +4,12 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author linShengWei
@@ -27,10 +26,31 @@ public class Category implements Serializable {
 
     private String avatar;
 
-    private String categoryName;
+    private String name;
 
     private String description;
 
+
+    private String palteId;
+
+    @Override
+    public String toString() {
+        return "Category{" +
+                "id='" + id + '\'' +
+                ", avatar='" + avatar + '\'' +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", palteId='" + palteId + '\'' +
+                '}';
+    }
+
+    public String getPalteId() {
+        return palteId;
+    }
+
+    public void setPalteId(String palteId) {
+        this.palteId = palteId;
+    }
 
     public String getId() {
         return id;
@@ -48,12 +68,12 @@ public class Category implements Serializable {
         this.avatar = avatar;
     }
 
-    public String getCategoryName() {
-        return categoryName;
+    public String getName() {
+        return name;
     }
 
-    public void setCategoryName(String categoryName) {
-        this.categoryName = categoryName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getDescription() {
@@ -64,14 +84,4 @@ public class Category implements Serializable {
         this.description = description;
     }
 
-    @NotNull
-    @Override
-    public String toString() {
-        return "Category{" +
-        "id=" + id +
-        ", avatar=" + avatar +
-        ", categoryName=" + categoryName +
-        ", description=" + description +
-        "}";
-    }
 }

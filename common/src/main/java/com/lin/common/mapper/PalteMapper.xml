@@ -4,15 +4,16 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.lin.common.pojo.Palte">
-        <id column="id" property="id" />
-        <result column="name" property="name" />
-        <result column="icon" property="icon" />
-        <result column="path" property="path" />
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="icon" property="icon"/>
+        <result column="path" property="path"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, name, icon, path
+        id
+        , name, icon, path
     </sql>
 
 </mapper>

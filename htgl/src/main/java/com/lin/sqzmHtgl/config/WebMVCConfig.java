@@ -20,13 +20,15 @@ public class WebMVCConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(@NotNull CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("http://localhost:8192","http://127.0.0.1:8192","http://192.168.43.5:8192")
-                .allowedOriginPatterns("http://localhost:8192","http://127.0.0.1:8192","http://192.168.43.5:8192")
+                .allowedOriginPatterns("*")
                 .allowedMethods("GET", "HEAD", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowCredentials(true)
                 .maxAge(3600)
                 .allowedHeaders("*");
     }
+/*               .allowedOrigins("http://localhost:8192","http://127.0.0.1:8192","http://192.168.43.5:8192")
+                .allowedOriginPatterns("http://localhost:8192","http://127.0.0.1:8192","http://192.168.43.5:8192")*/
+
     /***
      * 自定义资源映射
      * @param registry

@@ -9,14 +9,15 @@ import org.jetbrains.annotations.NotNull;
  */
 public class Md5Utils {
     //生成salt
-    public static String CretaeMd5(){
+    public static String CretaeMd5() {
         String salt = new SecureRandomNumberGenerator().nextBytes().toString();
         return salt;
     }
+
     //md5加密
     @NotNull
-    public static String md5Encryption(String password, String salt){
-        String password2= DigestUtils.md5Hex(password + salt);
+    public static String md5Encryption(String password, String salt) {
+        String password2 = DigestUtils.md5Hex(password + salt);
         return password2;
     }
     //慢哈希加密

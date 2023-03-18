@@ -1,6 +1,6 @@
 package com.lin.common.mapper;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.lin.common.mapper.mapperX.BaseMapperX;
 import com.lin.common.pojo.Role;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -18,7 +18,7 @@ import java.util.List;
  */
 @Mapper
 @Repository
-public interface RoleMapper extends BaseMapper<Role> {
+public interface RoleMapper extends BaseMapperX<Role> {
 
     List<Role> getListRoleBySUserId(@Param("sId") String sId);
 }

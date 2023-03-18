@@ -4,14 +4,15 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.lin.common.pojo.Author">
-        <id column="id" property="id" />
-        <result column="user_id" property="userId" />
-        <result column="status" property="status" />
+        <id column="id" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="status" property="status"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, user_id, status
+        id
+        , user_id, status
     </sql>
 
 </mapper>

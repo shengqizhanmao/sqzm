@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * @author lin
  */
-public class AddSUserAndRole {
+public class AddSUserRole {
     private String sId;
     private List<String> listRoleId;
 

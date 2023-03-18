@@ -11,7 +11,7 @@ import java.util.Date;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author linShengWei
@@ -138,16 +138,16 @@ public class User implements Serializable {
     @Override
     public String toString() {
         return "User{" +
-        "id=" + id +
-        ", username=" + username +
-        ", nickname=" + nickname +
-        ", password=" + password +
-        ", salt=" + salt +
-        ", avatar=" + avatar +
-        ", email=" + email +
-        ", gender=" + gender +
-        ", createDate=" + createDate +
-        ", enableFlag=" + enableFlag +
-        "}";
+                "id=" + id +
+                ", username=" + username +
+                ", nickname=" + nickname +
+                ", password=" + password +
+                ", salt=" + salt +
+                ", avatar=" + avatar +
+                ", email=" + email +
+                ", gender=" + gender +
+                ", createDate=" + createDate +
+                ", enableFlag=" + enableFlag +
+                "}";
     }
 }

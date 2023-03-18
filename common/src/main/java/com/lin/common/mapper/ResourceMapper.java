@@ -1,6 +1,6 @@
 package com.lin.common.mapper;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.lin.common.mapper.mapperX.BaseMapperX;
 import com.lin.common.pojo.Resource;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -18,8 +18,10 @@ import java.util.List;
  */
 @Mapper
 @Repository
-public interface ResourceMapper extends BaseMapper<Resource> {
+public interface ResourceMapper extends BaseMapperX<Resource> {
     List<Resource> getListResourceByUserId(String id);
+
     List<Resource> getListResourceBySUserId(@Param("id") String id);
+
     List<Resource> getListResourceByRoleId(@Param("id") String id);
 }

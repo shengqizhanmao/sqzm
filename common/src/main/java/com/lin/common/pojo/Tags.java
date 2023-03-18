@@ -4,13 +4,12 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author linShengWei
@@ -27,8 +26,36 @@ public class Tags implements Serializable {
 
     private String avatar;
 
-    private String tagName;
+    private String name;
 
+    private String palteId;
+
+
+    @Override
+    public String toString() {
+        return "Tags{" +
+                "id='" + id + '\'' +
+                ", avatar='" + avatar + '\'' +
+                ", name='" + name + '\'' +
+                ", palteId='" + palteId + '\'' +
+                '}';
+    }
+
+    public String getPalteId() {
+        return palteId;
+    }
+
+    public void setPalteId(String palteId) {
+        this.palteId = palteId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public String getId() {
         return id;
@@ -46,21 +73,5 @@ public class Tags implements Serializable {
         this.avatar = avatar;
     }
 
-    public String getTagName() {
-        return tagName;
-    }
 
-    public void setTagName(String tagName) {
-        this.tagName = tagName;
-    }
-
-    @NotNull
-    @Override
-    public String toString() {
-        return "Tags{" +
-        "id=" + id +
-        ", avatar=" + avatar +
-        ", tagName=" + tagName +
-        "}";
-    }
 }

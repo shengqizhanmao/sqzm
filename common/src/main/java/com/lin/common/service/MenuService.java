@@ -5,7 +5,7 @@ import com.lin.common.pojo.Menu;
 
 /**
  * <p>
- *  服务类
+ * 服务类
  * </p>
  *
  * @author linShengWei

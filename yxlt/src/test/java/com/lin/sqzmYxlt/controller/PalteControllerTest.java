@@ -45,7 +45,7 @@ class PalteControllerTest {
 
         // Run the test
         final MockHttpServletResponse response = mockMvc.perform(get("/palte/get")
-                .accept(MediaType.APPLICATION_JSON))
+                        .accept(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse();
 
         // Verify the results
@@ -60,7 +60,7 @@ class PalteControllerTest {
 
         // Run the test
         final MockHttpServletResponse response = mockMvc.perform(get("/palte/get")
-                .accept(MediaType.APPLICATION_JSON))
+                        .accept(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse();
 
         // Verify the results

@@ -28,7 +28,7 @@
         <shiro-redis.version>3.0.0</shiro-redis.version>
     </properties>
     <dependencies>
-    <!--        web-->
+        <!--        web-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>

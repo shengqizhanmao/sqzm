@@ -9,7 +9,7 @@ import java.util.List;
 
 /**
  * <p>
- *  服务类
+ * 服务类
  * </p>
  *
  * @author linShengWei
@@ -20,7 +20,7 @@ public interface FriendsUserService extends IService<FriendsUser> {
 
     Result getListFriendsUserVoByUserId(String userId);
 
-    Result getListSearchAddByUsernameOrNickname(String usernameOrNickname,String token);
+    Result getListSearchAddByUsernameOrNickname(String usernameOrNickname, String token);
 
     Result add(String formUserId, String toUserId);
 
@@ -31,5 +31,6 @@ public interface FriendsUserService extends IService<FriendsUser> {
     Result getListDetete(String userId);
 
     Result delete(String formUserId, String toUserId);
+
     List<FriendsUser> getListMethod(String formUserId);
 }

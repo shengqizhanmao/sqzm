@@ -5,7 +5,7 @@ import com.lin.common.pojo.Palte;
 
 /**
  * <p>
- *  服务类
+ * 服务类
  * </p>
  *
  * @author linShengWei

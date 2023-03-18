@@ -1,7 +1,7 @@
 package com.lin.common.mapper;
 
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.lin.common.mapper.mapperX.BaseMapperX;
 import com.lin.common.pojo.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -11,7 +11,7 @@ import java.util.List;
 
 /**
  * <p>
- *  Mapper 接口
+ * Mapper 接口
  * </p>
  *
  * @author linShengWei
@@ -19,7 +19,7 @@ import java.util.List;
  */
 @Mapper
 @Repository
-public interface UserMapper extends BaseMapper<User> {
+public interface UserMapper extends BaseMapperX<User> {
 
-    List<User> selectListUserByUsernameOrNickname(@Param("usernameOrNickname")String usernameOrNickname);
+    List<User> selectListUserByUsernameOrNickname(@Param("usernameOrNickname") String usernameOrNickname);
 }

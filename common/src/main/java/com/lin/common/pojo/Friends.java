@@ -11,7 +11,7 @@ import java.util.Date;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author linShengWei
@@ -79,11 +79,11 @@ public class Friends implements Serializable {
     @Override
     public String toString() {
         return "Friends{" +
-        "id=" + id +
-        ", formUserId=" + formUserId +
-        ", toUserId=" + toUserId +
-        ", msg=" + msg +
-        ", createdDate=" + createdDate +
-        "}";
+                "id=" + id +
+                ", formUserId=" + formUserId +
+                ", toUserId=" + toUserId +
+                ", msg=" + msg +
+                ", createdDate=" + createdDate +
+                "}";
     }
 }

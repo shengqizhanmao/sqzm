@@ -3,8 +3,6 @@ package com.lin.common.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.lin.common.Result;
 import com.lin.common.pojo.Role;
-import com.lin.common.pojo.RoleResource;
-
 
 import java.util.List;
 
@@ -18,11 +16,18 @@ import java.util.List;
  */
 public interface RoleService extends IService<Role> {
     Result getRoleAndResource();
+
     Result saveRole(Role role);
+
     Result deleteRoleById(String id);
+
     Result updateRole(Role role);
-    Result addRoleAndResource(String roleId,List<String> listResourceId);
-    Result deleteRoleResource(RoleResource roleResource);
-    Result updateRoleEnableFlag(Role role);
+
+    Result addRoleAndResource(String roleId, List<String> listResourceId);
+
+    Result deleteRoleResource(String roleId, String resourceId);
+
+    Result updateRoleEnableFlag(String id, String enableFlag);
+
     List<Role> getListRoleBySUserId(String sId);
 }
