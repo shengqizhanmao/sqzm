@@ -11,6 +11,7 @@ import org.jetbrains.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -24,8 +25,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/role")
 public class RoleController {
-    @Autowired
-    RoleService roleService;
+    @Resource
+    private RoleService roleService;
 
     @RequiresPermissions("role:get")
     @GetMapping("/get")
@@ -55,7 +56,7 @@ public class RoleController {
 
     @RequiresPermissions("role:add")
     @PostMapping("/addRoleAndResource")
-    public Result add(@NotNull @RequestBody AddRoleAndResource addRoleAndResource) {
+    public Result add( @RequestBody AddRoleAndResource addRoleAndResource) {
         List<String> listResourceId = addRoleAndResource.getListResourceId();
         String roleId = addRoleAndResource.getRoleId();
         return roleService.addRoleAndResource(roleId, listResourceId);
@@ -63,7 +64,7 @@ public class RoleController {
 
     @RequiresPermissions("role:update")
     @PutMapping("/update")
-    public Result update(@Nullable @RequestBody Role role) {
+    public Result update( @RequestBody Role role) {
         if (role == null) {
             return Result.fail("参数不能为空");
         }

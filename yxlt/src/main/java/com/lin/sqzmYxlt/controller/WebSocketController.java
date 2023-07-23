@@ -31,37 +31,34 @@ public class WebSocketController {
     private Session session;
     private String formUserId;
 
+    /*
+    * 连接websocket初始化
+    * */
     @OnOpen
-    public void onOpen(@PathParam("formUserId") String formUserId, Session session) {
+    public void onOpen(@PathParam("formUserId") String formUserId,
+                       Session session) {
         this.session = session;
         this.formUserId = formUserId;
         map.put(formUserId, session);
         webSocketSet.add(this);     //加入set中
-        System.out.println("有新连接加入！id为:" + formUserId + "连接webSocket,当前在线人数为" + webSocketSet.size());
+        System.out.println("有新连接加入！id为:" + formUserId +
+                "连接webSocket,当前在线人数为" + webSocketSet.size());
     }
-
-    /**
-     * 连接关闭调用的方法
-     */
-    @OnClose
-    public void onClose() {
-        webSocketSet.remove(this);  //从set中删除
-        System.out.println("有一连接关闭！当前在线人数为" + webSocketSet.size());
-    }
-
     /**
      * 收到客户端消息后调用的方法
      *
      * @param message 客户端发送过来的消息
      */
     @OnMessage
-    public void onMessage(String message, Session session, @PathParam("formUserId") String formUserId) {
-        WebSocketGetMeg webSocketGetMeg = JSON.parseObject(message, WebSocketGetMeg.class);
+    public void onMessage(String message, Session session,
+                          @PathParam("formUserId") String formUserId) {
+        WebSocketGetMeg webSocketGetMeg = JSON.parseObject(message,
+                WebSocketGetMeg.class);
         Session formSession = map.get(formUserId);
         //心跳测试
         if (webSocketGetMeg.getType().equals("heartbeat")) {
-//            System.out.println("心跳测试");
-            WebSocketPushMeg webSocketPushMeg = copy(webSocketGetMeg, "心跳测试成功");
+            WebSocketPushMeg webSocketPushMeg = copy(webSocketGetMeg,
+                    "心跳测试成功");
             String s = JSON.toJSONString(webSocketPushMeg);
             formSession.getAsyncRemote().sendText(s);
             return;
@@ -84,22 +81,26 @@ public class WebSocketController {
         //toUserId未连接到websocket
         try {
             if (!map.get(toUserId).isOpen()) {
-//                System.out.println("来自客户端的消息-->id为:"+formUserId+"发送: " + webSocketGetMeg.getMsg());
                 formSession.getAsyncRemote().sendText(pushMeg);
                 return;
             }
         } catch (NullPointerException e) {
-//            System.out.println("来自客户端的消息-->id为:"+formUserId+"发送: " + webSocketGetMeg.getMsg());
             formSession.getAsyncRemote().sendText(pushMeg);
             return;
         }
         Session toSession = map.get(toUserId);
-        //toUserId连接到websocket
-//        System.out.println("来自客户端的消息-->id为:"+formUserId+"发送: " + webSocketGetMeg.getMsg());
         formSession.getAsyncRemote().sendText(pushMeg);
         toSession.getAsyncRemote().sendText(pushMeg);
     }
 
+    /**
+     * 连接关闭调用的方法
+     */
+    @OnClose
+    public void onClose() {
+        webSocketSet.remove(this);  //从set中删除
+        System.out.println("有一连接关闭！当前在线人数为" + webSocketSet.size());
+    }
     /**
      * 发生错误时调用
      */
@@ -145,6 +146,4 @@ public class WebSocketController {
         webSocketPushMeg.setCreatedDate(new Date());
         return webSocketPushMeg;
     }
-
-
 }

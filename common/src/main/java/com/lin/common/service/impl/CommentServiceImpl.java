@@ -13,11 +13,16 @@ import com.lin.common.pojo.Vo.UserVo;
 import com.lin.common.service.ArticleService;
 import com.lin.common.service.CommentService;
 import com.lin.common.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -31,8 +36,13 @@ import java.util.List;
  * @since 2023-02-27
  */
 @Service
+@Slf4j
 public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> implements CommentService {
 
+    @Resource
+    private DataSourceTransactionManager dataSourceTransactionManager;
+    @Resource
+    private TransactionDefinition transactionDefinition;
     @Autowired
     private CommentMapper commentMapper;
 
@@ -43,25 +53,46 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     private ArticleService articleService;
 
     @Override
-    public Result getCommentsByArticleId(String articleId) {
+    public Result getCommentsVoByArticleId(String articleId) {
         LambdaQueryWrapper<Comment> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.eq(Comment::getArticleId, articleId);
         lambdaQueryWrapper.eq(Comment::getLevel, 1);
         lambdaQueryWrapper.orderByAsc(Comment::getLayer);
         List<Comment> comments = commentMapper.selectList(lambdaQueryWrapper);
         List<CommentVo> commentVoList = copyList(comments);
-        if (commentVoList == null) {
-            return Result.fail("查询评论失败");
-        }
         return Result.succ("查询评论成功", commentVoList);
     }
 
     @Override
+    public List<Comment> getCommentsByArticleId(String articleId) {
+        LambdaQueryWrapper<Comment> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(Comment::getArticleId, articleId);
+        return commentMapper.selectList(lambdaQueryWrapper);
+    }
+
+    @Override
+    public List<Comment> getCommentsByUserId(String UserId) {
+        LambdaQueryWrapper<Comment> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(Comment::getAuthorId, UserId);
+        return commentMapper.selectList(lambdaQueryWrapper);
+    }
+
+    /*
+    *@Param String articleId； 评论的帖子id
+    *@Param String content； 评论的内容
+    *@Param String toUserId；是否是回复，不为0，则为该评论的用户id
+    *@Param String parentId； 是否为回复，不为0，则为该评论id
+    *@Param String token；是否登录，登录才能评论回复
+    * */
+    @Override
     public Result create(String articleId, String content, String toUserId, String parentId, String token) {
         if (content.equals("")) {
-            return Result.succ(false, 200, "评论不能为空", null);
+            return Result.fail("评论不能为空");
         }
         UserTokenVo user = userService.findUserByToken(token);
+        if (user==null){
+            return Result.fail("请重新登录");
+        }
         Comment comment = new Comment();
         comment.setArticleId(articleId);
         comment.setAuthorId(user.getId());
@@ -107,7 +138,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         //评论数量加1
         one.setCommentCounts(aLong1);
         boolean b = articleService.updateById(one);
-        if (b == false) {
+        if (!b) {
             return Result.fail("修改评论数量失败");
         }
         if (insert == 1) {
@@ -119,22 +150,74 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         }
     }
 
+    @Override
+    public Result delete(String id,String token){
+        TransactionStatus transactionStatus = dataSourceTransactionManager.getTransaction(transactionDefinition);
+        UserTokenVo userByToken = userService.findUserByToken(token);
+        if (userByToken==null){
+            dataSourceTransactionManager.rollback(transactionStatus);
+            return Result.fail("请重新登录");
+        }
+        Comment comment = commentMapper.selectById(id);
+        String authorId = comment.getAuthorId();
+        if (!authorId.equals(userByToken.getId())){
+            dataSourceTransactionManager.rollback(transactionStatus);
+            return Result.fail("删除失败，不是该评论用户");
+        }
+        //先删除依赖这个评论的评论，也就是回复这个评论的评论都要删除
+        try {
+            int i = deleteChildrens(id);
+            log.info(userByToken.getUserName()+":删除子评论共"+i+"条");
+            //最后删除评论
+            int i1 = commentMapper.deleteById(id);
+            if (i1==0){
+                dataSourceTransactionManager.rollback(transactionStatus);
+                return Result.fail("删除失败");
+            }
+            dataSourceTransactionManager.commit(transactionStatus);
+            return Result.succ("删除成功",i+i1);
+        } catch (Exception e) {
+            log.error("删除评论失败，原因是："+e);
+            dataSourceTransactionManager.rollback(transactionStatus);
+            return Result.fail(500,"删除失败");
+        }
+    }
 
+    @Override
+    public boolean deleteByUserId(String id, TransactionStatus transaction) {
+        try {
+            List<Comment> commentsByUserId = getCommentsByUserId(id);
+            for (Comment comment : commentsByUserId) {
+                String commentId = comment.getId();
+                deleteChildrens(commentId);
+                commentMapper.deleteById(commentId);
+            }
+            return true;
+        }catch (Exception e){
+            return false;
+        }
+    }
+
+    //方法区
     private List<CommentVo> copyList(List<Comment> comments) {
         List<CommentVo> commentVoList = new ArrayList<>();
         for (Comment comment : comments) {
-            CommentVo copy = copy(comment);
-            commentVoList.add(copy);
-            if (copy.getChildrens().size() != 0 && copy.getLevel() == 2L) {
-                List<CommentVo> childrens = copy.getChildrens();
-                for (CommentVo commentVo : childrens) {
-                    commentVoList.add(commentVo);
-                }
+            CommentVo commentVo = copy(comment);
+            commentVoList.add(commentVo);
+            if (commentVo.getChildrens().size() != 0 && commentVo.getLevel() == 2L) {
+                List<CommentVo> childrens = commentVo.getChildrens();
+                commentVoList.addAll(childrens);
             }
         }
         return commentVoList;
     }
-
+    private List<CommentVo> findCommentsByParentId(String id) {
+        LambdaQueryWrapper<Comment> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(Comment::getParentId, id);
+        lambdaQueryWrapper.eq(Comment::getLevel, 2L);
+        lambdaQueryWrapper.orderByAsc(Comment::getLayer);
+        return copyList(commentMapper.selectList(lambdaQueryWrapper));
+    }
     private CommentVo copy(Comment comment) {
         CommentVo commentVo = new CommentVo();
         BeanUtils.copyProperties(comment, commentVo);
@@ -161,19 +244,27 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         commentVo.setToUser(getUserVoById);
         return commentVo;
     }
-
     private UserVo copy(User user) {
         UserVo userVo = new UserVo();
         BeanUtils.copyProperties(user, userVo);
         return userVo;
     }
 
-    private List<CommentVo> findCommentsByParentId(String id) {
-        LambdaQueryWrapper<Comment> lambdaQueryWrapper = new LambdaQueryWrapper();
-        lambdaQueryWrapper.eq(Comment::getParentId, id);
-        lambdaQueryWrapper.eq(Comment::getLevel, 2L);
-        lambdaQueryWrapper.orderByAsc(Comment::getLayer);
-        List<CommentVo> commentVos = copyList(commentMapper.selectList(lambdaQueryWrapper));
-        return commentVos;
+    private int deleteChildrens(String id,int i) {
+        LambdaQueryWrapper<Comment> commentLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        commentLambdaQueryWrapper.eq(Comment::getParentId,id);
+        List<Comment> comments = commentMapper.selectList(commentLambdaQueryWrapper);
+        if (comments.size()==0){
+            return i;
+        }
+        List<String> listCommentId = new ArrayList<>();
+        for (Comment c:comments) {
+            listCommentId.add(c.getId());
+            i=i+ deleteChildrens(c.getId(), i);
+        }
+        return i+commentMapper.deleteBatchIds(listCommentId);
+    }
+    private int deleteChildrens(String id) {
+        return deleteChildrens(id,0);
     }
 }

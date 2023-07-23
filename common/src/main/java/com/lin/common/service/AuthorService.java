@@ -4,6 +4,7 @@ package com.lin.common.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.lin.common.Result;
 import com.lin.common.pojo.Author;
+import org.springframework.transaction.TransactionStatus;
 
 /**
  * <p>
@@ -22,4 +23,6 @@ public interface AuthorService extends IService<Author> {
     Result add(String userId, String status);
 
     Result getAuthorVoList(String status, Long size, Long page);
+
+    boolean deleteByUserId(String id, TransactionStatus transaction);
 }

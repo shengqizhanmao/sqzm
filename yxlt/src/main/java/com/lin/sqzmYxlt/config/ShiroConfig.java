@@ -29,7 +29,6 @@ import java.util.Map;
 public class ShiroConfig {
 
     //ShiroFilterFactoryBean
-    @NotNull
     @Bean(value = "shiroFilterFactoryBean")
     public ShiroFilterFactoryBean shiroFilterFactoryBean(
             @Qualifier("defaultWebSecurityManager") DefaultWebSecurityManager defaultWebSecurityManager

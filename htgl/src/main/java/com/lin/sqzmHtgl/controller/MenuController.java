@@ -1,5 +1,6 @@
 package com.lin.sqzmHtgl.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.lin.common.Result;
 import com.lin.common.pojo.Menu;
 import com.lin.common.service.MenuService;
@@ -31,8 +32,16 @@ public class MenuController {
     @RequiresAuthentication
     @GetMapping("/get")
     public Result get() {
-        List<Menu> list = menuService.list();
+        LambdaQueryWrapper<Menu> menuLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        menuLambdaQueryWrapper.orderByAsc(Menu::getSort);
+        List<Menu> list = menuService.list(menuLambdaQueryWrapper);
         return Result.succ("获取用户菜单", list);
+    }
+
+    @RequiresPermissions("menu:get")
+    @GetMapping("/get/{page}/{size}")
+    public Result getMenu(@PathVariable("page") Long page,@PathVariable("size") Long size) {
+        return menuService.getMenuPage(page,size);
     }
 
     //添加menu

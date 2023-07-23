@@ -24,11 +24,8 @@ public class Category implements Serializable {
     @TableId(value = "id", type = IdType.ASSIGN_ID)
     private String id;
 
-    private String avatar;
 
     private String name;
-
-    private String description;
 
 
     private String palteId;
@@ -37,9 +34,7 @@ public class Category implements Serializable {
     public String toString() {
         return "Category{" +
                 "id='" + id + '\'' +
-                ", avatar='" + avatar + '\'' +
                 ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
                 ", palteId='" + palteId + '\'' +
                 '}';
     }
@@ -60,13 +55,7 @@ public class Category implements Serializable {
         this.id = id;
     }
 
-    public String getAvatar() {
-        return avatar;
-    }
 
-    public void setAvatar(String avatar) {
-        this.avatar = avatar;
-    }
 
     public String getName() {
         return name;
@@ -76,12 +65,5 @@ public class Category implements Serializable {
         this.name = name;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
 
 }

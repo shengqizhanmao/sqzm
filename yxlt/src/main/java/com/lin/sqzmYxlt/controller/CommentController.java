@@ -1,6 +1,7 @@
 package com.lin.sqzmYxlt.controller;
 
 import com.lin.common.Result;
+import com.lin.common.pojo.Comment;
 import com.lin.common.service.CommentService;
 import com.lin.sqzmYxlt.controller.param.CommentCreateParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,7 @@ public class CommentController {
     //获取评论
     @GetMapping("/getByArticleId")
     public Result comments(@RequestParam("articleId") String articleId) {
-        return commentService.getCommentsByArticleId(articleId);
+        return commentService.getCommentsVoByArticleId(articleId);
     }
 
     //进行评论
@@ -36,5 +37,10 @@ public class CommentController {
         String toUserId = commentCreateParam.getToUserId();
         String parentId = commentCreateParam.getParentId();
         return commentService.create(articleId, content, toUserId, parentId, token);
+    }
+
+    @PostMapping("/delete/{id}")
+    public Result delete(@PathVariable("id") String id, @RequestHeader("Authorization") String token) {
+        return commentService.delete(id,token);
     }
 }

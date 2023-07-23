@@ -18,6 +18,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.web.bind.MissingRequestHeaderException;
 
 import java.time.Duration;
 import java.util.List;
@@ -68,7 +69,7 @@ public class SUserRealm extends AuthorizingRealm {
         return info;
     }
 
-    //认证
+    //请求认证
     @Nullable
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(@NotNull AuthenticationToken authenticationToken) throws AuthenticationException {
@@ -77,6 +78,7 @@ public class SUserRealm extends AuthorizingRealm {
         SUserTokenVo sUser = sUserService.findSUserByToken(token.getToken());
         if (sUser == null) {
             return null;
+//            throw new AuthenticationException();
         }
         if (sUser.getEnableFlag().equals("-1")) {
             throw new DisabledAccountException();

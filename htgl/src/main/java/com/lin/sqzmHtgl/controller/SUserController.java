@@ -37,6 +37,10 @@ public class SUserController {
         return Result.succ("获取sUser信息成功", sUserByToken);
     }
 
+    /**
+        @Param Long size,分页的大小
+        @Param Long page,第N页
+     **/
     //获取系统用户
     @RequiresPermissions("sUser:get")
     @GetMapping("/get/{size}/{page}")

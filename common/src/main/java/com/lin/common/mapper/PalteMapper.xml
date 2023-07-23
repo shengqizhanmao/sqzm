@@ -6,14 +6,12 @@
     <resultMap id="BaseResultMap" type="com.lin.common.pojo.Palte">
         <id column="id" property="id"/>
         <result column="name" property="name"/>
-        <result column="icon" property="icon"/>
-        <result column="path" property="path"/>
+        <result column="sort_no" property="sortNo"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id
-        , name, icon, path
+        id, name,sort_no
     </sql>
 
 </mapper>

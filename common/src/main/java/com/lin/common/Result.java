@@ -9,7 +9,6 @@ import java.io.Serializable;
  */
 public class Result implements Serializable {
 
-    // 200表示正常，非200表示异常
     private int code;
     private String msg;
     private Object data;
@@ -17,17 +16,17 @@ public class Result implements Serializable {
 
     @NotNull
     public static Result succ(Object data) {
-        return succ(ResultCode.SUCCESS, "操作成功", data);
+        return succ(200, "操作成功", data);
     }
 
     @NotNull
     public static Result succ(String msg, Object data) {
-        return succ(ResultCode.SUCCESS, msg, data);
+        return succ(200, msg, data);
     }
 
     @NotNull
     public static Result succ(String msg) {
-        return succ(ResultCode.SUCCESS, msg, null);
+        return succ(200, msg, null);
     }
 
     @NotNull
@@ -46,7 +45,7 @@ public class Result implements Serializable {
     }
 
     public static Result fail(String msg) {
-        return fail(ResultCode.FAIL, msg, null);
+        return fail(400, msg, null);
     }
 
     @NotNull
@@ -56,7 +55,7 @@ public class Result implements Serializable {
 
     @NotNull
     public static Result fail(String msg, Object data) {
-        return fail(ResultCode.FAIL, msg, data);
+        return fail(400, msg, data);
     }
 
     @NotNull
@@ -98,10 +97,7 @@ public class Result implements Serializable {
         this.data = data;
     }
 
-    public boolean isSuccess() {
-        return success;
-    }
-
+    public boolean getSuccess() {return success;}
     public void setSuccess(boolean success) {
         this.success = success;
     }

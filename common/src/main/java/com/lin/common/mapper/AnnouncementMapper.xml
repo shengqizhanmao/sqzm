@@ -12,8 +12,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id
-        , palte_id, modulars_id, content
+        id, palte_id, modulars_id, content
     </sql>
 
 </mapper>

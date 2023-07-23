@@ -1,25 +1,25 @@
 spring:
-  jackson:
+  jackson: #日期格式和时区
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
-  datasource:
+  datasource: #mysql的配置
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/sqzm_yxlt?useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://192.168.20.130:3306/sqzm_yxlt?useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=Asia/Shanghai
     username: root
     password: root
     hikari:
-      max-lifetime: 50000
-  redis:
+      max-lifetime: 50000 #最大连接数
+  redis: #redis的配置
     host: 192.168.20.130
     port: 6379
     connect-timeout: 30000
-  servlet:
+  servlet: #文件最大大小和请求的最大大小
     multipart:
       max-file-size: 100MB
       max-request-size: 200MB
-  aop:
+  aop: #开启aop
     proxy-target-class: true
-  mail:
+  mail: #邮箱的配置
     protocol: smtps
     host: smtp.163.com
     port: 465
@@ -32,17 +32,20 @@ spring:
           socketFactoryClass: javax.net.ssl.SSLSocketFactory
     #        debug: true
     from: lin1149566912@163.com
-minio:
+minio: #minio对象的配置
   url: http://192.168.20.130:9000 # 服务地址
   access: admin # 账号
   secret: adminminio # 密码
   bucket: htgl # Bucket
-mybatis-plus:
+mybatis-plus: #mybatis-plus的mapper映射
   mapper-locations: classpath*:/mapper/**Mapper.xml
+#mybatis调试日志
+#  configuration:
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 server:
-  port: 8099
+  port: 8099 #服务器端口
   servlet:
-    context-path: /htgl
+    context-path: /htgl #服务器前缀
 logging:
   file:
-    path: G:\\lin\\bysj\\sqzm\\log\\htgl-log
+    path: G:\\lin\\bysj\\sqzm\\log\\htgl-log #日志输出位置

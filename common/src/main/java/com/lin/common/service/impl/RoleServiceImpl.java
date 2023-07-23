@@ -147,6 +147,10 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         }
     }
 
+    /*
+    * @param String roleId;角色的id
+    * @param List<String> listResourceId;资源的id列表
+    * */
     @NotNull
     @Override
     public Result addRoleAndResource(String roleId, @NotNull List<String> listResourceId) {
@@ -154,9 +158,10 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
             return Result.fail("角色id参数不能为空");
         }
         try {
-            LambdaQueryWrapper<RoleResource> roleResourceLambdaQueryWrapper2 = new LambdaQueryWrapper<>();
-            roleResourceLambdaQueryWrapper2.eq(RoleResource::getRoleId, roleId);
-            roleResourceService.remove(roleResourceLambdaQueryWrapper2);
+            //先继续删除
+            LambdaQueryWrapper<RoleResource> roleResourceLambdaQueryWrapper = new LambdaQueryWrapper<>();
+            roleResourceLambdaQueryWrapper.eq(RoleResource::getRoleId, roleId);
+            roleResourceService.remove(roleResourceLambdaQueryWrapper);
         } catch (Exception e) {
             e.printStackTrace();
             Result.fail("删除角色拥有的资源失败");
@@ -164,34 +169,20 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         if (listResourceId.size() == 0) {
             return Result.succ("修改角色拥有的资源成功");
         }
+        List<RoleResource> roleResources = new ArrayList<>();
+        //再添加
         for (String resourceId : listResourceId) {
             if (StringUtils.isEmpty(resourceId)) {
-                return Result.fail("资源id参数不能为空");
+                continue;
             }
             RoleResource roleResource = new RoleResource();
             roleResource.setRoleId(roleId);
             roleResource.setResourceId(resourceId);
             roleResource.setEnableFlag("1");
-            LambdaQueryWrapper<RoleResource> roleResourceLambdaQueryWrapper = new LambdaQueryWrapper<>();
-            roleResourceLambdaQueryWrapper.eq(RoleResource::getRoleId, roleId);
-            roleResourceLambdaQueryWrapper.eq(RoleResource::getResourceId, resourceId);
-            try {
-                RoleResource one = roleResourceService.getOne(roleResourceLambdaQueryWrapper);
-                if (one != null) {
-                    Result.fail("角色拥有的资源已经存在");
-                }
-            } catch (Exception e) {
-                log.error(e.toString());
-                Result.fail("角色拥有的资源已经存在");
-            }
-            try {
-                roleResourceService.save(roleResource);
-            } catch (Exception e) {
-                e.printStackTrace();
-                Result.fail("添加角色拥有的资源失败");
-            }
+            roleResources.add(roleResource);
         }
-        return Result.succ("添加角色拥有的资源成功");
+        roleResourceService.saveBatch(roleResources);
+        return Result.succ("修改角色拥有的资源成功");
     }
 
     @NotNull
@@ -205,6 +196,8 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         }
         return Result.fail("角色拥有的权限删除失败");
     }
+
+
 
     @Override
     public List<Role> getListRoleBySUserId(String sId) {

@@ -3,6 +3,9 @@ package com.lin.common.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.lin.common.Result;
 import com.lin.common.pojo.ArticleLikesCollection;
+import org.springframework.transaction.TransactionStatus;
+
+import java.util.List;
 
 /**
  * <p>
@@ -14,7 +17,14 @@ import com.lin.common.pojo.ArticleLikesCollection;
  */
 public interface ArticleLikesCollectionService extends IService<ArticleLikesCollection> {
 
+
+
+
     Result getByArticle(String articleId, String token);
 
+    public List<ArticleLikesCollection> getByArticleId(String articleId);
+
     Result updateByArticleId(String articleId, String likes, String collection, String token);
+
+    boolean deleteByUserId(String id, TransactionStatus transaction);
 }

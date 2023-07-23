@@ -4,7 +4,7 @@ spring:
     time-zone: GMT+8
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/sqzm_yxlt?useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://192.168.20.130:3306/sqzm_yxlt?useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=Asia/Shanghai
     username: root
     password: root
     hikari:
@@ -39,6 +39,8 @@ minio:
   bucket: yxlt # Bucket
 mybatis-plus:
   mapper-locations: classpath*:/mapper/**Mapper.xml
+#  configuration:
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 server:
   port: 8100
   servlet:

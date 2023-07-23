@@ -119,7 +119,7 @@ public class CodeUtils {
         return text;
     }
 
-    public static void output(@NotNull BufferedImage image, @NotNull OutputStream out) throws IOException {
+    public void output(@NotNull BufferedImage image, @NotNull OutputStream out) throws IOException {
         ImageIO.write(image, "JPEG", out);
     }
 }

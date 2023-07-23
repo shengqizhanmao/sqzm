@@ -13,6 +13,7 @@ import com.lin.common.service.AuthorService;
 import com.lin.common.service.UserService;
 import com.lin.common.utils.PagesHashMap;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.TransactionStatus;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -105,6 +106,18 @@ public class AuthorServiceImpl extends ServiceImpl<AuthorMapper, Author> impleme
         List<AuthorVo> authorVos = copy(authors);
         Map<String, Object> authorListMap = PagesHashMap.getPagesHashMap(total, "authorList", authorVos);
         return Result.succ("查询作者成功", authorListMap);
+    }
+
+    @Override
+    public boolean deleteByUserId(String id, TransactionStatus transaction) {
+        try{
+            LambdaQueryWrapper<Author> authorLambdaQueryWrapper = new LambdaQueryWrapper<>();
+            authorLambdaQueryWrapper.eq(Author::getUserId,id);
+            authorMapper.delete(authorLambdaQueryWrapper);
+            return true;
+        }catch (Exception e){
+            return false;
+        }
     }
 
     public List<AuthorVo> copy(List<Author> authors) {

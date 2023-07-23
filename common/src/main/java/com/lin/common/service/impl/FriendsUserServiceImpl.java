@@ -12,6 +12,7 @@ import com.lin.common.service.FriendsUserService;
 import com.lin.common.service.UserService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.TransactionStatus;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -196,6 +197,23 @@ public class FriendsUserServiceImpl extends ServiceImpl<FriendsUserMapper, Frien
         FriendsUser method = getMethod(formUserId, toUserId);
         friendsUserMapper.deleteById(method);
         return Result.succ("删除成功");
+    }
+
+    @Override
+    public boolean deleteByUserId(String id, TransactionStatus transaction) {
+        try{
+            LambdaQueryWrapper<FriendsUser> friendsUserLambdaQueryWrapper = new LambdaQueryWrapper<>();
+            friendsUserLambdaQueryWrapper.eq(FriendsUser::getFormUserId,id);
+            friendsUserMapper.delete(friendsUserLambdaQueryWrapper);
+            LambdaQueryWrapper<FriendsUser> friendsUserLambdaQueryWrapper2 = new LambdaQueryWrapper<>();
+            friendsUserLambdaQueryWrapper2.eq(FriendsUser::getToUserId,id);
+            friendsUserMapper.delete(friendsUserLambdaQueryWrapper2);
+            return true;
+        }catch (Exception e){
+            return false;
+        }
+
+
     }
 
     public FriendsUser getMethod(String formUserId, String toUserId) {

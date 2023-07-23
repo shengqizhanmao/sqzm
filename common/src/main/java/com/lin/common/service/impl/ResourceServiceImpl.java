@@ -64,6 +64,10 @@ public class ResourceServiceImpl extends ServiceImpl<ResourceMapper, Resource> i
         return Result.succ("查询成功", resourceVos);
     }
 
+
+    /*
+    * @Param  Resource resource;资源的实体类
+    * */
     @NotNull
     @Override
     public Result addResource(@NotNull Resource resource) {
@@ -78,7 +82,6 @@ public class ResourceServiceImpl extends ServiceImpl<ResourceMapper, Resource> i
             resource.setIsLeaf("0");
         }
         resource.setIsSystemRoot("0");
-        resource.setSystemCode("0");
         resource.setEnableFlag("1");
         int insert = resourceMapper.insert(resource);
         if (insert == 0) {

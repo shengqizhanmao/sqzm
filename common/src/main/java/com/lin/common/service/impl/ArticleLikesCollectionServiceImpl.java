@@ -11,8 +11,10 @@ import com.lin.common.service.ArticleLikesCollectionService;
 import com.lin.common.service.ArticleService;
 import com.lin.common.service.UserService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.TransactionStatus;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * <p>
@@ -43,6 +45,13 @@ public class ArticleLikesCollectionServiceImpl extends ServiceImpl<ArticleLikesC
         }
         ArticleLikesCollection articleLikesCollection = getByArticleMethod(articleId, userByToken.getId());
         return Result.succ("获取成功", articleLikesCollection);
+    }
+
+    @Override
+    public List<ArticleLikesCollection> getByArticleId(String articleId){
+        LambdaQueryWrapper<ArticleLikesCollection> articleLikesCollectionLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        articleLikesCollectionLambdaQueryWrapper.eq(ArticleLikesCollection::getArticleId, articleId);
+        return articleLikesCollectionMapper.selectList(articleLikesCollectionLambdaQueryWrapper);
     }
 
     @Override
@@ -96,6 +105,18 @@ public class ArticleLikesCollectionServiceImpl extends ServiceImpl<ArticleLikesC
         articleService.updateById(article);
         Update(articleLikesCollection, likes, collection);
         return Result.succ("修改成功");
+    }
+
+    @Override
+    public boolean deleteByUserId(String id, TransactionStatus transaction) {
+        try {
+            LambdaQueryWrapper<ArticleLikesCollection> articleLikesCollectionLambdaQueryWrapper = new LambdaQueryWrapper<>();
+            articleLikesCollectionLambdaQueryWrapper.eq(ArticleLikesCollection::getUserId,id);
+            articleLikesCollectionMapper.delete(articleLikesCollectionLambdaQueryWrapper);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     public void Update(ArticleLikesCollection articleLikesCollection, String likes, String collection) {

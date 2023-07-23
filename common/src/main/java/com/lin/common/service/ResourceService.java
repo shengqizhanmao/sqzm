@@ -30,4 +30,5 @@ public interface ResourceService extends IService<Resource> {
     Result updateResource(Resource resource);
 
     Result deleteResourceById(String id);
+
 }

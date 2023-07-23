@@ -5,14 +5,13 @@
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.lin.common.pojo.Tags">
         <id column="id" property="id"/>
-        <result column="avatar" property="avatar"/>
+        <result column="name" property="name"/>
         <result column="palte_id" property="palteId"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id
-        , avatar, name,palte_id
+        id, name,palte_id
     </sql>
 
 </mapper>

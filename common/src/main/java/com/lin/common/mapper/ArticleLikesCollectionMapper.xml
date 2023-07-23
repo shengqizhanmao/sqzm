@@ -13,8 +13,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id
-        , article_id, likes, collection, user_id
+        id, article_id, likes, collection, user_id
     </sql>
 
 </mapper>

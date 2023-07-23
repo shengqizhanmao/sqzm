@@ -30,4 +30,5 @@ public class ArticleTagsServiceImpl extends ServiceImpl<ArticleTagsMapper, Artic
         articleTagsLambdaQueryWrapper.eq(ArticleTags::getArticleId, id);
         return articleTagsMapper.selectList(articleTagsLambdaQueryWrapper);
     }
+
 }

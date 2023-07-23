@@ -7,6 +7,7 @@ import com.lin.common.pojo.Body;
 import com.lin.common.service.ArticleService;
 import com.lin.sqzmYxlt.controller.param.AddArticle;
 import com.lin.sqzmYxlt.controller.param.GetArticle;
+import org.jetbrains.annotations.Nullable;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -41,8 +42,8 @@ public class ArticleController {
     public Result apply(@RequestBody AddArticle addArticle, @RequestHeader("Authorization") String token) {
         Article article = copyArticleMethod(addArticle);
         Body body = copyBodyMethod(addArticle);
-        List<String> tagsList = addArticle.getTagsList();
-        return articleService.saveArticle(article, token, body, tagsList);
+        List<String> tagsIdList = addArticle.getTagsList();
+        return articleService.saveArticle(article, token, body, tagsIdList);
     }
 
     //作者获取自己的帖子
@@ -62,6 +63,13 @@ public class ArticleController {
         return articleService.getArticleByPalteId(palteId, token);
     }
 
+    //用户获取收藏的帖子
+    @GetMapping("/getArticleByUserCollect")
+    public Result getArticleByUserCollect(@RequestHeader("Authorization") String token) {
+        return articleService.getArticleByUserCollect(token);
+    }
+
+
     //作者删除自己的帖子
     @PostMapping("/deleteByArticleId")
     public Result deleteByArticleId(@RequestBody String articleId, @RequestHeader("Authorization") String token) {
@@ -75,11 +83,11 @@ public class ArticleController {
         article.setId(addArticle.getId());
         Body body = copyBodyMethod(addArticle);
         body.setArticleId(addArticle.getId());
-        List<String> tagsList = addArticle.getTagsList();
-        return articleService.updateArticle(article, token, body, tagsList);
+        List<String> tagsIdList = addArticle.getTagsList();
+        return articleService.updateArticle(article, token, body, tagsIdList);
     }
 
-    //普通用户获取帖子的基本内容
+    //普通用户获取帖子的基本内容，根据排序
     @PostMapping("/getBySortAndPalteAndModulersId")
     public Result getBySortAndPalteAndModulersId(@RequestBody GetArticle getArticle) {
         String sort = getArticle.getSort();
@@ -89,16 +97,20 @@ public class ArticleController {
         Long pagesSize = getArticle.getPagesSize();
         return articleService.getArticleByPalteIdAndSort(palteId, modularsId, sort, pages, pagesSize);
     }
-
-    @GetMapping("/getArticleByUserCollect")
-    public Result getArticleByUserCollect(@RequestParam("palteId") String palteId, @RequestHeader("Authorization") String token) {
-        return articleService.getArticleByUserCollect(palteId, token);
+    //普通用户获取帖子的基本内容，根据分类
+    @GetMapping("/getArticleByCategory/{palteId}/{modularsId}/{categoryId}/{page}/{pageSize}")
+    public Result getArticleByPalteId(@PathVariable("palteId")String palteId,
+                                      @PathVariable("modularsId")String modularsId,
+                                      @PathVariable("categoryId")String categoryId,
+                                      @PathVariable("page")Long page,
+                                      @PathVariable("pageSize")Long pageSize) {
+        return articleService.getArticleByCateory(palteId,modularsId,categoryId,page,pageSize);
     }
 
     //普通用户获取帖子的详细内容
     @GetMapping("/getArticleDetail")
-    public Result getArticleDetail(@RequestParam("articleId") String articleId) {
-        return articleService.getArticleDetail(articleId);
+    public Result getArticleDetail(@RequestParam("articleId") String articleId,@RequestHeader(value = "Authorization", required = false) String token) {
+        return articleService.getArticleDetail(articleId,token);
     }
 
     public Article copyArticleMethod(AddArticle addArticle) {
@@ -115,7 +127,6 @@ public class ArticleController {
         article.setLikesCounts(0L);
         article.setViewCounts(0L);
         article.setCommentCounts(0L);
-        article.setWeight("0");
         return article;
     }
 

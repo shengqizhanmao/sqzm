@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lin.common.mapper.BodyMapper;
 import com.lin.common.pojo.Body;
 import com.lin.common.service.BodyService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -22,6 +23,7 @@ public class BodyServiceImpl extends ServiceImpl<BodyMapper, Body> implements Bo
 
     @Resource
     private BodyMapper bodyMapper;
+
 
     @Override
     public Body getBodyByArticleId(String id) {

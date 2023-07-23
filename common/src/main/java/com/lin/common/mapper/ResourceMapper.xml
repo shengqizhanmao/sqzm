@@ -9,12 +9,10 @@
         <result column="resource_name" property="resourceName"/>
         <result column="request_path" property="requestPath"/>
         <result column="lavel" property="lavel"/>
-        <result column="icon" property="icon"/>
         <result column="is_leaf" property="isLeaf"/>
         <result column="resource_type" property="resourceType"/>
         <result column="sort_no" property="sortNo"/>
         <result column="description" property="description"/>
-        <result column="system_code" property="systemCode"/>
         <result column="is_system_root" property="isSystemRoot"/>
         <result column="enable_flag" property="enableFlag"/>
     </resultMap>
@@ -22,7 +20,7 @@
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         id
-        , parent_id, resource_name, request_path, lavel, icon, is_leaf, resource_type, sort_no, description, system_code, is_system_root, enable_flag
+        , parent_id, resource_name, request_path, lavel, is_leaf, resource_type, sort_no, description,  is_system_root, enable_flag
     </sql>
     <select id="getListResourceBySUserId" resultMap="BaseResultMap">
         SELECT c.id, request_path, lavel, c.enable_flag
@@ -50,7 +48,7 @@
     </select>
 
     <select id="getListResourceByRoleId" resultMap="BaseResultMap">
-        SELECT *
+        SELECT a.id, a.parent_id, a.resource_name, a.request_path, a.lavel,  a.is_leaf, a.resource_type, a.sort_no, a.description, a.is_system_root, a.enable_flag
         from sh_resource a
                  join sh_role_resource b
                       on a.id = b.resource_id

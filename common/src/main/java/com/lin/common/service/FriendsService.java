@@ -3,6 +3,7 @@ package com.lin.common.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.lin.common.Result;
 import com.lin.common.pojo.Friends;
+import org.springframework.transaction.TransactionStatus;
 
 /**
  * <p>
@@ -19,4 +20,5 @@ public interface FriendsService extends IService<Friends> {
 
     Result getFriendsAndUserVo(String token);
 
+    boolean deleteByUserId(String id, TransactionStatus transaction);
 }

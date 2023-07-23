@@ -39,8 +39,6 @@ public class Resource implements Serializable {
     @ApiModelProperty("资源标签")
     private String lavel;
 
-    @ApiModelProperty("图标")
-    private String icon;
 
     @ApiModelProperty("是否叶子节点")
     private String isLeaf;
@@ -54,8 +52,6 @@ public class Resource implements Serializable {
     @ApiModelProperty("描述")
     private String description;
 
-    @ApiModelProperty("系统code")
-    private String systemCode;
 
     @ApiModelProperty("是否根节点")
     private String isSystemRoot;
@@ -104,13 +100,6 @@ public class Resource implements Serializable {
         this.lavel = lavel;
     }
 
-    public String getIcon() {
-        return icon;
-    }
-
-    public void setIcon(String icon) {
-        this.icon = icon;
-    }
 
     public String getIsLeaf() {
         return isLeaf;
@@ -144,13 +133,7 @@ public class Resource implements Serializable {
         this.description = description;
     }
 
-    public String getSystemCode() {
-        return systemCode;
-    }
 
-    public void setSystemCode(String systemCode) {
-        this.systemCode = systemCode;
-    }
 
     public String getIsSystemRoot() {
         return isSystemRoot;
@@ -177,12 +160,10 @@ public class Resource implements Serializable {
                 ", resourceName=" + resourceName +
                 ", requestPath=" + requestPath +
                 ", lavel=" + lavel +
-                ", icon=" + icon +
                 ", isLeaf=" + isLeaf +
                 ", resourceType=" + resourceType +
                 ", sortNo=" + sortNo +
                 ", description=" + description +
-                ", systemCode=" + systemCode +
                 ", isSystemRoot=" + isSystemRoot +
                 ", enableFlag=" + enableFlag +
                 "}";

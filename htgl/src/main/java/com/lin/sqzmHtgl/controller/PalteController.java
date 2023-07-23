@@ -1,5 +1,6 @@
 package com.lin.sqzmHtgl.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.lin.common.Result;
 import com.lin.common.pojo.Palte;
 import com.lin.common.service.PalteService;
@@ -31,7 +32,9 @@ public class PalteController {
     @RequiresAuthentication
     @GetMapping("/get")
     public Result get() {
-        List<Palte> list = palteService.list();
+        LambdaQueryWrapper<Palte> palteLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        palteLambdaQueryWrapper.orderByAsc(Palte::getSortNo);
+        List<Palte> list = palteService.list(palteLambdaQueryWrapper);
         return Result.succ("获取板块", list);
     }
 

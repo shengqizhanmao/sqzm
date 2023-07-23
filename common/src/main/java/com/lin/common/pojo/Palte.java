@@ -26,10 +26,15 @@ public class Palte implements Serializable {
 
     private String name;
 
-    private String icon;
+    private Integer sortNo;
 
-    private String path;
+    public Integer getSortNo() {
+        return sortNo;
+    }
 
+    public void setSortNo(Integer sortNo) {
+        this.sortNo = sortNo;
+    }
 
     public String getId() {
         return id;
@@ -47,29 +52,13 @@ public class Palte implements Serializable {
         this.name = name;
     }
 
-    public String getIcon() {
-        return icon;
-    }
-
-    public void setIcon(String icon) {
-        this.icon = icon;
-    }
-
-    public String getPath() {
-        return path;
-    }
-
-    public void setPath(String path) {
-        this.path = path;
-    }
 
     @Override
     public String toString() {
         return "Palte{" +
-                "id=" + id +
-                ", name=" + name +
-                ", icon=" + icon +
-                ", path=" + path +
-                "}";
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", sortNo=" + sortNo +
+                '}';
     }
 }

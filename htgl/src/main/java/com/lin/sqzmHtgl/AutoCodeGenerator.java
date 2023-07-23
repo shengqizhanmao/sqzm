@@ -13,7 +13,6 @@ public class AutoCodeGenerator {
      * 项目根目录
      */
     private static final String PROJECT_ROOT_PATH = System.getProperty("user.dir") + ("/htgl");
-
     public static void main(String[] args) {
         // 1、数据源配置
         DataSourceConfig.Builder datasourceBuilder = new DataSourceConfig.Builder(
@@ -21,10 +20,8 @@ public class AutoCodeGenerator {
                 "root",
                 "root"
         );
-
         // 2、创建代码生成器对象
         FastAutoGenerator generator = FastAutoGenerator.create(datasourceBuilder);
-
         // 3、全局配置
         generator.globalConfig(builder -> {
             // 设置作者
@@ -40,7 +37,6 @@ public class AutoCodeGenerator {
                     // 指定输出目录
                     .outputDir(PROJECT_ROOT_PATH + "/src/main/java");
         });
-
         // 4、包配置
         generator.packageConfig(builder -> {
             // 父包名. ===========1.手动修改设置===========

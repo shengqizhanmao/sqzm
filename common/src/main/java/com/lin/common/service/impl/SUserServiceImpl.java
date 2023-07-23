@@ -7,8 +7,10 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lin.common.RedisStatus;
 import com.lin.common.Result;
+import com.lin.common.mapper.RoleMapper;
 import com.lin.common.mapper.SUserMapper;
 import com.lin.common.pojo.Role;
+import com.lin.common.pojo.SMenu;
 import com.lin.common.pojo.SUser;
 import com.lin.common.pojo.UserRole;
 import com.lin.common.pojo.Vo.SUserTokenVo;
@@ -20,11 +22,15 @@ import com.lin.common.service.UserRoleService;
 import com.lin.common.utils.JWTUtils;
 import com.lin.common.utils.Md5Utils;
 import com.lin.common.utils.PagesHashMap;
-import com.lin.common.utils.SnowFlakeUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.annotations.Param;
+import org.apache.poi.ss.formula.functions.T;
+import org.apache.shiro.crypto.SecureRandomNumberGenerator;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.BeanUtils;
+import org.springframework.dao.DataAccessException;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Service;
@@ -32,10 +38,7 @@ import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * <p>
@@ -98,6 +101,11 @@ public class SUserServiceImpl extends ServiceImpl<SUserMapper, SUser> implements
         return sUserMapper.selectOne(sUserLambdaQueryWrapper);
     }
 
+    /**
+     获取系统用户的列表,分页
+     @Param Long size,分页的大小
+     @Param Long page,第N页
+     **/
     @Override
     public Result get(Long size, Long page) {
         if (size <= 0L) {
@@ -106,26 +114,42 @@ public class SUserServiceImpl extends ServiceImpl<SUserMapper, SUser> implements
         if (page <= 0L) {
             return Result.fail("参数错误,页数不能为0");
         }
-        Page<SUser> sUserPage = sUserMapper.selectPage(page, size);
-        long total = sUserPage.getTotal();//获取全部共n条
-        List<SUser> sUserList = sUserPage.getRecords();//获取查询数据
-        List<SUserVo> sUserVos = ListCopy(sUserList);
-        Map<String, Object> sUserListHashMap = PagesHashMap.getPagesHashMap(total, "sUserList", sUserVos);
-        return Result.succ("查询角色成功", sUserListHashMap);
+        try {
+            Page<SUser> sUserPage = sUserMapper.selectPage(page, size);//获取数据
+            long total = sUserPage.getTotal();//获取全部共n条
+            List<SUser> sUserList = sUserPage.getRecords();//获取查询数据
+            List<SUserVo> sUserVos = ListCopy(sUserList);
+            Map<String, Object> sUserListHashMap = PagesHashMap.getPagesHashMap(total, "sUserList", sUserVos);
+            return Result.succ("查询角色成功", sUserListHashMap);
+        } catch (Exception e) {
+            return Result.succ(500,"查询角色失败", e);
+        }
     }
 
+    @Resource
+    RoleMapper roleMapper;
+
+    /**
+     * @param  sUserSId 系统用户Id
+     */
     @Override
     public Result getSUserRoleBySUserId(String sUserSId) {
         List<Role> listRoleBySUserId = roleService.getListRoleBySUserId(sUserSId);
         return Result.succ("查询角色成功", listRoleBySUserId);
     }
 
+
+    /**
+     * @param String sUserSId ;系统用户的id
+     * */
     @Override
     public Result getSUserSMenuBySUserId(String sUserSId) {
         return sMenuService.getSMenuBySUserId2(sUserSId);
     }
 
-    //添加用户
+    /**
+    * @param SUser sUser ;系统用户的实体类
+    * */
     @Override
     public Result addSUser(@NotNull SUser sUser) {
         String sUsername = sUser.getUsername();
@@ -147,13 +171,17 @@ public class SUserServiceImpl extends ServiceImpl<SUserMapper, SUser> implements
         sUser.setEnableFlag("1");
         sUser.setSalt(salt);
         sUser.setPassword(password2);
-        sUser.setsId(SnowFlakeUtil.getId());
         sUser.setCreateDate(new Date());
-        int insert = sUserMapper.insert(sUser);
-        if (insert == 0) {
-            return Result.fail(401, "添加用户失败");
+        try {
+            int insert = sUserMapper.insert(sUser);
+            if (insert == 0) {
+                return Result.fail(401, "添加用户失败");
+            }
+            return Result.succ("添加成功");
+        } catch (DataAccessException e) {
+            log.error("出现错误："+e);
+            return Result.fail(505, "添加用户失败");
         }
-        return Result.succ("添加成功");
     }
 
     @Override
@@ -170,16 +198,22 @@ public class SUserServiceImpl extends ServiceImpl<SUserMapper, SUser> implements
     @Override
     public Result updateSUser(SUser sUser) {
         SUser sUser1 = sUserMapper.selectById(sUser.getsId());
+        if (sUser1==null){
+            return Result.fail("用户不存在");
+        }
         if (!StringUtils.isEmpty(sUser.getEmail())) {
             sUser1.setEmail(sUser.getEmail());//邮箱
         }
         if (!StringUtils.isEmpty(sUser.getNickname())) {
             sUser1.setNickname(sUser.getNickname());//昵称
         }
+        if (!StringUtils.isBlank(sUser.getRealname())){
+            sUser1.setRealname(sUser.getRealname());//真实姓名
+        }
         if (!StringUtils.isEmpty(sUser.getGender())) {
             sUser1.setGender(sUser.getGender());//性别
         }
-        if (!StringUtils.isBlank(sUser.getPassword())) {
+        if (!StringUtils.isBlank(sUser.getPassword())) {//密码和盐
             String salt = Md5Utils.CretaeMd5();
             String password2 = Md5Utils.md5Encryption(sUser.getPassword(), salt);
             sUser1.setPassword(password2);
@@ -211,9 +245,13 @@ public class SUserServiceImpl extends ServiceImpl<SUserMapper, SUser> implements
         return Result.succ("禁用系统用户成功");
     }
 
-    //删除用户
+    /*删除系统用户
+    *
+    * @param String sId;系统用户的id
+    * */
     @Override
     public Result deleteSUser(String sId) {
+        //获取事务
         TransactionStatus transactionStatus = dataSourceTransactionManager.getTransaction(transactionDefinition);
         try {
             //先删除系统用户拥有的角色

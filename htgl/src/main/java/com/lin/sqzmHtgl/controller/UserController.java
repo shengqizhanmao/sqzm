@@ -1,6 +1,7 @@
 package com.lin.sqzmHtgl.controller;
 
 import com.lin.common.Result;
+import com.lin.common.pojo.SUser;
 import com.lin.common.pojo.User;
 import com.lin.common.service.UserService;
 import org.apache.commons.lang3.StringUtils;
@@ -30,6 +31,13 @@ public class UserController {
     public Result get(@PathVariable("size") Long size, @PathVariable("page") Long page) {
         return userService.listPage(size, page);
     }
+    /**
+     获取系统用户的列表,分页
+     @Param Long size,分页的大小
+     @Param Long page,第N页
+     @return Result,自定义返回数据
+     **/
+
 
     //添加用户
     @RequiresPermissions("user:add")

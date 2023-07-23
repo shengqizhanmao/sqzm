@@ -24,7 +24,6 @@ public class Tags implements Serializable {
     @TableId(value = "id", type = IdType.ASSIGN_ID)
     private String id;
 
-    private String avatar;
 
     private String name;
 
@@ -35,7 +34,6 @@ public class Tags implements Serializable {
     public String toString() {
         return "Tags{" +
                 "id='" + id + '\'' +
-                ", avatar='" + avatar + '\'' +
                 ", name='" + name + '\'' +
                 ", palteId='" + palteId + '\'' +
                 '}';
@@ -65,13 +63,6 @@ public class Tags implements Serializable {
         this.id = id;
     }
 
-    public String getAvatar() {
-        return avatar;
-    }
-
-    public void setAvatar(String avatar) {
-        this.avatar = avatar;
-    }
 
 
 }

@@ -14,6 +14,7 @@ import com.lin.common.service.FriendsService;
 import com.lin.common.service.FriendsUserService;
 import com.lin.common.service.UserService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.TransactionStatus;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -43,7 +44,7 @@ public class FriendsServiceImlp extends ServiceImpl<FriendsMapper, Friends> impl
         List<Friends> friendsList = getListMethod(formUserId, toUserId);
         List<Friends> friendsList2 = getListMethod(toUserId, formUserId);
         friendsList.addAll(friendsList2);
-        friendsList.sort(getSortComparator());
+        friendsList.sort(Comparator.comparing(Friends::getCreatedDate));
         return Result.succ("获取全部聊天记录成功", friendsList);
     }
 
@@ -85,13 +86,19 @@ public class FriendsServiceImlp extends ServiceImpl<FriendsMapper, Friends> impl
         return friendsMapper.selectList(friendsLambdaQueryWrapper);
     }
 
-    //数组sort根据日期进行排序
-    public Comparator<Friends> getSortComparator() {
-//        return (Comparator<Friends>) (o1, o2) -> {
-//            return o1.getCreatedDate().compareTo(o2.getCreatedDate());
-//        };
-//        return ((o1, o2) ->o1.getCreatedDate().compareTo(o2.getCreatedDate()) );
-        return Comparator.comparing(friends -> friends.getCreatedDate());
+    @Override
+    public boolean deleteByUserId(String id, TransactionStatus transaction) {
+        try {
+            LambdaQueryWrapper<Friends> friendsLambdaQueryWrapper = new LambdaQueryWrapper<>();
+            friendsLambdaQueryWrapper.eq(Friends::getFormUserId,id);
+            friendsMapper.delete(friendsLambdaQueryWrapper);
+            LambdaQueryWrapper<Friends> friendsLambdaQueryWrapper2 = new LambdaQueryWrapper<>();
+            friendsLambdaQueryWrapper2.eq(Friends::getToUserId,id);
+            friendsMapper.delete(friendsLambdaQueryWrapper2);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     public FriendsAndUserVo copyFriendsAndUserVo(User user, Friends friends) {
@@ -107,7 +114,7 @@ public class FriendsServiceImlp extends ServiceImpl<FriendsMapper, Friends> impl
     }
 
     public List<FriendsAndUserVo> copyListFriendsAndUserVo(List<FriendsUser> listFriendsUser) {
-        List<FriendsAndUserVo> friendsAndUserVos = new ArrayList();
+        List<FriendsAndUserVo> friendsAndUserVos = new ArrayList<>();
         for (FriendsUser friendsUser : listFriendsUser) {
             String formUserId = friendsUser.getFormUserId();
             String toUserId = friendsUser.getToUserId();

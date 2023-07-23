@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.lin.common.Result;
 import com.lin.common.pojo.Article;
 import com.lin.common.pojo.Body;
+import org.springframework.transaction.TransactionStatus;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -20,7 +21,7 @@ public interface ArticleService extends IService<Article> {
 
     Result img(MultipartFile file);
 
-    Result saveArticle(Article article, String token, Body body, List<String> tagsList);
+    Result saveArticle(Article article, String token, Body body, List<String> tagsIdList);
 
     Result getArticle(String token);
 
@@ -30,16 +31,23 @@ public interface ArticleService extends IService<Article> {
 
     Result deleteByArticleId(String id, String token);
 
-    Result updateArticle(Article article, String token, Body body, List<String> tagsList);
+    Result updateArticle(Article article, String token, Body body, List<String> tagsIdList);
 
     Result getArticleByPalteIdAndSort(String palteId, String modularsId, String sort, Long pages, Long pagesSize);
 
-    Result getArticleDetail(String articleId);
+    Result getArticleDetail(String articleId, String token);
 
-    Result getArticleByUserCollect(String palteId, String token);
+    Result getArticleByUserCollect(String token);
 
     Result getArticleListPageByModularsIdStatus(String modularsId, String status, Long size, Long page);
 
 
     Result updateStatus(String id, String status);
+
+    boolean deleteByUserId(String userId);
+
+    boolean deleteByUserId(String userId, TransactionStatus transactionStatus);
+
+
+    Result getArticleByCateory(String palteId, String modularsId, String categoryId, Long page, Long pageSize);
 }

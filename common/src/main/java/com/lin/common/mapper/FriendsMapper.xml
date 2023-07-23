@@ -13,17 +13,14 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id
-        ,form_user_id,to_user_id,msg,created_date
+        id,form_user_id,to_user_id,msg,created_date
     </sql>
 
     <select id="getTenList" resultType="com.lin.common.pojo.Friends">
-        SELECT *
-        FROM (SELECT *
-              FROM u_friends
-              WHERE (form_user_id = #{formUserId} AND to_user_id = #{toUserId})
-                 OR (form_user_id = #{toUserId} AND to_user_id = #{formUserId})
-              ORDER BY created_date desc LIMIT #{one}, #{two}) a
-        ORDER BY created_date asc
+                SELECT id,form_user_id,to_user_id,msg,created_date
+                FROM u_friends
+                WHERE (form_user_id = #{formUserId} AND to_user_id = #{toUserId})
+                    OR (form_user_id = #{toUserId} AND to_user_id = #{formUserId})
+                ORDER BY created_date asc LIMIT #{one}, #{two}
     </select>
 </mapper>

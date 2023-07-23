@@ -40,11 +40,17 @@ public class CacheAspect {
     public Object around(@NotNull ProceedingJoinPoint joinPoint) {
         try {
             Signature signature = joinPoint.getSignature();
+            //类名
             String className = joinPoint.getTarget().getClass().getSimpleName();
+            //方法名
             String methodName = signature.getName();
+            //参数类型列表，创建
             Class[] parameterTypes = new Class[joinPoint.getArgs().length];
+            //参数列表
             Object[] args = joinPoint.getArgs();
+            //参数
             String params = "";
+            //循环将参数转换为String放入params中，并将参数类型放入parameterTypes
             for (int i = 0; i < args.length; i++) {
                 if (args[i] != null) {
                     params += JSON.toJSONString(args[i]);
@@ -53,29 +59,33 @@ public class CacheAspect {
                     parameterTypes[i] = null;
                 }
             }
+            //如果参数不能为空，则进行加密
             if (StringUtils.isNoneEmpty(params)) {
                 params = DigestUtils.md5Hex(params);
             }
+            //获取方法
             Method method = joinPoint.getSignature().getDeclaringType().getMethod(methodName, parameterTypes);
+            //获取方法的cacheAnnotation类
             CacheAnnotation cacheAnnotation = method.getAnnotation(CacheAnnotation.class);
             //获取过期时间
             long expire = cacheAnnotation.expire();
             //获取缓存名称
             String name = cacheAnnotation.name();
+            //获取缓存列表
             String[] names = cacheAnnotation.names();
+            //是否是修改
             boolean update = cacheAnnotation.update();
+            //修改则删除全部缓存
             if (update) {
                 Object proceed = joinPoint.proceed();
-                if (names.length != 0) {
-                    for (String n : names) {
-                        Set<String> keys = redisTemplate.keys(n + "::*");
-                        for (String key : keys) {
-                            redisTemplate.delete(key);
-                        }
-                        log.info("删除缓存...,{}", n);
+                for (String n : names) {
+                    Set<String> keys = redisTemplate.keys(n + "::*");
+                    for (String key : keys) {
+                        redisTemplate.delete(key);
                     }
+                    log.info("删除缓存...,{}", n);
                 }
-                if (!name.equals("")) {
+                if (StringUtils.isEmpty(name)) {
                     Set<String> keys = redisTemplate.keys(name + "::*");
                     for (String key : keys) {
                         redisTemplate.delete(key);
@@ -96,11 +106,12 @@ public class CacheAspect {
             }
             Object proceed = joinPoint.proceed();
             redisTemplate.opsForValue().set(redisKey, JSON.toJSONString(proceed), Duration.ofMillis(expire));
-            log.info("存入缓存---{},{}", className, methodName);
+            log.info("存入缓存---,{},{}", className, methodName);
             return proceed;
         } catch (Throwable throwable) {
             throwable.printStackTrace();
+            log.error("缓存出现错误"+throwable);
+            return Result.fail(500, "系统错误");
         }
-        return Result.fail(500, "系统错误");
     }
 }

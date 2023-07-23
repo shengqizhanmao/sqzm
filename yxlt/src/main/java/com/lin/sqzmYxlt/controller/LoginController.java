@@ -4,6 +4,7 @@ import com.lin.common.RedisStatus;
 import com.lin.common.Result;
 import com.lin.common.pojo.User;
 import com.lin.common.service.UserService;
+import com.lin.common.utils.CodeUtils;
 import com.lin.sqzmYxlt.controller.param.EmailCode;
 import com.lin.sqzmYxlt.controller.param.LoginForm;
 import lombok.extern.slf4j.Slf4j;
@@ -12,6 +13,12 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -34,6 +41,20 @@ public class LoginController {
         String password = loginForm.getPassword();
         String code = loginForm.getCode();
         return userService.Login(username, password, code, codeDate);
+    }
+    //生成code图片
+    @GetMapping("/code")
+    public void verifyCode(@NotNull HttpServletResponse res, @RequestParam("time") String date) {
+        CodeUtils code = new CodeUtils();
+        BufferedImage image = code.getImage();
+        String codeText = code.getText();
+        System.out.println(codeText);
+        redisTemplate.opsForValue().set(RedisStatus.USER_CODE + date, codeText, 1, TimeUnit.MINUTES);
+        try {
+            code.output(image, res.getOutputStream());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @GetMapping("/getEmailCode")

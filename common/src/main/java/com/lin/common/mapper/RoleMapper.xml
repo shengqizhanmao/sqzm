@@ -18,7 +18,7 @@
         , role_name, label, description, sort_no, enable_flag
     </sql>
     <select id="getListRoleBySUserId" resultMap="BaseResultMap">
-        SELECT *
+        SELECT  a.id, a.role_name, a.label, a.description, a.sort_no, a.enable_flag
         from sh_role a
                  join sh_user_role b
                       on a.id = b.role_id

@@ -3,7 +3,6 @@ package com.lin.common.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lin.common.Result;
-import com.lin.common.ResultCode;
 import com.lin.common.mapper.UserRoleMapper;
 import com.lin.common.pojo.UserRole;
 import com.lin.common.service.UserRoleService;
@@ -39,8 +38,7 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> i
             userRoleLambdaQueryWrapper2.eq(UserRole::getUserId, sId);
             userRoleService.remove(userRoleLambdaQueryWrapper2);
         } catch (Exception e) {
-            e.printStackTrace();
-            Result.fail(ResultCode.USER_ROLE_DELETE_FAIL, "删除用户拥有角色失败");
+            Result.fail(502, "删除用户拥有角色失败");
         }
         if (listRoleId.size() == 0) {
             return Result.succ("修改用户拥有角色连接成功");

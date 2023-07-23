@@ -27,13 +27,10 @@ public class Modulars implements Serializable {
 
     private String name;
 
-    private String icon;
-
-    private String path;
 
     private String palteId;
 
-    private String sort;
+    private Long sort;
 
     @NotNull
     @Override
@@ -41,18 +38,16 @@ public class Modulars implements Serializable {
         return "Modulars{" +
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
-                ", icon='" + icon + '\'' +
-                ", path='" + path + '\'' +
                 ", palteId='" + palteId + '\'' +
                 ", sort='" + sort + '\'' +
                 '}';
     }
 
-    public String getSort() {
+    public Long getSort() {
         return sort;
     }
 
-    public void setSort(String sort) {
+    public void setSort(Long sort) {
         this.sort = sort;
     }
 
@@ -72,21 +67,6 @@ public class Modulars implements Serializable {
         this.name = name;
     }
 
-    public String getIcon() {
-        return icon;
-    }
-
-    public void setIcon(String icon) {
-        this.icon = icon;
-    }
-
-    public String getPath() {
-        return path;
-    }
-
-    public void setPath(String path) {
-        this.path = path;
-    }
 
     public String getPalteId() {
         return palteId;

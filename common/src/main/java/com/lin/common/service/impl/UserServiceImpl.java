@@ -7,12 +7,12 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lin.common.RedisStatus;
 import com.lin.common.Result;
-import com.lin.common.ResultCode;
 import com.lin.common.mapper.UserMapper;
+import com.lin.common.pojo.Comment;
 import com.lin.common.pojo.User;
 import com.lin.common.pojo.Vo.UserTokenVo;
 import com.lin.common.pojo.Vo.UserVo;
-import com.lin.common.service.UserService;
+import com.lin.common.service.*;
 import com.lin.common.utils.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -20,7 +20,10 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
@@ -39,13 +42,33 @@ import java.util.concurrent.TimeUnit;
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
     @Resource
+    private DataSourceTransactionManager dataSourceTransactionManager;
+    @Resource
+    private TransactionDefinition transactionDefinition;
+
+    @Resource
     private UserMapper userMapper;
     @Resource(name = "minioUtils")
     private MinioUtils minioUtils;
 
     @Resource
+    private ArticleService articleService;
+    @Resource
+    private CommentService commentService;
+    @Resource
+    private ArticleLikesCollectionService articleLikesCollectionService;
+
+    @Resource
     private RedisTemplate<String, String> redisTemplate;
 
+    @Resource
+    private FriendsService friendsService;
+
+    @Resource
+    private FriendsUserService friendsUserService;
+
+    @Resource
+    private AuthorService authorService;
     @Resource
     private SendEmailUtil emailUtil;
 
@@ -88,9 +111,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
         String token = JWTUtils.createToken(user.getUsername());
         UserTokenVo userTokenVo = getUserTokenVoByUser(user);
-        redisTemplate.opsForValue().set(RedisStatus.TOKEN_USER + token, JSON.toJSONString(userTokenVo), 1, TimeUnit.DAYS);
+        redisTemplate.opsForValue().set(RedisStatus.TOKEN_USER + token, JSON.toJSONString(userTokenVo), 7, TimeUnit.DAYS);
         return Result.succ("登录成功", token);
     }
+
 
     @Override
     public Result listPage(Long size, Long page) {
@@ -124,7 +148,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         if (!email.matches("^([a-zA-Z0-9]+[_|\\_|\\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\\_|\\.]?)*[a-zA-Z0-9]+\\.[a-zA-Z]{2,3}$")) {
             return Result.fail(401, "邮箱格式错误");
         }
-        String code = (String) redisTemplate.opsForValue().get(RedisStatus.USER_EMAIL_CODE + email);
+        String code = redisTemplate.opsForValue().get(RedisStatus.USER_EMAIL_CODE + email);
         if (!StringUtils.isBlank(code)) {
             log.info("code" + code);
             return Result.fail(401, "请等待60秒");
@@ -201,23 +225,23 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         if (StringUtils.isBlank(token)) {
             return null;
         }
-        //获取redis是否存在
-        String userJson = (String) redisTemplate.opsForValue().get(RedisStatus.TOKEN_USER + token);
-        if (StringUtils.isBlank(userJson)) {
-            return null;
-        }
-        //解析token
         try {
+            //获取redis是否存在
+            String userJson =  redisTemplate.opsForValue().get(RedisStatus.TOKEN_USER + token);
+            if (StringUtils.isBlank(userJson)) {
+                return null;
+            }
+            //解析token
             Map<String, Object> stringObjectMap = JWTUtils.checkToken(token);
             if (stringObjectMap.size() == 0) {
                 return null;
             }
+            UserTokenVo user = JSON.parseObject(userJson, UserTokenVo.class);
+            return user;
         } catch (Exception e) {
             log.error("UserService的findUserByToken出现错误,问题为:" + e);
             return null;
         }
-        UserTokenVo user = JSON.parseObject(userJson, UserTokenVo.class);
-        return user;
     }
 
     @Nullable
@@ -403,7 +427,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             return Result.succ("修改头像成功");
         } catch (Exception e) {
             log.error("上传图片失败，原因是" + e);
-            return Result.fail(ResultCode.IMAGE_UPLOAD_FAIL, "上传图片失败");
+            return Result.fail(503, "上传图片失败");
         } finally {
             minioUtils.MinioUtilsUpdateDefault();
         }
@@ -466,28 +490,47 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
 
-    @NotNull
+    /*
+    * @param String id;普通用户的id
+    * */
     @Override
     public Result deleteUser(String id) {
+        TransactionStatus transaction = dataSourceTransactionManager.getTransaction(transactionDefinition);
         if (StringUtils.isBlank(id)) {
+            dataSourceTransactionManager.rollback(transaction);
             return Result.fail("id参数不能为空");
         }
         try {
+            //验证User是否存在
             User user1 = userMapper.selectById(id);
             if (user1 == null) {
+                dataSourceTransactionManager.rollback(transaction);
                 return Result.fail("用户删除失败,用户不存在");
             }
-        } catch (Exception e) {
-            log.error("用户删除失败,原因是" + e);
-            return Result.fail("用户删除失败");
-        }
-        try {
-            int i = userMapper.deleteById(id);
-            if (i == 0) {
+            //删除帖子
+            boolean b = articleService.deleteByUserId(id,transaction);
+            //该用户的评论
+            boolean b1 = commentService.deleteByUserId(id,transaction);
+            // 该用户点赞收藏中间表、
+            boolean b2 =articleLikesCollectionService.deleteByUserId(id,transaction);
+            // 该用户的好友中间表和好友聊天记录
+            boolean b3 =friendsService.deleteByUserId(id,transaction);
+            boolean b4 =friendsUserService.deleteByUserId(id,transaction);
+            // 删除该用户的作者记录表
+            boolean b5 =authorService.deleteByUserId(id,transaction);
+            if (!b || !b1 || !b2 || !b3 || !b4 || !b5 ) {
+                dataSourceTransactionManager.rollback(transaction);
                 return Result.fail("删除失败");
             }
+            int i = userMapper.deleteById(id);
+            if (i == 0) {
+                dataSourceTransactionManager.rollback(transaction);
+                return Result.fail("删除失败");
+            }
+            dataSourceTransactionManager.commit(transaction);
             return Result.succ("删除成功");
         } catch (Exception e) {
+            dataSourceTransactionManager.rollback(transaction);
             log.error("用户删除失败,原因是" + e);
             return Result.fail("用户删除失败");
         }

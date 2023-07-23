@@ -27,13 +27,12 @@ public class Menu implements Serializable {
 
     private String name;
 
-    private String icon;
 
     private String path;
 
     private String effect;
 
-    private String modularsId;
+    private Integer sort;
 
 
     public String getId() {
@@ -52,13 +51,7 @@ public class Menu implements Serializable {
         this.name = name;
     }
 
-    public String getIcon() {
-        return icon;
-    }
 
-    public void setIcon(String icon) {
-        this.icon = icon;
-    }
 
     public String getPath() {
         return path;
@@ -76,24 +69,22 @@ public class Menu implements Serializable {
         this.effect = effect;
     }
 
-    public String getModularsId() {
-        return modularsId;
+    public Integer getSort() {
+        return sort;
     }
 
-    public void setModularsId(String modularsId) {
-        this.modularsId = modularsId;
+    public void setSort(Integer sort) {
+        this.sort = sort;
     }
 
-    @NotNull
     @Override
     public String toString() {
         return "Menu{" +
-                "id=" + id +
-                ", name=" + name +
-                ", icon=" + icon +
-                ", path=" + path +
-                ", effect=" + effect +
-                ", modularsId=" + modularsId +
-                "}";
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", path='" + path + '\'' +
+                ", effect='" + effect + '\'' +
+                ", sort='" + sort + '\'' +
+                '}';
     }
 }

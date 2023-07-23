@@ -29,6 +29,9 @@ import java.util.Map;
 public class ShiroConfig {
 
     //ShiroFilterFactoryBean
+    /*
+    * 核心配置类
+    * */
     @Bean(value = "shiroFilterFactoryBean")
     public ShiroFilterFactoryBean shiroFilterFactoryBean(
             @Qualifier("defaultWebSecurityManager") DefaultWebSecurityManager defaultWebSecurityManager
@@ -42,7 +45,7 @@ public class ShiroConfig {
         shiroFilterFactoryBean.setFilters(map);
         //anon游客,authc登录,user,perms资源,role角色
         Map<String, String> filterMap = new LinkedHashMap<>();
-        //资源
+        //静态资源
         filterMap.put("/static/**", "anon");
         filterMap.put("/webjars/**", "anon");
         filterMap.put("/swagger-ui.html", "anon");

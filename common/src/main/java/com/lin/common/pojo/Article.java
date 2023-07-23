@@ -42,8 +42,6 @@ public class Article implements Serializable {
     @ApiModelProperty("浏览数量")
     private Long viewCounts;
 
-    @ApiModelProperty("是否置顶")
-    private String weight;
 
     @ApiModelProperty("点赞人数")
     private Long likesCounts;
@@ -121,13 +119,6 @@ public class Article implements Serializable {
         this.viewCounts = viewCounts;
     }
 
-    public String getWeight() {
-        return weight;
-    }
-
-    public void setWeight(String weight) {
-        this.weight = weight;
-    }
 
     public Long getLikesCounts() {
         return likesCounts;
@@ -210,7 +201,6 @@ public class Article implements Serializable {
                 ", summary=" + summary +
                 ", commentCounts=" + commentCounts +
                 ", viewCounts=" + viewCounts +
-                ", weight=" + weight +
                 ", likesCounts=" + likesCounts +
                 ", collectionCounts=" + collectionCounts +
                 ", createDate=" + createDate +

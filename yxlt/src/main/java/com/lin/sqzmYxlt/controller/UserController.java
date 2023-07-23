@@ -39,7 +39,7 @@ public class UserController {
     private UserService userService;
 
     @Resource
-    private RedisTemplate redisTemplate;
+    private RedisTemplate<String,String> redisTemplate;
 
     @RequiresAuthentication
     @GetMapping("/getUserByToken")
@@ -53,20 +53,6 @@ public class UserController {
         return Result.succ("获取user信息成功", userByToken);
     }
 
-    //生成code图片
-    @GetMapping("/code")
-    public void verifyCode(@NotNull HttpServletResponse res, @RequestParam("time") String date) {
-        CodeUtils code = new CodeUtils();
-        BufferedImage image = code.getImage();
-        String codeText = code.getText();
-        System.out.println(codeText);
-        redisTemplate.opsForValue().set(RedisStatus.USER_CODE + date, codeText, 1, TimeUnit.MINUTES);
-        try {
-            code.output(image, res.getOutputStream());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     //修改用户
     @PostMapping("/update")
@@ -74,8 +60,8 @@ public class UserController {
         return userService.updateUser(user);
     }
 
-    @GetMapping("/getCodeByEmail")
-    public Result getCodeByEmail(@RequestParam("email") String email) {
+    @GetMapping("/getUpdateCodeByEmail")
+    public Result getUpdateCodeByEmail(@RequestParam("email") String email) {
         return userService.getUpdateEmailCode(email);
     }
 
@@ -106,7 +92,7 @@ public class UserController {
     }
 
     @GetMapping("/getUserById")
-    public Result getUserById(@RequestParam("userId") String userId) throws InvocationTargetException, IllegalAccessException {
+    public Result getUserById(@RequestParam("userId") String userId) {
         User byId = userService.getById(userId);
         UserVo userVo = new UserVo();
         BeanUtils.copyProperties(byId, userVo);

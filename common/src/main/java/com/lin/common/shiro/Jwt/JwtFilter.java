@@ -4,7 +4,6 @@ package com.lin.common.shiro.Jwt;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.lin.common.Result;
-import com.lin.common.ResultCode;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -42,6 +41,7 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
             if (StringUtils.isBlank(token)) {
                 return true;
             }
+            //如果有token则创建jwtToken进行登录
             JwtToken jwtToken = new JwtToken(token);
             Subject subject = SecurityUtils.getSubject();
             subject.login(jwtToken);
@@ -50,8 +50,8 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
             HttpServletResponse httpServletResponse = (HttpServletResponse) response;
             httpServletResponse.setContentType("application/json;charset=utf-8");
             httpServletResponse.setCharacterEncoding("utf-8");
-            httpServletResponse.setStatus(ResultCode.TOKEN_OVERDUE);
-            Result fail = Result.fail(ResultCode.TOKEN_OVERDUE, "登录过期,请重新登录");
+            httpServletResponse.setStatus(420);
+            Result fail = Result.fail(420, "登录过期,请重新登录");
             httpServletResponse.getWriter().write(JSON.toJSONString(fail, SerializerFeature.WriteDateUseDateFormat));
             return false;
         } catch (Exception e) {
